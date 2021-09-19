@@ -1,0 +1,36 @@
+const hotelDataInCity = [
+  {
+    id: "hotel-1",
+    title: "Paragon",
+    location: "Ho Chi Minh",
+    image: require("../image/paragon.jpeg"),
+    imageBig: require("../image/paragonBig.jpeg"),
+    decription: "day la Paragpn",
+    liked: true,
+    price: 50,
+    duration: 2,
+  },
+  {
+    id: "hotel-2",
+    title: "lalendi",
+    location: "Ha noi",
+    image: require("../image/lalendi.jpeg"),
+    imageBig: require("../image/lalendiBig.jpeg"),
+    decription: "day la lalendi studio",
+    liked: false,
+    price: 100,
+    duration: 3,
+  },
+  {
+    id: "hotel-3",
+    title: "alacate",
+    location: "Da Nang",
+    image: require("../image/alacate.png"),
+    imageBig: require("../image/alacateBig.jpeg"),
+    decription: "day la alacate",
+    liked: false,
+    price: 100,
+    duration: 3,
+  },
+];
+export default hotelDataInCity;
