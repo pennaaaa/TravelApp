@@ -52,7 +52,14 @@ const Home = ({ navigation }) => {
   };
   const renderHotelDataItem = ({ item }) => {
     return (
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() =>
+        navigation.navigate("HotelDetails", {
+          item: item,
+          name: item.location,
+        })
+      }
+      >
         <ImageBackground
           source={item.image}
           style={styles.discorverItem}

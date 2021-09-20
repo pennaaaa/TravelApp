@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import Home from "./components/Home";
 import Details from "./components/Details";
+import HotelDetails from "./components/HotelDetails";
 import Find from "./components/Find";
 import Profile from "./components/Profile";
 import colors from "./assets/color/colors";
@@ -74,6 +75,14 @@ const App = () => {
         <Stack.Screen
           name="Details"
           component={Details}
+          options={({ route }) => ({
+            headerBackTitle: "",
+            headerTitle: route.params.name,
+          })}
+        />
+        <Stack.Screen
+          name="HotelDetails"
+          component={ HotelDetails }
           options={({ route }) => ({
             headerBackTitle: "",
             headerTitle: route.params.name,

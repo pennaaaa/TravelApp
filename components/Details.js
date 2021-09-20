@@ -6,6 +6,7 @@ import OverviewCity from "./OverviewCity";
 import HotelCityList from "./HotelCityList";
 import EntertainmetCityList from "./EntertainmeniCityList";
 import FoodCityList from "./FoodCityList";
+import HotelDetails from "./HotelDetails";
 
 const Details = ({ route, navigation }) => {
   const { item } = route.params;
