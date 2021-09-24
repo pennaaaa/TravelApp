@@ -31,9 +31,18 @@ export default class HotelCityList extends React.Component {
           range
         >
           <Text>Click me!</Text>
+
           {/* <Text>start datet : {startDate}</Text>
           <Text>{endDate}</Text> */}
+
         </DateRangePicker>
+        <Text>
+          start date :{" "}
+          {this.state.startDate && this.state.startDate.format("LL")}
+        </Text>
+        <Text>
+          end Date: {this.state.endDate && this.state.endDate.format("LL")}
+        </Text>
       </View>
     );
   }

@@ -38,7 +38,7 @@ Là “ngôi nhà xa xứ,” các phòng khách sạn cung cấp tv màn hình
   },
   {
     id: "hotel-4",
-    title: "alacate",
+    title: "alacate3",
     location: "Da Nang",
     image: require("../image/alacate.png"),
     imageBig: require("../image/alacateBig.jpeg"),
@@ -50,7 +50,7 @@ Là “ngôi nhà xa xứ,” các phòng khách sạn cung cấp tv màn hình
   },
   {
     id: "hotel-5",
-    title: "alacate",
+    title: "alacate2",
     location: "Da Nang",
     image: require("../image/alacate.png"),
     imageBig: require("../image/alacateBig.jpeg"),

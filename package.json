@@ -8,7 +8,11 @@
     "eject": "expo eject"
   },
   "dependencies": {
+<<<<<<< HEAD
     "@fawazahmed/react-native-read-more": "^2.1.1",
+=======
+    "@freakycoder/react-native-bounceable": "^0.2.5",
+>>>>>>> 2dd4c1a0686f5fc16ed1d306d5cf61b787a59b28
     "@react-native-community/datetimepicker": "3.5.2",
     "@react-native-masked-view/masked-view": "0.2.4",
     "@react-native-picker/picker": "1.16.1",
@@ -24,8 +28,12 @@
     "react-dom": "16.13.1",
     "react-multi-date-picker": "^3.1.4",
     "react-native": "https://github.com/expo/react-native/archive/sdk-42.0.0.tar.gz",
+    "react-native-animated-spinkit": "^1.5.2",
     "react-native-daterange-picker": "^1.5.1",
     "react-native-dates": "^2.0.4",
+    "react-native-dynamic-search-bar": "github:WrathChaos/react-native-dynamic-search-bar#expo",
+    "react-native-dynamic-vector-icons": "github:WrathChaos/react-native-dynamic-vector-icons#expo",
+    "react-native-elements": "^3.4.2",
     "react-native-gesture-handler": "~1.10.2",
     "react-native-modal-datetime-picker": "^11.0.0",
     "react-native-pager-view": "5.0.12",
@@ -35,7 +43,8 @@
     "react-native-screens": "~3.4.0",
     "react-native-tab-view": "^3.1.1",
     "react-native-vector-icons": "^8.1.0",
-    "react-native-web": "~0.13.12"
+    "react-native-web": "~0.13.12",
+    "tslib": "^2.3.1"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0"
