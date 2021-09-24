@@ -5,7 +5,7 @@ const hotelData = [
     location: "Ho Chi Minh",
     image: require("../image/paragon.jpeg"),
     imageBig: require("../image/paragonBig.jpeg"),
-    description: 'day la Paragon',
+    description: "day la Paragon",
     liked: true,
     price: 50,
     rating: 4,
@@ -36,7 +36,7 @@ const hotelData = [
   },
   {
     id: "hotel-4",
-    title: "alacate",
+    title: "alacate3",
     location: "Da Nang",
     image: require("../image/alacate.png"),
     imageBig: require("../image/alacateBig.jpeg"),
@@ -48,7 +48,7 @@ const hotelData = [
   },
   {
     id: "hotel-5",
-    title: "alacate",
+    title: "alacate2",
     location: "Da Nang",
     image: require("../image/alacate.png"),
     imageBig: require("../image/alacateBig.jpeg"),
