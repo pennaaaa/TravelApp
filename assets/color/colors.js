@@ -6,5 +6,6 @@ const colors = {
   darkblue: '#001A72',
   darkgray: '#565656',
   gray: '#808080',
+  shade: '#aaabac',
 };
 export default colors;

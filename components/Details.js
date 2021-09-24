@@ -5,8 +5,10 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import OverviewCity from "./OverviewCity";
 import HotelCityList from "./HotelCityList";
 import EntertainmetCityList from "./EntertainmeniCityList";
-import FoodCityList from "./FoodCityList";
+// import FoodCityList from "./FoodCityList";
 import HotelDetails from "./HotelDetails";
+import FoodCityList from "./FoodCityList";
+
 
 const Details = ({ route, navigation }) => {
   const { item } = route.params;
