@@ -9,7 +9,6 @@ import EntertainmetCityList from "./EntertainmeniCityList";
 import HotelDetails from "./HotelDetails";
 import FoodCityList from "./FoodCityList";
 
-
 const Details = ({ route, navigation }) => {
   const { item } = route.params;
   const Tab = createMaterialTopTabNavigator();
@@ -22,7 +21,7 @@ const Details = ({ route, navigation }) => {
         />
         <Tab.Screen
           name="Khách sạn"
-          children={() => <HotelCityList item={item} />}
+          children={() => <HotelCityList item={item} navigation={navigation} />}
         />
         <Tab.Screen
           name="Giải trí"

@@ -2,15 +2,9 @@
   "devToolsPort": 19002,
   "expoServerPort": 19000,
   "packagerPort": 19000,
-<<<<<<< HEAD
-  "expoServerNgrokUrl": "https://jc-s3c.vnd2k.travelapp.exp.direct",
-  "packagerNgrokUrl": "https://packager.jc-s3c.vnd2k.travelapp.exp.direct",
-  "ngrokPid": 16680,
-=======
   "expoServerNgrokUrl": null,
   "packagerNgrokUrl": null,
   "ngrokPid": null,
->>>>>>> 2dd4c1a0686f5fc16ed1d306d5cf61b787a59b28
   "packagerPid": null,
   "webpackServerPort": null
 }

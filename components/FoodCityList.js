@@ -43,16 +43,22 @@ const FoodCityList = ({ navigation }) => {
         <View style={styles.descriptionFood}>
           <Text style={styles.itemTitleText}>{item.title}</Text>
           <Text style={styles.itemAddress}>Địa chỉ: {item.address}</Text>
-          <Text style={styles.itemAlivableTime}>Đặt chỗ: 19h-22h các ngày trong tuần</Text>
+          <Text style={styles.itemAlivableTime}>
+            Đặt chỗ: 19h-22h các ngày trong tuần
+          </Text>
           <Text style={styles.itemFastReview}>Chuyên món Việt (Cơm niêu)</Text>
-          <Text style={styles.rangePrice}>Giá từ: {item.pricefrom}-{item.priceto} đ/ Món</Text>
-          <TouchableOpacity
-            style={styles.bookButton}
-            onPress={() => alert("Bạn đã đặt chỗ thành công!")}>
-            <Text style={styles.buttonText}>Đặt chỗ</Text>
-          </TouchableOpacity>
+          <Text style={styles.rangePrice}>
+            Giá từ: {item.pricefrom}-{item.priceto} đ/ Món
+          </Text>
+          <View style={{ marginBottom: 5 }}>
+            <TouchableOpacity
+              style={styles.bookButton}
+              onPress={() => alert("Bạn đã đặt chỗ thành công!")}
+            >
+              <Text style={styles.buttonText}>Đặt chỗ</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-        
       </View>
 
       // </TouchableOpacity>
@@ -95,8 +101,8 @@ const styles = StyleSheet.create({
     // marginTop: 20,
   },
   restaurantItemImage: {
-    borderTopLeftRadius:8,
-    borderBottomLeftRadius:8,
+    borderTopLeftRadius: 8,
+    borderBottomLeftRadius: 8,
   },
   restaurantHighContainer: {
     // marginTop: 10,
@@ -111,7 +117,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginTop: 10,
   },
-  
+
   itemTitleText: {
     width: width * 0.6,
     // height: height * 0.1,
@@ -121,38 +127,39 @@ const styles = StyleSheet.create({
   },
   card: {
     // height:height*0.3,
-    flexDirection:'row',
-    backgroundColor: 'white',
+    flexDirection: "row",
+    backgroundColor: "white",
     borderRadius: 8,
     // paddingVertical: 45,
     // paddingHorizontal: 25,
-    width: '100%',
+    width: "100%",
     marginVertical: 5,
   },
   shadowProp: {
-    shadowColor: '#171717',
-    shadowOffset: {width: -2, height: 4},
+    shadowColor: "#171717",
+    shadowOffset: { width: -2, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 3,
   },
-  descriptionFood:{
-    flexDirection:'column',
+  descriptionFood: {
+    flexDirection: "column",
     // marginVertical:5
+    justifyContent: "space-between",
   },
-  itemAddress:{
+  itemAddress: {
     width: width * 0.6,
   },
-  itemAlivableTime:{
+  itemAlivableTime: {
     color: colors.orange,
     width: width * 0.6,
   },
-  itemFastReview:{
+  itemFastReview: {
     width: width * 0.6,
   },
-  rangePrice:{
+  rangePrice: {
     width: width * 0.6,
   },
-  bookButton:{
+  bookButton: {
     // color:colors.orange,
     // backgroundColor: colors.orange,
     // position:'relative',
@@ -160,8 +167,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     // height:50,
     // paddingBottom:0,
-    bottom:-20,
-    
+    // bottom: ,
+
     marginTop: 10,
     // marginBottom:10,
     // marginTop: height*0.1,
@@ -186,10 +193,10 @@ const styles = StyleSheet.create({
 
   //   // marginBottom
   // },
-  buttonText:{
+  buttonText: {
     fontSize: 18,
     color: colors.white,
-  }
+  },
 });
 
 export default FoodCityList;
