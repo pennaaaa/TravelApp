@@ -1,7 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import moment from "moment";
 import DateRangePicker from "react-native-daterange-picker";
+import colors from "../assets/color/colors";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { Image } from "react-native-elements/dist/image/Image";
+// import Calendar from "react-native-calendar-range-picker";
+
+AntDesign.loadFont();
+MaterialIcons.loadFont();
 
 export default class HotelCityList extends React.Component {
   constructor(props) {
@@ -22,27 +30,59 @@ export default class HotelCityList extends React.Component {
   render() {
     const { startDate, endDate, displayedDate } = this.state;
     return (
-      <View style={styles.container}>
-        <DateRangePicker
-          onChange={this.setDates}
-          endDate={endDate}
-          startDate={startDate}
-          displayedDate={displayedDate}
-          range
-        >
-          <Text>Click me!</Text>
-
-          {/* <Text>start datet : {startDate}</Text>
-          <Text>{endDate}</Text> */}
-
-        </DateRangePicker>
-        <Text>
-          start date :{" "}
-          {this.state.startDate && this.state.startDate.format("LL")}
-        </Text>
-        <Text>
-          end Date: {this.state.endDate && this.state.endDate.format("LL")}
-        </Text>
+      <View>
+        <View style={styles.container}>
+          <DateRangePicker
+            onChange={this.setDates}
+            endDate={endDate}
+            startDate={startDate}
+            displayedDate={displayedDate}
+            range
+            minDate={Date()}
+          >
+            <View style={styles.pickerButton}>
+              <AntDesign
+                name="calendar"
+                size={18}
+                style={{ paddingLeft: 10 }}
+              />
+              <View style={{ justifyContent: "center", alignItems: "center" }}>
+                <Text style={{ fontSize: 14 }}>
+                  {this.state.startDate &&
+                    this.state.startDate.format("MM/DD/YYYY")}{" "}
+                  -{" "}
+                  {this.state.endDate &&
+                    this.state.endDate.format("MM/DD/YYYY")}
+                </Text>
+              </View>
+            </View>
+          </DateRangePicker>
+          <View style={styles.containerPickerGroups}>
+            <MaterialIcons
+              name="groups"
+              size={18}
+              style={{ paddingLeft: 10 }}
+            />
+            <Text style={{ marginLeft: 5 }}> 2 </Text>
+          </View>
+          <View style={styles.containerPickerGroups}>
+            <MaterialIcons
+              name="filter-list"
+              size={18}
+              style={{ paddingLeft: 10 }}
+            />
+            <Text style={{ marginLeft: 5 }}> Bo loc </Text>
+          </View>
+        </View>
+        <View>
+          <Calendar
+            startDate="2020-05-05"
+            endDate="2020-05-12"
+            onChange={({ startDate, endDate }) =>
+              console.log({ startDate, endDate })
+            }
+          />
+        </View>
       </View>
     );
   }
@@ -50,11 +90,26 @@ export default class HotelCityList extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    height: "100%",
-    backgroundColor: "#fff",
+    // backgroundColor: "#fff",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 5,
+  },
+  pickerButton: {
+    flexDirection: "row",
+    backgroundColor: colors.white,
+    height: 40,
+    width: 195,
+    borderRadius: 20,
     alignItems: "center",
+  },
+  containerPickerGroups: {
+    backgroundColor: colors.white,
+    height: 40,
+    width: 80,
+    borderRadius: 20,
+    flexDirection: "row",
     justifyContent: "center",
-    width: "100%",
-    paddingTop: 20,
+    alignItems: "center",
   },
 });
