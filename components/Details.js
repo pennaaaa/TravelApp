@@ -8,6 +8,9 @@ import EntertainmetCityList from "./EntertainmeniCityList";
 // import FoodCityList from "./FoodCityList";
 import HotelDetails from "./HotelDetails";
 import FoodCityList from "./FoodCityList";
+import VehicleRentalList from "./VehicleRentalList";
+import HotelList from "./HotelList";
+
 
 const Details = ({ route, navigation }) => {
   const { item } = route.params;
@@ -21,16 +24,24 @@ const Details = ({ route, navigation }) => {
         />
         <Tab.Screen
           name="Khách sạn"
-          children={() => <HotelCityList item={item} navigation={navigation} />}
+          // children={() => <HotelList item={item} navigation={navigation} />}
+
+          children={() => <HotelList item={item} navigation={navigation} />}
+
         />
         <Tab.Screen
-          name="Giải trí"
-          children={() => <EntertainmetCityList item={item} />}
+          name="Thuê xe"
+          children={() => <VehicleRentalList item={item} navigation={navigation} />}
         />
+
         <Tab.Screen
           name="Ẩm thực"
-          children={() => <FoodCityList item={item} />}
+          children={() => <FoodCityList item={item} navigation={navigation} />}
         />
+        {/* <Tab.Screen
+          name="Giải trí"
+          children={() => <EntertainmetCityList item={item} />}
+        /> */}
       </Tab.Navigator>
     </SafeAreaView>
   );

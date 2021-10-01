@@ -6,7 +6,7 @@ import colors from "../assets/color/colors";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { Image } from "react-native-elements/dist/image/Image";
-import Calendar from "react-native-calendar-range-picker";
+// import Calendar from "react-native-calendar-range-picker";
 
 AntDesign.loadFont();
 MaterialIcons.loadFont();

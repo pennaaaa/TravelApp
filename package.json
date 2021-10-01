@@ -8,10 +8,15 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@fawazahmed/react-native-read-more": "^2.1.1",
     "@freakycoder/react-native-bounceable": "^0.2.5",
     "@react-native-community/datetimepicker": "3.5.2",
     "@react-native-masked-view/masked-view": "0.2.4",
-    "@react-native-picker/picker": "^1.16.1",
+    "@react-native-picker/picker": "^2.1.0",
+
+ 
+
+
     "@react-navigation/bottom-tabs": "^6.0.5",
     "@react-navigation/material-top-tabs": "^6.0.2",
     "@react-navigation/native": "^6.0.2",
@@ -21,28 +26,42 @@
     "expo-status-bar": "~1.0.4",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
+    "native-base": "^3.2.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-multi-date-picker": "^3.1.4",
     "react-native": "https://github.com/expo/react-native/archive/sdk-42.0.0.tar.gz",
+    "react-native-anchor-carousel": "^4.0.1",
     "react-native-animated-spinkit": "^1.5.2",
+    "react-native-datepicker": "^1.7.2",
+    "react-native-datepicker-dialog": "0.0.9",
+
+
+
     "react-native-calendar-range-picker": "^1.5.3",
+
     "react-native-daterange-picker": "^1.5.1",
     "react-native-dates": "^2.0.4",
     "react-native-dynamic-search-bar": "github:WrathChaos/react-native-dynamic-search-bar#expo",
     "react-native-dynamic-vector-icons": "github:WrathChaos/react-native-dynamic-vector-icons#expo",
     "react-native-elements": "^3.4.2",
     "react-native-gesture-handler": "~1.10.2",
+    "react-native-imaged-carousel-card": "^0.1.1",
     "react-native-modal-datetime-picker": "^11.0.0",
     "react-native-pager-view": "5.0.12",
     "react-native-picker-select": "^8.0.4",
     "react-native-read-more-text": "^1.1.2",
     "react-native-safe-area-context": "3.2.0",
     "react-native-screens": "~3.4.0",
+    "react-native-snap-carousel": "^3.9.1",
     "react-native-tab-view": "^3.1.1",
     "react-native-vector-icons": "^8.1.0",
     "react-native-web": "~0.13.12",
+    "save": "^2.4.0",
+
+
     "rnv-date-range-picker": "^1.2.6",
+
     "tslib": "^2.3.1"
   },
   "devDependencies": {

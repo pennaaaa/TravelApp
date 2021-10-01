@@ -8,16 +8,20 @@ import {
   StyleSheet,
   TouchableOpacity,
   Button,
+  Dimensions,
 } from "react-native";
 import colors from "../assets/color/colors";
 import Feather from "react-native-vector-icons/Feather";
+import { ScrollView } from "react-native-gesture-handler";
 
 Feather.loadFont();
 
+const height = Dimensions.get("window").height;
+const width = Dimensions.get("window").width;
+
 const Profile = () => {
   return (
-    // <SafeAreaView>
-    <View style={styles.headerContainer}>
+    <ScrollView style={styles.headerContainer}>
       <ImageBackground
         source={require("../assets/image/backgroundUser.jpg")}
         style={{
@@ -75,17 +79,17 @@ const Profile = () => {
           />
         </View>
       </View>
-      <View style={styles.logoutContainer}>
-        <Button
-          style={styles.logoutButton}
-          title="Đăng xuất"
+      <View >
+        <TouchableOpacity
+          style={styles.buttonWrapper}
           onPress={() => {
             alert("Bạn đã Đăng xuất thành công!");
           }}
-        />
+        >
+          <Text style={styles.buttonText}>Đăng xuất</Text>
+        </TouchableOpacity>
       </View>
-    </View>
-    // </SafeAreaView>
+    </ScrollView>
   );
 };
 export default Profile;
@@ -149,5 +153,22 @@ const styles = StyleSheet.create({
   logoutButton: {
     justifyContent: "center",
     alignSelf: "center",
+  },
+  buttonWrapper: {
+    marginHorizontal: 20,
+    marginTop: 10,
+    marginBottom: 10,
+    width: width * 0.4,
+    marginLeft: width * 0.3,
+    // marginTop: height*0.1,
+    backgroundColor: colors.orange,
+    alignItems: "center",
+    paddingVertical: 20,
+    borderRadius: 15,
+  },
+  buttonText: {
+    // fontFamily: 'Lato-Bold',
+    fontSize: 18,
+    color: colors.white,
   },
 });

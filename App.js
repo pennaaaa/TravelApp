@@ -14,6 +14,10 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
+import FoodDetails from "./components/FoodDetails";
+import FoodBooking from "./components/FoodBooking";
+import VehicleDetails from "./components/VehicleDetails";
+import Homepage from "./components/Homepage";
 
 Entypo.loadFont();
 AntDesign.loadFont();
@@ -64,38 +68,64 @@ const TabNavigation = () => {
   );
 };
 const App = () => {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="TabNavigation"
-          component={TabNavigation}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Details"
-          component={Details}
-          options={({ route }) => ({
-            headerBackTitle: "",
-            headerTitle: route.params.name,
-          })}
-        />
-        <Stack.Screen
-          name="HotelDetails"
-          component={HotelDetails}
-          options={({ route }) => ({
-            headerBackTitle: "",
-            headerTitle: route.params.name,
-          })}
-        />
-        <Stack.Screen
-          name="SearchView"
-          component={SearchView}
-          options={{ headerShown: false }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
+  if (1 != 1) return Homepage;
+  else
+    return (
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="TabNavigation"
+            component={TabNavigation}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Details"
+            component={Details}
+            options={({ route }) => ({
+              headerBackTitle: "",
+              headerTitle: route.params.name,
+            })}
+          />
+          <Stack.Screen
+            name="HotelDetails"
+            component={HotelDetails}
+            options={({ route }) => ({
+              headerBackTitle: "",
+              headerTitle: route.params.name,
+            })}
+          />
+          <Stack.Screen
+            name="FoodDetails"
+            component={FoodDetails}
+            options={({ route }) => ({
+              headerBackTitle: "",
+              headerTitle: route.params.name,
+            })}
+          />
+          <Stack.Screen
+            name="FoodBooking"
+            component={FoodBooking}
+            options={({ route }) => ({
+              headerBackTitle: "",
+              headerTitle: route.params.name,
+            })}
+          />
+          <Stack.Screen
+            name="VehicleDetails"
+            component={VehicleDetails}
+            options={({ route }) => ({
+              headerBackTitle: "",
+              headerTitle: route.params.name,
+            })}
+          />
+          <Stack.Screen
+            name="SearchView"
+            component={SearchView}
+            options={{ headerShown: false }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    );
 };
 
 const styles = StyleSheet.create({
