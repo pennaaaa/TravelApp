@@ -127,12 +127,20 @@ const HotelDetails = ({ route, naviogation }) => {
                     paddingHorizontal: 10,
                     backgroundColor: colors.yelow,
                     borderRadius: 5,
-                  },
-                }}
+
+                    width:width,
+                  },}
+                }
+
+
                 onValueChange={(value) => setSelectedValue(value)}
                 style={{
                   inputAndroid: {
-                    backgroundColor: "transparent",
+                    // fontSize:32,
+                    marginTop:10,
+                    // backgroundColor: "transparent",
+                    width:80,
+                    color: colors.orange,
                   },
                   iconContainer: {
                     top: 5,
@@ -202,7 +210,7 @@ const styles = StyleSheet.create({
     marginTop: -20,
     // marginBottom:20,
     borderRadius: 25,
-    height: height,
+    // height: height,
   },
   backIcon: {
     marginLeft: 20,
@@ -300,7 +308,7 @@ const styles = StyleSheet.create({
   buttonWrapper: {
     marginHorizontal: 20,
     marginTop: 10,
-    // marginBottom:10,
+    marginBottom:10,
     // marginTop: height*0.1,
     backgroundColor: colors.orange,
     alignItems: "center",

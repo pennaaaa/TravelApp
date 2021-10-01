@@ -10,16 +10,14 @@ import {
   Button,
 } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
-import foodData from "../assets/data/foodData";
 import colors from "../assets/color/colors";
+import vehicleRentalData from "../assets/data/vehicleRentalData";
 
 const height = Dimensions.get("window").height;
 const width = Dimensions.get("window").width;
 
-const FoodCityList = (props) => {
-  const item = props.item;
-  const navigation = props.navigation;
-  const renderFoodDataItem = ({ item }) => {
+const VehicleRentalList = ({ navigation }) => {
+  const renderVehicleRentalDataItem = ({ item }) => {
     return (
       <View style={[styles.card, styles.shadowProp]}>
         <ImageBackground
@@ -29,41 +27,37 @@ const FoodCityList = (props) => {
         >
         </ImageBackground>
         <View style={styles.descriptionFood}>
-
           <View>
             <Text style={styles.itemTitleText} numberOfLines={1}>
               {item.title}
             </Text>
+            <Text style={styles.itemFastReview} numberOfLines={1}>
+              Loại xe: {item.type}
+            </Text>
+            <Text style={styles.itemFastReview} numberOfLines={1}>
+              Chỗ ngồi: {item.seat}
+            </Text>
             <Text style={styles.itemAddress} numberOfLines={1}>
               Địa chỉ: {item.address}
             </Text>
-            <Text style={styles.itemFastReview} numberOfLines={1}>
-              Chuyên món Việt (Cơm niêu)
-            </Text>
             <Text style={styles.rangePrice} numberOfLines={1}>
-              Giá từ: {item.pricefrom}- {item.priceto} đ/ Món
-            </Text>
-            <Text style={styles.itemAlivableTime} numberOfLines={1}>
-              Đặt chỗ: 19h-22h các ngày trong tuần
+              Giá thuê: {item.price} đ/ ngày
             </Text>
           </View>
 
           <TouchableOpacity
             style={styles.bookButton}
             onPress={() =>
-              navigation.navigate("FoodDetails", {
+              navigation.navigate("VehicleDetails", {
                 item: item,
                 name: item.location,
               })
             }
           >
-            <Text style={styles.buttonText}>Xem chi tiết</Text>
+            <Text style={styles.buttonText}>Thuê xe</Text>
           </TouchableOpacity>
-
         </View>
       </View>
-
-      // </TouchableOpacity>
     );
   };
   return (
@@ -73,8 +67,8 @@ const FoodCityList = (props) => {
         {/* <Text style={styles.highTitle}>Ẩm thực nổi bật</Text> */}
         <View style={styles.highItemWrapper}>
           <FlatList
-            data={foodData}
-            renderItem={renderFoodDataItem}
+            data={vehicleRentalData}
+            renderItem={renderVehicleRentalDataItem}
             keyExtractor={(item) => item.id}
 
             // horizontal
@@ -94,7 +88,7 @@ const styles = StyleSheet.create({
     marginBottom: 0,
   },
   restaurantItem: {
-    width: width * 0.3,
+    width: width * 0.35,
     height: height * 0.35,
     justifyContent: "space-between",
     // paddingHorizontal: 10,
@@ -123,7 +117,7 @@ const styles = StyleSheet.create({
   itemTitleText: {
     width: width * 0.6,
     // height: height * 0.1,
-    fontSize: 24,
+    fontSize: 20,
     marginTop: 10,
     // marginLeft:0,
   },
@@ -144,19 +138,16 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
   },
   descriptionFood: {
+    height: height * 0.35,
+    display: "flex",
     flexDirection: "column",
-
-    // justifyContent:"space-between"
-
   },
   itemAddress: {
     width: width * 0.6,
     marginTop: height * 0.02,
   },
   itemAlivableTime: {
-
     color: colors.black,
-
     width: width * 0.6,
     marginTop: height * 0.02,
   },
@@ -165,33 +156,16 @@ const styles = StyleSheet.create({
     marginTop: height * 0.02,
   },
   rangePrice: {
-
     color: colors.orange,
-
     width: width * 0.6,
     marginTop: height * 0.02,
   },
   bookButton: {
-
     // height:height*0.2,
     marginTop: "auto",
     marginHorizontal: 20,
     bottom: -20,
     // marginBottom:100,
-
-    // color:colors.orange,
-    // backgroundColor: colors.orange,
-    // position:'relative',
-    // borderRadius:10,
-    marginHorizontal: 20,
-    // height:50,
-    // paddingBottom:0,
-    // bottom: ,
-
-    marginTop: 10,
-    // marginBottom:10,
-    // marginTop: height*0.1,
-
     backgroundColor: colors.orange,
     alignItems: "center",
     paddingVertical: 15,
@@ -200,11 +174,10 @@ const styles = StyleSheet.create({
     // alignContent:"flex-end"
   },
 
-
   buttonText: {
     fontSize: 18,
     color: colors.white,
   },
 });
 
-export default FoodCityList;
+export default VehicleRentalList;

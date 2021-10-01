@@ -68,7 +68,9 @@ const Home = ({ navigation }) => {
         onPress={() =>
           navigation.navigate("HotelDetails", {
             item: item,
-            name: item.city,
+
+            name: item.location,
+
           })
         }
       >
@@ -98,7 +100,7 @@ const Home = ({ navigation }) => {
     );
   };
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <ScrollView>
         {/* Header */}
         <SafeAreaView>
@@ -146,7 +148,7 @@ const Home = ({ navigation }) => {
           </View>
         </SafeAreaView>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 
