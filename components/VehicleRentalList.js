@@ -10,16 +10,14 @@ import {
   Button,
 } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
-import foodData from "../assets/data/foodData";
 import colors from "../assets/color/colors";
+import vehicleRentalData from "../assets/data/vehicleRentalData";
 
 const height = Dimensions.get("window").height;
 const width = Dimensions.get("window").width;
 
-const FoodCityList = (props) => {
-  const item = props.item;
-  const navigation = props.navigation;
-  const renderFoodDataItem = ({ item }) => {
+const VehicleRentalList = ({ navigation }) => {
+  const renderVehicleRentalDataItem = ({ item }) => {
     return (
       <View style={[styles.card, styles.shadowProp]}>
         <ImageBackground
@@ -33,35 +31,33 @@ const FoodCityList = (props) => {
             <Text style={styles.itemTitleText} numberOfLines={1}>
               {item.title}
             </Text>
+            <Text style={styles.itemFastReview} numberOfLines={1}>
+              Loại xe: {item.type}
+            </Text>
+            <Text style={styles.itemFastReview} numberOfLines={1}>
+              Chỗ ngồi: {item.seat}
+            </Text>
             <Text style={styles.itemAddress} numberOfLines={1}>
               Địa chỉ: {item.address}
             </Text>
-            <Text style={styles.itemFastReview} numberOfLines={1}>
-              Chuyên món Việt (Cơm niêu)
-            </Text>
             <Text style={styles.rangePrice} numberOfLines={1}>
-              Giá từ: {item.pricefrom}- {item.priceto} đ/ Món
-            </Text>
-            <Text style={styles.itemAlivableTime} numberOfLines={1}>
-              Đặt chỗ: 19h-22h các ngày trong tuần
+              Giá thuê: {item.price} đ/ ngày
             </Text>
           </View>
 
           <TouchableOpacity
             style={styles.bookButton}
             onPress={() =>
-              navigation.navigate("FoodDetails", {
+              navigation.navigate("VehicleDetails", {
                 item: item,
                 name: item.location,
               })
             }
           >
-            <Text style={styles.buttonText}>Xem chi tiết</Text>
+            <Text style={styles.buttonText}>Thuê xe</Text>
           </TouchableOpacity>
         </View>
       </View>
-
-      // </TouchableOpacity>
     );
   };
   return (
@@ -71,8 +67,8 @@ const FoodCityList = (props) => {
         {/* <Text style={styles.highTitle}>Ẩm thực nổi bật</Text> */}
         <View style={styles.highItemWrapper}>
           <FlatList
-            data={foodData}
-            renderItem={renderFoodDataItem}
+            data={vehicleRentalData}
+            renderItem={renderVehicleRentalDataItem}
             keyExtractor={(item) => item.id}
 
             // horizontal
@@ -92,7 +88,7 @@ const styles = StyleSheet.create({
     marginBottom: 0,
   },
   restaurantItem: {
-    width: width * 0.3,
+    width: width * 0.35,
     height: height * 0.35,
     justifyContent: "space-between",
     // paddingHorizontal: 10,
@@ -121,7 +117,7 @@ const styles = StyleSheet.create({
   itemTitleText: {
     width: width * 0.6,
     // height: height * 0.1,
-    fontSize: 24,
+    fontSize: 20,
     marginTop: 10,
     // marginLeft:0,
   },
@@ -142,8 +138,9 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
   },
   descriptionFood: {
+    height: height * 0.35,
+    display: "flex",
     flexDirection: "column",
-    // justifyContent:"space-between"
   },
   itemAddress: {
     width: width * 0.6,
@@ -183,4 +180,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FoodCityList;
+export default VehicleRentalList;

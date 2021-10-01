@@ -54,11 +54,11 @@ const Home = ({ navigation }) => {
     return (
       <TouchableOpacity
         onPress={() =>
-        navigation.navigate("HotelDetails", {
-          item: item,
-          name: item.location,
-        })
-      }
+          navigation.navigate("HotelDetails", {
+            item: item,
+            name: item.location,
+          })
+        }
       >
         <ImageBackground
           source={item.image}
@@ -88,7 +88,7 @@ const Home = ({ navigation }) => {
     );
   };
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <ScrollView>
         {/* Header */}
         <SafeAreaView>
@@ -132,7 +132,7 @@ const Home = ({ navigation }) => {
           </View>
         </SafeAreaView>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 
