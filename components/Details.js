@@ -11,6 +11,7 @@ import FoodCityList from "./FoodCityList";
 import VehicleRentalList from "./VehicleRentalList";
 import HotelList from "./HotelList";
 
+
 const Details = ({ route, navigation }) => {
   const { item } = route.params;
   const Tab = createMaterialTopTabNavigator();
@@ -23,7 +24,9 @@ const Details = ({ route, navigation }) => {
         />
         <Tab.Screen
           name="Khách sạn"
+
           children={() => <HotelList item={item} navigation={navigation} />}
+
         />
         <Tab.Screen
           name="Thuê xe"

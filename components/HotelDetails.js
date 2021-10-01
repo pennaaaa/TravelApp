@@ -5,7 +5,7 @@ import {
   StyleSheet,
   ImageBackground,
   Dimensions,
-  FlatList
+  FlatList,
 } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import colors from "../assets/color/colors";
@@ -15,11 +15,8 @@ import ReadMore from "react-native-read-more-text";
 import RNPPickerSelect from "react-native-picker-select";
 import { values } from "lodash";
 
-
 const height = Dimensions.get("window").height;
 const width = Dimensions.get("window").width;
-
-
 
 const HotelDetails = ({ route, naviogation }) => {
   const { item } = route.params;
@@ -29,7 +26,10 @@ const HotelDetails = ({ route, naviogation }) => {
   return (
     <ScrollView>
       <View style={styles.container}>
-        <ImageBackground source={item.imageBig} style={styles.backgroundImage}>
+        <ImageBackground
+          source={{ uri: item.images[1] }}
+          style={styles.backgroundImage}
+        >
           {/* <View style={styles.titlesWrapper}>
             <Text style={styles.itemTitle}>{item.title}</Text>
             <View style={styles.locationWrapper}>
@@ -105,7 +105,7 @@ const HotelDetails = ({ route, naviogation }) => {
 
             <View style={styles.infoItem}>
               <Text style={styles.infoTitle}>Số người</Text>
-              <RNPPickerSelect 
+              <RNPPickerSelect
                 onClose={() => console.log("close select")}
                 style={{
                   inputIOS: {
@@ -114,11 +114,11 @@ const HotelDetails = ({ route, naviogation }) => {
                     paddingHorizontal: 10,
                     paddingBottom: 12,
                     borderWidth: 1,
-                    borderColor: 'gray',
+                    borderColor: "gray",
                     borderRadius: 4,
-                    backgroundColor: 'white',
-                    color: 'black',
-                },
+                    backgroundColor: "white",
+                    color: "black",
+                  },
                   placeholder: {
                     colors: colors.yelow,
                   },
@@ -127,9 +127,11 @@ const HotelDetails = ({ route, naviogation }) => {
                     paddingHorizontal: 10,
                     backgroundColor: colors.yelow,
                     borderRadius: 5,
+
                     width:width,
                   },}
                 }
+
 
                 onValueChange={(value) => setSelectedValue(value)}
                 style={{
@@ -366,7 +368,6 @@ const styles = StyleSheet.create({
     height: height * 0.15,
     alignItems: "stretch",
   },
-  
 });
 
 export default HotelDetails;

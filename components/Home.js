@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -25,6 +25,18 @@ Entypo.loadFont();
 FontAwesome.loadFont();
 
 const Home = ({ navigation }) => {
+  const [isHotelLoading, setHotelLoading] = useState(true);
+  const [hotelData, sethotelData] = useState([]);
+  // console.log(hotelData);
+
+  useEffect(() => {
+    fetch("https://pbl6-travelapp.herokuapp.com/hotel")
+      .then((response) => response.json())
+      .then((json) => sethotelData(json))
+      .catch((error) => console.error(error))
+      .finally(() => setHotelLoading(false));
+  }, []);
+
   const renderDiscorverDataItem = ({ item }) => {
     return (
       <TouchableOpacity
@@ -56,20 +68,20 @@ const Home = ({ navigation }) => {
         onPress={() =>
           navigation.navigate("HotelDetails", {
             item: item,
+
             name: item.location,
+
           })
         }
       >
         <ImageBackground
-          source={item.image}
+          source={{ uri: item.imageCover }}
           style={styles.discorverItem}
           imageStyle={styles.discorverItemImage}
         >
           <View style={styles.discorverItemLocationWrapper}>
             <Entypo name="location-pin" size={18} color={colors.white} />
-            <Text style={styles.discorverItemLocationText}>
-              {item.location}
-            </Text>
+            <Text style={styles.discorverItemLocationText}>{item.city}</Text>
           </View>
         </ImageBackground>
       </TouchableOpacity>
@@ -121,13 +133,17 @@ const Home = ({ navigation }) => {
           <View style={styles.cityHighContainer}>
             <Text style={styles.highTitle}>Khách sạn nổi bật</Text>
             <View style={styles.highItemWrapper}>
-              <FlatList
-                data={hotelData}
-                renderItem={renderHotelDataItem}
-                keyExtractor={(item) => item.id}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-              />
+              {isHotelLoading ? (
+                <Text>Loading...</Text>
+              ) : (
+                <FlatList
+                  data={hotelData}
+                  renderItem={renderHotelDataItem}
+                  keyExtractor={(item) => item.id}
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                />
+              )}
             </View>
           </View>
         </SafeAreaView>

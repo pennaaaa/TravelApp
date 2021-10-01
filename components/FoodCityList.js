@@ -29,6 +29,7 @@ const FoodCityList = (props) => {
         >
         </ImageBackground>
         <View style={styles.descriptionFood}>
+
           <View>
             <Text style={styles.itemTitleText} numberOfLines={1}>
               {item.title}
@@ -58,6 +59,7 @@ const FoodCityList = (props) => {
           >
             <Text style={styles.buttonText}>Xem chi tiết</Text>
           </TouchableOpacity>
+
         </View>
       </View>
 
@@ -143,14 +145,18 @@ const styles = StyleSheet.create({
   },
   descriptionFood: {
     flexDirection: "column",
+
     // justifyContent:"space-between"
+
   },
   itemAddress: {
     width: width * 0.6,
     marginTop: height * 0.02,
   },
   itemAlivableTime: {
+
     color: colors.black,
+
     width: width * 0.6,
     marginTop: height * 0.02,
   },
@@ -159,16 +165,33 @@ const styles = StyleSheet.create({
     marginTop: height * 0.02,
   },
   rangePrice: {
+
     color: colors.orange,
+
     width: width * 0.6,
     marginTop: height * 0.02,
   },
   bookButton: {
+
     // height:height*0.2,
     marginTop: "auto",
     marginHorizontal: 20,
     bottom: -20,
     // marginBottom:100,
+
+    // color:colors.orange,
+    // backgroundColor: colors.orange,
+    // position:'relative',
+    // borderRadius:10,
+    marginHorizontal: 20,
+    // height:50,
+    // paddingBottom:0,
+    // bottom: ,
+
+    marginTop: 10,
+    // marginBottom:10,
+    // marginTop: height*0.1,
+
     backgroundColor: colors.orange,
     alignItems: "center",
     paddingVertical: 15,
@@ -176,6 +199,7 @@ const styles = StyleSheet.create({
     // alignSelf:"flex-end",
     // alignContent:"flex-end"
   },
+
 
   buttonText: {
     fontSize: 18,
