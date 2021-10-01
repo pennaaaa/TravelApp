@@ -68,7 +68,9 @@ const Home = ({ navigation }) => {
         onPress={() =>
           navigation.navigate("HotelDetails", {
             item: item,
+
             name: item.location,
+
           })
         }
       >

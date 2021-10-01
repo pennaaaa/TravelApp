@@ -143,14 +143,18 @@ const styles = StyleSheet.create({
   },
   descriptionFood: {
     flexDirection: "column",
+
     // justifyContent:"space-between"
+
   },
   itemAddress: {
     width: width * 0.6,
     marginTop: height * 0.02,
   },
   itemAlivableTime: {
+
     color: colors.black,
+
     width: width * 0.6,
     marginTop: height * 0.02,
   },
@@ -160,6 +164,9 @@ const styles = StyleSheet.create({
   },
   rangePrice: {
     color: colors.orange,
+
+    // color: colors.orange,
+
     width: width * 0.6,
     marginTop: height * 0.02,
   },
@@ -169,6 +176,20 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     bottom: -20,
     // marginBottom:100,
+
+    // color:colors.orange,
+    // backgroundColor: colors.orange,
+    // position:'relative',
+    // borderRadius:10,
+    marginHorizontal: 20,
+    // height:50,
+    // paddingBottom:0,
+    // bottom: ,
+
+    marginTop: 10,
+    // marginBottom:10,
+    // marginTop: height*0.1,
+
     backgroundColor: colors.orange,
     alignItems: "center",
     paddingVertical: 15,
