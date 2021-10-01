@@ -1,12 +1,12 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import Home from "./components/Home";
-import Details from "./components/Details";
-import HotelDetails from "./components/HotelDetails";
-import SearchView from "./components/SearchView";
-import Find from "./components/Find";
-import Profile from "./components/Profile";
-import colors from "./assets/color/colors";
+import Home from "./Home";
+import Details from "./Details";
+import HotelDetails from "./HotelDetails";
+import SearchView from "./SearchView";
+import Find from "./Find";
+import Profile from "./Profile";
+import colors from "../assets/color/colors";
 import Entypo from "react-native-vector-icons/Entypo";
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
 import AntDesign from "react-native-vector-icons/AntDesign";
@@ -63,7 +63,8 @@ const TabNavigation = () => {
     </Tab.Navigator>
   );
 };
-const App = () => {
+
+const Homepage = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -106,4 +107,4 @@ const styles = StyleSheet.create({
     display: "flex",
   },
 });
-export default App;
+export default Homepage;
