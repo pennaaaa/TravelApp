@@ -68,9 +68,7 @@ const Home = ({ navigation }) => {
         onPress={() =>
           navigation.navigate("HotelDetails", {
             item: item,
-
             name: item.location,
-
           })
         }
       >
@@ -103,7 +101,7 @@ const Home = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       <ScrollView>
         {/* Header */}
-        <SafeAreaView>
+        <View>
           <View style={styles.menuWrapper}>
             <Text style={styles.title}>Khám phá</Text>
             <View style={styles.allActivity}>
@@ -146,7 +144,7 @@ const Home = ({ navigation }) => {
               )}
             </View>
           </View>
-        </SafeAreaView>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -158,7 +156,7 @@ const styles = StyleSheet.create({
     color: colors.white,
   },
   menuWrapper: {
-    backgroundColor: colors.orange,
+    backgroundColor: "#48BB78",
     height: 200,
     width: "100%",
   },
@@ -166,6 +164,7 @@ const styles = StyleSheet.create({
     fontSize: 38,
     justifyContent: "center",
     marginTop: 10,
+    color: colors.white,
     marginHorizontal: 10,
     // fontFamily: 'LexendDeca-Bold',
   },
