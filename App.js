@@ -17,7 +17,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 import FoodDetails from "./components/FoodDetails";
 import FoodBooking from "./components/FoodBooking";
 import VehicleDetails from "./components/VehicleDetails";
-import Homepage from "./components/Homepage";
+import AppLoading from "./components/AppLoading";
+import OnBoarding from "./components/OnBoarding";
 
 Entypo.loadFont();
 AntDesign.loadFont();
@@ -68,64 +69,72 @@ const TabNavigation = () => {
   );
 };
 const App = () => {
-  if (1 != 1) return Homepage;
-  else
-    return (
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="TabNavigation"
-            component={TabNavigation}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Details"
-            component={Details}
-            options={({ route }) => ({
-              headerBackTitle: "",
-              headerTitle: route.params.name,
-            })}
-          />
-          <Stack.Screen
-            name="HotelDetails"
-            component={HotelDetails}
-            options={({ route }) => ({
-              headerBackTitle: "",
-              headerTitle: route.params.name,
-            })}
-          />
-          <Stack.Screen
-            name="FoodDetails"
-            component={FoodDetails}
-            options={({ route }) => ({
-              headerBackTitle: "",
-              headerTitle: route.params.name,
-            })}
-          />
-          <Stack.Screen
-            name="FoodBooking"
-            component={FoodBooking}
-            options={({ route }) => ({
-              headerBackTitle: "",
-              headerTitle: route.params.name,
-            })}
-          />
-          <Stack.Screen
-            name="VehicleDetails"
-            component={VehicleDetails}
-            options={({ route }) => ({
-              headerBackTitle: "",
-              headerTitle: route.params.name,
-            })}
-          />
-          <Stack.Screen
-            name="SearchView"
-            component={SearchView}
-            options={{ headerShown: false }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-    );
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="LoadingApp"
+          component={AppLoading}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="OnBoarding"
+          component={OnBoarding}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="TabNavigation"
+          component={TabNavigation}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Details"
+          component={Details}
+          options={({ route }) => ({
+            headerBackTitle: "",
+            headerTitle: route.params.name,
+          })}
+        />
+        <Stack.Screen
+          name="HotelDetails"
+          component={HotelDetails}
+          options={({ route }) => ({
+            headerBackTitle: "",
+            headerTitle: route.params.name,
+          })}
+        />
+        <Stack.Screen
+          name="FoodDetails"
+          component={FoodDetails}
+          options={({ route }) => ({
+            headerBackTitle: "",
+            headerTitle: route.params.name,
+          })}
+        />
+        <Stack.Screen
+          name="FoodBooking"
+          component={FoodBooking}
+          options={({ route }) => ({
+            headerBackTitle: "",
+            headerTitle: route.params.name,
+          })}
+        />
+        <Stack.Screen
+          name="VehicleDetails"
+          component={VehicleDetails}
+          options={({ route }) => ({
+            headerBackTitle: "",
+            headerTitle: route.params.name,
+          })}
+        />
+        <Stack.Screen
+          name="SearchView"
+          component={SearchView}
+          options={{ headerShown: false }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
 };
 
 const styles = StyleSheet.create({

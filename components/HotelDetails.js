@@ -18,7 +18,7 @@ import { values } from "lodash";
 const height = Dimensions.get("window").height;
 const width = Dimensions.get("window").width;
 
-const HotelDetails = ({ route, naviogation }) => {
+const HotelDetails = ({ route, navigation }) => {
   const { item } = route.params;
 
   // const [selectedValue, setSelectedValue] = useState("1");
@@ -127,17 +127,16 @@ const HotelDetails = ({ route, naviogation }) => {
                     paddingHorizontal: 10,
                     backgroundColor: colors.yelow,
                     borderRadius: 5,
-                    width:width,
-                  },}
-                }
-
+                    width: width,
+                  },
+                }}
                 onValueChange={(value) => setSelectedValue(value)}
                 style={{
                   inputAndroid: {
                     // fontSize:32,
-                    marginTop:10,
+                    marginTop: 10,
                     // backgroundColor: "transparent",
-                    width:80,
+                    width: 80,
                     color: colors.orange,
                   },
                   iconContainer: {
@@ -306,7 +305,7 @@ const styles = StyleSheet.create({
   buttonWrapper: {
     marginHorizontal: 20,
     marginTop: 10,
-    marginBottom:10,
+    marginBottom: 10,
     // marginTop: height*0.1,
     backgroundColor: colors.orange,
     alignItems: "center",
