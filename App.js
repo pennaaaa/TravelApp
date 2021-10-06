@@ -31,8 +31,7 @@ const TabNavigation = () => {
     <Tab.Navigator
       screenOptions={{
         style: styles.tabBar,
-        inactiveTintColor: colors.darkblue,
-        activeTintColor: colors.yelow,
+        tabBarActiveTintColor: "#68BD48",
       }}
     >
       <Tab.Screen
