@@ -5,14 +5,16 @@ import {
   StyleSheet,
   SafeAreaView,
   TouchableOpacity,
-  ImageBackground,
+  Image,
 } from "react-native";
 import SearchBar from "react-native-dynamic-search-bar";
 import { FlatList } from "react-native-gesture-handler";
 import colors from "../assets/color/colors";
 import hotelData from "../assets/data/hotelData";
+import kindSearch from "../assets/data/kindSearch";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Entypo from "react-native-vector-icons/Entypo";
+import { Rating } from "react-native-elements";
 
 FontAwesome.loadFont();
 Entypo.loadFont();
@@ -31,25 +33,61 @@ const SearchView = ({ navigation }) => {
         }
       >
         <View style={styles.itemContainer}>
-          <View>
-            <ImageBackground
-              source={item.image}
-              style={styles.discorverItem}
-              imageStyle={styles.discorverItemImage}
-            >
-              <View style={styles.discorverItemLocationWrapper}>
-                <Entypo name="location-pin" size={18} color={colors.white} />
-                <Text style={styles.discorverItemLocationText}>
-                  {item.location}
-                </Text>
-              </View>
-            </ImageBackground>
+          <View
+            style={{
+              borderTopLeftRadius: 20,
+              borderTopRightRadius: 20,
+            }}
+          >
+            <Image source={item.image} style={styles.discorverItem} />
           </View>
           <View style={styles.itemText}>
-            <Text style={styles.itemName}>{item.title}</Text>
-            <Text style={styles.itemPrice}>{item.price}đ/ngày</Text>
-            <Text style={styles.itemDescription}>{item.description}</Text>
+            <Text style={styles.itemName}>
+              <FontAwesome name="flash" size={20} color={"green"} />
+              {"  "}
+              {item.title}, {item.location}
+            </Text>
+            <View
+              style={{
+                margin: 10,
+                backgroundColor: "#D3D3D3",
+                padding: 5,
+              }}
+            >
+              <Text style={styles.addressText}>
+                <Entypo name="location-pin" size={16} color={"green"} /> {"   "}{" "}
+                Đây là chỗ của địa chỉ nè!!
+              </Text>
+              <Text style={styles.addressText}>
+                <FontAwesome name="bed" size={16} color={"green"} /> {"   "} 1
+                giường đôi lớn, 1 phòng tắm
+              </Text>
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                marginBottom: 10,
+              }}
+            >
+              <Text style={styles.itemPrice}>{item.price}đ/ngày</Text>
+              <Rating
+                imageSize={20}
+                fractions="{1}"
+                readonly
+                startingValue={item.rating}
+              />
+            </View>
           </View>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+  const renderKindSearch = ({ item }) => {
+    return (
+      <TouchableOpacity onPress={() => alert("bam roi nha!")}>
+        <View style={styles.kindSearchView}>
+          <Text style={styles.kindSearchText}>{item.title}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -66,18 +104,32 @@ const SearchView = ({ navigation }) => {
     setData(newData);
   };
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ backgroundColor: colors.white }}>
       <SearchBar
-        style={{ height: 50, width: 344, borderRadius: 10 }}
+        style={{
+          height: 68,
+          width: 344,
+          borderRadius: 20,
+          marginTop: 10,
+        }}
         fontSize={20}
         searchIconImageStyle={{ height: 25, width: 25 }}
         clearIconImageStyle={{ paddingRight: 40 }}
-        placeholder="Search here"
+        placeholder="Bạn sắp đến đâu?"
         onChangeText={(text) => onChangeText(text)}
         autoFocus
       />
       <View style={styles.resultView}>
         <Text style={styles.resultText}>Kết quả tìm kiếm</Text>
+        <View style={styles.kindSearch}>
+          <FlatList
+            data={kindSearch}
+            renderItem={renderKindSearch}
+            keyExtractor={(item) => item.id}
+            showsHorizontalScrollIndicator={false}
+            horizontal
+          />
+        </View>
       </View>
       <View style={styles.highItemWrapper}>
         <FlatList
@@ -92,28 +144,51 @@ const SearchView = ({ navigation }) => {
 };
 const styles = StyleSheet.create({
   itemContainer: {
-    flexDirection: "row",
-    marginTop: 10,
+    alignSelf: "center",
+    marginBottom: 15,
+    borderRadius: 20,
+    width: "98%",
     backgroundColor: colors.white,
-    borderRadius: 30,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  kindSearch: {
+    marginTop: 10,
+  },
+  kindSearchView: {
+    height: 40,
+    width: 120,
+    backgroundColor: colors.white,
+    borderRadius: 20,
+    borderWidth: 0.4,
+    marginRight: 10,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  kindSearchText: {
+    fontFamily: "SourceSans-Regular",
+    fontSize: 18,
   },
   resultView: {
     paddingTop: 20,
-    paddingLeft: 20,
+    paddingLeft: 10,
   },
   resultText: {
     fontSize: 24,
+    marginLeft: 10,
   },
   discorverItem: {
-    width: 177,
-    height: 204,
-    justifyContent: "flex-end",
-    paddingHorizontal: 10,
-    paddingVertical: 15,
-    marginRight: 20,
-  },
-  discorverItemImage: {
-    borderRadius: 30,
+    width: "100%",
+    height: 200,
+    resizeMode: "cover",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
   },
   discorverItemLocationWrapper: {
     flexDirection: "row",
@@ -125,24 +200,26 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   highItemWrapper: {
-    flexDirection: "column",
-    marginTop: 20,
-    paddingLeft: 20,
-    paddingRight: 10,
+    marginTop: 15,
+    marginHorizontal: 15,
   },
   itemText: {
-    justifyContent: "space-between",
-    paddingTop: 10,
-    paddingBottom: 10,
+    marginTop: 10,
+    marginHorizontal: 15,
   },
   itemName: {
-    fontSize: 22,
+    fontSize: 20,
+    fontFamily: "SourceSans-SemiBold",
   },
   itemPrice: {
-    fontSize: 18,
+    fontSize: 20,
+    fontFamily: "SourceSans-SemiBold",
   },
-  itemDescription: {
+  addressText: {
     fontSize: 16,
+    fontFamily: "SourceSans-Regular",
+    marginLeft: 15,
+    marginBottom: 5,
   },
 });
 export default SearchView;
