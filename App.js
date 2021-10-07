@@ -17,6 +17,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 import FoodDetails from "./components/FoodDetails";
 import FoodBooking from "./components/FoodBooking";
 import VehicleDetails from "./components/VehicleDetails";
+import AppLoading from "./components/AppLoading";
+import OnBoarding from "./components/OnBoarding";
 
 Entypo.loadFont();
 AntDesign.loadFont();
@@ -66,11 +68,20 @@ const TabNavigation = () => {
     </Tab.Navigator>
   );
 };
-
 const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen
+          name="LoadingApp"
+          component={AppLoading}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="OnBoarding"
+          component={OnBoarding}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="TabNavigation"
           component={TabNavigation}
@@ -108,7 +119,7 @@ const App = () => {
             headerTitle: route.params.name,
           })}
         />
-         <Stack.Screen
+        <Stack.Screen
           name="VehicleDetails"
           component={VehicleDetails}
           options={({ route }) => ({
