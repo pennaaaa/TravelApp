@@ -8,6 +8,7 @@ import {
   FlatList,
   TouchableOpacity,
   ImageBackground,
+  Image,
 } from "react-native";
 import colors from "../assets/color/colors";
 import SearchBar from "react-native-dynamic-search-bar";
@@ -42,18 +43,32 @@ const Find = ({ navigation }) => {
           })
         }
       >
-        <ImageBackground
-          source={item.image}
-          style={styles.discorverItem}
-          imageStyle={styles.discorverItemImage}
-        >
-          <View style={styles.discorverItemLocationWrapper}>
-            <Entypo name="location-pin" size={18} color={colors.white} />
-            <Text style={styles.discorverItemLocationText}>
+        <View style={styles.itemContainer} shadowOffset={{ height: 10 }}>
+          <Image source={item.imageBig} style={styles.discorverItem} />
+          <View style={styles.itemViewText}>
+            <Text
+              style={{
+                marginLeft: 10,
+                marginTop: 5,
+                fontFamily: "SourceSans-SemiBold",
+                fontSize: 18,
+              }}
+            >
+              {item.title}
+            </Text>
+            <Text
+              style={{
+                marginLeft: 10,
+                marginVertical: 5,
+                fontFamily: "SourceSans-Regular",
+                fontSize: 18,
+                color: "#7B7B7B",
+              }}
+            >
               {item.location}
             </Text>
           </View>
-        </ImageBackground>
+        </View>
       </TouchableOpacity>
     );
   };
@@ -62,21 +77,31 @@ const Find = ({ navigation }) => {
       <ScrollView>
         {/* Header */}
         <SafeAreaView>
-          <View style={styles.menuWrapper}>
-            <Text style={styles.title}>Tìm Kiếm</Text>
-            <View style={styles.allActivity}>
-              <SearchBar
-                style={{ height: 68, width: 344, borderRadius: 40 }}
-                fontSize={20}
-                searchIconImageStyle={{ height: 25, width: 25 }}
-                clearIconImageStyle={{ paddingRight: 40 }}
-                placeholder="Search here"
-                // onPress={() => navigation.navigate("SearchView")}
-                // onChangeText={() => navigation.navigate("SearchView")}
-                onFocus={() => navigation.navigate("SearchView")}
-              />
-            </View>
+          <View style={styles.logo}>
+            <Image
+              source={require("../assets/image/logo2.png")}
+              style={{
+                resizeMode: "stretch",
+                height: 50,
+                width: 100,
+              }}
+            />
+            <Text style={styles.logoName}>Go Go</Text>
           </View>
+
+          <SearchBar
+            style={{
+              height: 68,
+              width: 344,
+              borderRadius: 20,
+              marginTop: 20,
+            }}
+            fontSize={20}
+            searchIconImageStyle={{ height: 25, width: 25 }}
+            clearIconImageStyle={{ paddingRight: 40 }}
+            placeholder="Bạn sắp đến đâu?"
+            onFocus={() => navigation.navigate("SearchView")}
+          />
           {/* last search */}
           <View style={styles.cityHighContainer}>
             <Text style={styles.highTitle}>Tìm kiếm gần đây của bạn</Text>
@@ -110,37 +135,26 @@ const Find = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    color: colors.white,
-  },
-  menuWrapper: {
-    backgroundColor: colors.orange,
-    height: 200,
-    width: "100%",
-  },
-  title: {
-    fontSize: 38,
-    justifyContent: "center",
+  logo: {
     marginTop: 10,
-    marginHorizontal: 10,
-    // fontFamily: 'LexendDeca-Bold',
-  },
-  allActivity: {
     marginLeft: 10,
-    marginTop: 30,
+    flexDirection: "row",
+    alignItems: "center",
   },
-  cityHighContainer: {
-    marginTop: 10,
-    marginHorizontal: 10,
+  logoName: {
+    fontSize: 40,
+    fontWeight: "300",
+    marginLeft: 10,
   },
+  container: { flex: 1, backgroundColor: colors.white },
   highTitle: {
     fontSize: 24,
     justifyContent: "center",
+    fontFamily: "SourceSans-SemiBold",
   },
   highItemWrapper: {
     flexDirection: "row",
-    marginTop: 20,
+    marginTop: 10,
   },
   discorverItem: {
     width: 177,
@@ -150,42 +164,59 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     marginRight: 20,
   },
-  discorverItemImage: {
-    borderRadius: 30,
+  itemContainer: {
+    marginVertical: 5,
+    marginHorizontal: 5,
+    borderRadius: 20,
   },
-  discorverItemLocationWrapper: {
-    flexDirection: "row",
-    alignItems: "center",
+  discorverItem: {
+    width: 220,
+    height: 130,
+    resizeMode: "stretch",
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
   },
-  discorverItemLocationText: {
-    fontSize: 18,
-    color: colors.white,
-    marginLeft: 5,
+  itemViewText: {
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    backgroundColor: colors.white,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
   },
   activityItemText: {
     color: colors.black,
     fontSize: 18,
-    // fontFamily: 'LexendDeca-Bold',
-    // justifyContent: 'center',
   },
   activityItem: {
     flexDirection: "row",
     backgroundColor: colors.white,
     width: 164,
-    height: 77,
-    borderRadius: 50,
+    height: 68,
+    borderRadius: 20,
     marginRight: 10,
     alignItems: "center",
     alignContent: "center",
     justifyContent: "flex-start",
+    borderWidth: 0.4,
   },
   allActivity: {
-    marginLeft: 10,
-    marginTop: 30,
+    // marginLeft: 10,
+    marginTop: 10,
   },
   activityItemImage: {
     marginRight: 10,
     marginLeft: 15,
+  },
+  cityHighContainer: {
+    marginTop: 15,
+    marginLeft: 10,
   },
 });
 export default Find;

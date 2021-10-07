@@ -10,22 +10,11 @@ import {
 import colors from "../assets/color/colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const AppLoading = ({ navigation }) => {
+const AppLoading = ({ navigation, isFirst }) => {
   const [state, setState] = useState({
     LogoAnimation: new Animated.Value(0),
     LogoTextAnimation: new Animated.Value(0),
   });
-  // const [isFirst, setIsFirst] = useState(true);
-  // useEffect(() => {
-  //   AsyncStorage.getItem("alreadyLaunched").then((value) => {
-  //     if (value == null) {
-  //       AsyncStorage.setItem("alreadyLaunched", "true");
-  //       setIsFirst(true);
-  //     } else {
-  //       setIsFirst(false);
-  //     }
-  //   });
-  // });
 
   useEffect(() => {
     Animated.parallel([
@@ -41,8 +30,8 @@ const AppLoading = ({ navigation }) => {
         duration: 1200,
         useNativeDriver: false,
       }).start(() => {
-        // if (isFirst == true)
-        setTimeout(() => navigation.navigate("OnBoarding"), 2000);
+        if (isFirst == null)
+          setTimeout(() => navigation.navigate("OnBoarding"), 2000);
         // else setTimeout(() => navigation.navigate("TabNavigation"), 2000);
       }),
     ]);
