@@ -98,7 +98,7 @@ const OnBoarding = ({ navigation }) => {
       renderNextButton={_renderNextBunton}
       renderDoneButton={_renderDoneBunton}
       onDone={() => {
-        navigation.navigate("TabNavigation");
+        navigation.navigate("SignIn");
       }}
     />
   );

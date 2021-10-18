@@ -11,164 +11,199 @@ import {
   Dimensions,
 } from "react-native";
 import colors from "../assets/color/colors";
-import Feather from "react-native-vector-icons/Feather";
-import { ScrollView } from "react-native-gesture-handler";
+import AuthContext from "../store/context";
+import { LinearGradient } from "expo-linear-gradient";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
-Feather.loadFont();
+MaterialIcons.loadFont();
 
 const height = Dimensions.get("window").height;
 const width = Dimensions.get("window").width;
 
 const Profile = () => {
+  const authContext = React.useContext(AuthContext);
   return (
-    <ScrollView style={styles.headerContainer}>
+    <SafeAreaView style={{ flex: 1 }}>
       <ImageBackground
         source={require("../assets/image/backgroundUser.jpg")}
-        style={{
-          resizeMode: "contain",
-          height: 270,
-          width: "100%",
-        }}
-      >
-        <View style={styles.userContainer}>
-          <Image
-            source={require("../assets/image/avata.png")}
-            style={styles.avata}
-          />
-          <View style={{ alignSelf: "center", width: "60%" }}>
-            <Text style={styles.userName}>Văn Ngọc Đạt</Text>
+        style={styles.imageView}
+      ></ImageBackground>
+      <View style={styles.view}>
+        <View style={styles.profile}>
+          <View
+            style={{ flex: 3.5 }}
+            // onPress={() => authContext.signOut()}
+          >
+            <Image
+              source={require("../assets/image/avata.png")}
+              style={styles.avatar}
+            />
+          </View>
+          <View style={styles.infoView}>
+            <Text style={styles.name}>{authContext.userName}</Text>
+            <Text style={styles.phone}>{authContext.phone}</Text>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => alert("xem xem cai l")}
+            >
+              <LinearGradient
+                colors={["#3FA344", "#8DCA70"]}
+                start={{ x: 0, y: 1 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.button}
+              >
+                <Text style={[styles.buttonText, { color: "#fff" }]}>
+                  Xem thông tin
+                </Text>
+              </LinearGradient>
+            </TouchableOpacity>
           </View>
         </View>
-        <TouchableOpacity>
-          <View style={styles.moreInfo}>
-            <Text style={styles.moreInfoText}>Xem hồ sơ đầy đủ</Text>
-          </View>
-        </TouchableOpacity>
-      </ImageBackground>
-      <View>
-        <View style={styles.optionContainer}>
-          <Text style={styles.optionText}>Đặt chỗ của tôi</Text>
-          <Feather
-            name="arrow-up-right"
-            size={30}
-            style={{ alignSelf: "center" }}
-          />
-        </View>
-        <View style={styles.optionContainer}>
-          <Text style={styles.optionText}>Tin nhắn của tôi</Text>
-          <Feather
-            name="arrow-up-right"
-            size={30}
-            style={{ alignSelf: "center" }}
-          />
-        </View>
-        <View style={styles.optionContainer}>
-          <Text style={styles.optionText}>Tùy chọn thanh toán</Text>
-          <Feather
-            name="arrow-up-right"
-            size={30}
-            style={{ alignSelf: "center" }}
-          />
-        </View>
-        <View style={styles.optionContainer}>
-          <Text style={styles.optionText}>Điều khoản sử dụng</Text>
-          <Feather
-            name="arrow-up-right"
-            size={30}
-            style={{ alignSelf: "center" }}
-          />
-        </View>
-      </View>
-      <View >
-        <TouchableOpacity
-          style={styles.buttonWrapper}
-          onPress={() => {
-            alert("Bạn đã Đăng xuất thành công!");
+        <View
+          style={{
+            flexDirection: "row",
+            padding: 20,
+            justifyContent: "space-around",
           }}
         >
-          <Text style={styles.buttonText}>Đăng xuất</Text>
+          <TouchableOpacity style={styles.support}>
+            <MaterialIcons name="rate-review" size={40} color="green" />
+            <Text style={styles.supportText1}>Review GoGo</Text>
+            <Text style={styles.supportText2}>Đánh giá 5 sao</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.support}>
+            <MaterialIcons name="support-agent" size={40} color="green" />
+            <Text style={styles.supportText1}>Hỗ trợ</Text>
+            <Text style={styles.supportText2}>0792755198</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.support}>
+            <MaterialIcons name="library-books" size={40} color="green" />
+            <Text style={styles.supportText1}>Chính sách</Text>
+            <Text style={styles.supportText2}>Chính sách bảo mật</Text>
+          </TouchableOpacity>
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            padding: 20,
+            justifyContent: "space-around",
+          }}
+        >
+          <TouchableOpacity style={styles.support}>
+            <MaterialIcons name="history" size={40} color="green" />
+            <Text style={styles.supportText1}>Lịch sử</Text>
+            <Text style={styles.supportText2}>Hóa đơn của bạn</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.support}>
+            <MaterialIcons name="search" size={40} color="green" />
+            <Text style={styles.supportText1}>Đánh giá</Text>
+            <Text style={styles.supportText2}>Đánh giá của bạn</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.support}>
+            <MaterialIcons name="favorite" size={40} color="green" />
+            <Text style={styles.supportText1}>Yêu thích</Text>
+            <Text style={styles.supportText2}>Khách sạn đã thích</Text>
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity
+          style={[
+            styles.button,
+            { width: "80%", alignSelf: "center", padding: 12 },
+          ]}
+          onPress={() => authContext.signOut()}
+        >
+          <LinearGradient
+            colors={["#3FA344", "#8DCA70"]}
+            start={{ x: 0, y: 1 }}
+            end={{ x: 1, y: 1 }}
+            style={[
+              styles.button,
+              { width: "100%", alignSelf: "center", padding: 10 },
+            ]}
+          >
+            <Text style={[styles.buttonText, { color: "#fff" }]}>
+              Đăng xuất
+            </Text>
+          </LinearGradient>
         </TouchableOpacity>
       </View>
-    </ScrollView>
+    </SafeAreaView>
   );
 };
 export default Profile;
 const styles = StyleSheet.create({
-  headerContainer: {
-    height: 270,
-  },
-  userContainer: {
-    flexDirection: "row",
-  },
-  avata: {
+  imageView: {
+    flex: 2,
     resizeMode: "contain",
-    height: 60,
-    width: 60,
-    borderRadius: 60,
-    marginLeft: 15,
-    marginTop: 60,
   },
-  userName: {
-    color: colors.black,
-    fontSize: 28,
-    marginTop: 60,
-    alignSelf: "center",
-    justifyContent: "center",
-  },
-  moreInfo: {
-    backgroundColor: colors.white,
-    height: 65,
-    width: 285,
-    borderRadius: 60,
-    opacity: 0.5,
-    justifyContent: "center",
-    alignSelf: "center",
-    marginTop: 40,
-  },
-  moreInfoText: {
-    fontSize: 24,
-    alignSelf: "center",
-  },
-  optionContainer: {
+  profile: {
     flexDirection: "row",
+    backgroundColor: "white",
+    // height: height * 0.2,
+    padding: 15,
+    width: width * 0.85,
+    alignSelf: "center",
+    marginTop: -70,
+    borderRadius: 10,
+    borderWidth: 0.1,
+    backgroundColor: colors.white,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
+    flexDirection: "row",
+  },
+  avatar: {
+    resizeMode: "contain",
     height: 100,
-    width: 330,
-    alignSelf: "center",
-    justifyContent: "space-between",
-    borderBottomWidth: 1,
+    width: 100,
+    borderRadius: 35,
   },
-  optionText: {
-    alignSelf: "center",
-    fontSize: 24,
+  infoView: {
+    flex: 6,
+    paddingLeft: 10,
   },
-  logoutContainer: {
+  name: {
+    fontSize: 18,
+    fontFamily: "SourceSans-SemiBold",
+    marginBottom: 5,
+  },
+  phone: {
+    fontSize: 16,
+    fontFamily: "SourceSans-Regular",
+    marginBottom: 5,
+  },
+  button: {
+    marginTop: 5,
+    width: "100%",
+    // height: 30,
     justifyContent: "center",
-    height: 70,
-    width: 220,
-    alignSelf: "center",
-    backgroundColor: colors.yelow,
-    borderRadius: 50,
-    marginTop: 15,
-  },
-  logoutButton: {
-    justifyContent: "center",
-    alignSelf: "center",
-  },
-  buttonWrapper: {
-    marginHorizontal: 20,
-    marginTop: 10,
-    marginBottom: 10,
-    width: width * 0.4,
-    marginLeft: width * 0.3,
-    // marginTop: height*0.1,
-    backgroundColor: colors.orange,
     alignItems: "center",
-    paddingVertical: 20,
-    borderRadius: 15,
+    borderRadius: 10,
+    padding: 5,
   },
   buttonText: {
-    // fontFamily: 'Lato-Bold',
     fontSize: 18,
-    color: colors.white,
+    fontFamily: "SourceSans-SemiBold",
   },
+  support: {
+    alignItems: "center",
+    marginHorizontal: 10,
+    width: width * 0.3,
+  },
+  supportText1: {
+    fontSize: 16,
+    fontFamily: "SourceSans-SemiBold",
+  },
+  supportText2: {
+    fontSize: 14,
+    fontFamily: "SourceSans-Regular",
+    color: "grey",
+  },
+  view: { flex: 7, backgroundColor: "white" },
 });
