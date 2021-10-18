@@ -197,6 +197,8 @@ const App = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(data),
+        }).then((response) => {
+          console.log(response.status);
         });
         // xoa du lieu lu trong may
         await AsyncStorage.removeItem("userToken");
