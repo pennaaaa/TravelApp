@@ -16,6 +16,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import FoodDetails from "./components/FoodDetails";
 import FoodBooking from "./components/FoodBooking";
+import HotelBooking from "./components/HotelBooking"
 import VehicleDetails from "./components/VehicleDetails";
 import AppLoading from "./components/AppLoading";
 import OnBoarding from "./components/OnBoarding";
@@ -97,10 +98,7 @@ const App = () => {
         <Stack.Screen
           name="HotelDetails"
           component={HotelDetails}
-          options={({ route }) => ({
-            headerBackTitle: "",
-            headerTitle: route.params.name,
-          })}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="FoodDetails"
@@ -116,6 +114,14 @@ const App = () => {
           options={({ route }) => ({
             headerBackTitle: "",
             headerTitle: route.params.name,
+          })}
+        />
+        <Stack.Screen
+          name="HotelBooking"
+          component={HotelBooking}
+          options={({ route }) => ({
+            headerBackTitle: "",
+            headerTitle: "Xác nhận đặt phòng",
           })}
         />
         <Stack.Screen

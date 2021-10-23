@@ -20,7 +20,8 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useFonts } from "@use-expo/font";
 import cityData from "../assets/data/cityData";
 import AppLoading from "./AppLoading";
-
+import ContentLoader from "react-content-loader";
+import MyLoader from "./skeleton";
 Entypo.loadFont();
 FontAwesome.loadFont();
 
@@ -35,11 +36,13 @@ const Home = ({ navigation }) => {
   });
 
   useEffect(() => {
-    fetch("https://pbl6-travelapp.herokuapp.com/hotel")
-      .then((response) => response.json())
-      .then((json) => sethotelData(json))
-      .catch((error) => console.error(error))
-      .finally(() => setHotelLoading(false));
+    setTimeout(() => {
+      fetch("https://pbl6-travelapp.herokuapp.com/hotel")
+        .then((response) => response.json())
+        .then((json) => sethotelData(json))
+        .catch((error) => console.error(error))
+        .finally(() => setHotelLoading(false));
+    },0);
   }, []);
 
   const renderHotelDataItem = ({ item }) => {
@@ -86,7 +89,14 @@ const Home = ({ navigation }) => {
   };
   const renderActivityData = ({ item }) => {
     return (
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate("Details", {
+            item: item,
+            name: item.location,
+          })
+        }
+      >
         <View style={styles.activityItem}>
           <Image
             source={item.image}
@@ -96,8 +106,6 @@ const Home = ({ navigation }) => {
               height: 60,
               borderRadius: 30,
               marginHorizontal: 15,
-              // borderWidth: 3,
-              // borderColor: "#68BD48",
             }}
           />
           <Text style={styles.activityItemText}>{item.title}</Text>
@@ -105,6 +113,8 @@ const Home = ({ navigation }) => {
       </TouchableOpacity>
     );
   };
+  if (isHotelLoading) return <MyLoader></MyLoader>;
+
   if (!isLoaded) {
     return <AppLoading isFirst={true} />;
   } else {
@@ -227,7 +237,6 @@ const styles = StyleSheet.create({
   itemViewText: {
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
-    // borderWidth: 0.3,
     backgroundColor: colors.white,
     shadowColor: "#000",
     shadowOffset: {

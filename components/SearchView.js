@@ -35,31 +35,31 @@ const SearchView = ({ navigation }) => {
         <View style={styles.itemContainer}>
           <View
             style={{
-              borderTopLeftRadius: 20,
-              borderTopRightRadius: 20,
+              borderTopLeftRadius: 10,
+              borderTopRightRadius: 10,
             }}
           >
             <Image source={item.image} style={styles.discorverItem} />
           </View>
           <View style={styles.itemText}>
             <Text style={styles.itemName}>
-              <FontAwesome name="flash" size={20} color={"green"} />
+              <FontAwesome name="flash" size={20} color={"#87BB73"} />
               {"  "}
               {item.title}, {item.location}
             </Text>
             <View
               style={{
                 margin: 10,
-                backgroundColor: "#D3D3D3",
+                backgroundColor: "#F7F8FB",
                 padding: 5,
               }}
             >
               <Text style={styles.addressText}>
-                <Entypo name="location-pin" size={16} color={"green"} /> {"   "}{" "}
-                Đây là chỗ của địa chỉ nè!!
+                <Entypo name="location-pin" size={16} color={"#87BB73"} /> {"   "}{" "}
+                Đây là chỗ của địa chỉ nè!
               </Text>
               <Text style={styles.addressText}>
-                <FontAwesome name="bed" size={16} color={"green"} /> {"   "} 1
+                <FontAwesome name="bed" size={16} color={"#87BB73"} /> {"   "} 1
                 giường đôi lớn, 1 phòng tắm
               </Text>
             </View>
@@ -109,13 +109,14 @@ const SearchView = ({ navigation }) => {
         style={{
           height: 68,
           width: 344,
-          borderRadius: 20,
+          borderRadius: 10,
           marginTop: 10,
         }}
         fontSize={20}
-        searchIconImageStyle={{ height: 25, width: 25 }}
+        searchIconImageStyle={{ height: 25, width:18 }}
         clearIconImageStyle={{ paddingRight: 40 }}
         placeholder="Bạn sắp đến đâu?"
+        placeholderTextColor='#919191'
         onChangeText={(text) => onChangeText(text)}
         autoFocus
       />
@@ -146,7 +147,7 @@ const styles = StyleSheet.create({
   itemContainer: {
     alignSelf: "center",
     marginBottom: 15,
-    borderRadius: 20,
+    borderRadius: 10,
     width: "98%",
     backgroundColor: colors.white,
     shadowColor: "#000",
@@ -165,7 +166,7 @@ const styles = StyleSheet.create({
     height: 40,
     width: 120,
     backgroundColor: colors.white,
-    borderRadius: 20,
+    borderRadius: 10,
     borderWidth: 0.4,
     marginRight: 10,
     alignItems: "center",
@@ -176,7 +177,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   resultView: {
-    paddingTop: 20,
+    paddingTop: 10,
     paddingLeft: 10,
   },
   resultText: {
@@ -187,8 +188,8 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 200,
     resizeMode: "cover",
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
   },
   discorverItemLocationWrapper: {
     flexDirection: "row",

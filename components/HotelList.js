@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Dimensions,
   SafeAreaView,
+  Image,
 } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import hotelData from "../assets/data/hotelData";
@@ -21,46 +22,45 @@ const HotelList = (props) => {
   const navigation = props.navigation;
   const renderHotelDataItem = ({ item }) => {
     return (
-      <View style={[styles.card, styles.shadowProp]}>
-        <ImageBackground
-          source={item.image}
-          style={styles.restaurantItem}
-          imageStyle={styles.restaurantItemImage}
-        ></ImageBackground>
-        <View style={styles.descriptionFood}>
-          <View>
-            <Text style={styles.itemTitleText} numberOfLines={1}>
+      <TouchableOpacity
+        style={styles.card}
+        onPress={() =>
+          navigation.navigate("HotelDetails", {
+            item: item,
+            name: item.location,
+          })
+        }
+      >
+        <View style={[styles.itemContainer,styles.shadowProp]} >
+          <Image source={item.image} style={styles.discorverItem}></Image>
+          <View style={styles.itemViewText}>
+            <Text
+              style={{
+                marginLeft: 10,
+                marginTop: 5,
+                fontFamily: "SourceSans-SemiBold",
+                fontSize: 22,
+                alignSelf: "center",
+              }}
+            >
               {item.title}
             </Text>
-            <Text style={styles.itemAddress} numberOfLines={1}>
-              Địa chỉ: {item.location}
+            <Text
+              style={{
+                marginLeft: 10,
+                marginVertical: 5,
+                fontFamily: "SourceSans-Regular",
+                fontSize: 20,
+                color: "#7B7B7B",
+                marginTop:15,
+                alignSelf: "center",
+              }}
+            >
+              {item.price}đ/ngày
             </Text>
-            <Text style={styles.itemFastReview} numberOfLines={1}>
-              Đánh giá: {item.rating}/5
-            </Text>
-            <Text style={styles.rangePrice} numberOfLines={1}>
-              Giá phòng từ: {item.price} đ/Ngày/Người
-            </Text>
-            {/* <Text style={styles.itemAlivableTime} numberOfLines={1}>
-              Đặt chỗ: 19h-22h các ngày trong tuần
-            </Text> */}
           </View>
-
-          <TouchableOpacity
-            style={styles.bookButton}
-            onPress={() =>
-              navigation.navigate("HotelDetails", {
-                item: item,
-                name: item.location,
-              })
-            }
-          >
-            <Text style={styles.buttonText}>Xem chi tiết</Text>
-          </TouchableOpacity>
         </View>
-      </View>
-
-      // </TouchableOpacity>
+      </TouchableOpacity>
     );
   };
   return (
@@ -124,9 +124,9 @@ const styles = StyleSheet.create({
   },
   card: {
     // height:height*0.3,
-    flexDirection: "row",
+    flexDirection: "column",
     backgroundColor: "white",
-    borderRadius: 8,
+    borderRadius: 10,
     // paddingVertical: 45,
     // paddingHorizontal: 25,
     width: "100%",
@@ -138,46 +138,26 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 3,
   },
-  descriptionFood: {
-    height: height * 0.35,
-    display: "flex",
-    flexDirection: "column",
-  },
-  itemAddress: {
-    width: width * 0.6,
-    marginTop: height * 0.02,
-  },
-  itemAlivableTime: {
-    color: colors.black,
-    width: width * 0.6,
-    marginTop: height * 0.02,
-  },
-  itemFastReview: {
-    width: width * 0.6,
-    marginTop: height * 0.02,
-  },
-  rangePrice: {
-    color: colors.orange,
-    width: width * 0.6,
-    marginTop: height * 0.02,
-  },
-  bookButton: {
-    // height:height*0.2,
-    marginTop: "auto",
-    marginHorizontal: 20,
-    bottom: -20,
-    // marginBottom:100,
-    backgroundColor: colors.orange,
-    alignItems: "center",
-    paddingVertical: 15,
-    borderRadius: 10,
-    // alignSelf:"flex-end",
-    // alignContent:"flex-end"
-  },
-
   buttonText: {
     fontSize: 18,
     color: colors.white,
+  },
+  itemContainer: {   
+    flexDirection: "row",
+    marginVertical: 10,
+    marginHorizontal: 10,
+  },
+  discorverItem: {
+    width: 200,
+    height: 120,
+    resizeMode: "stretch",
+    borderRadius: 10,
+    // borderTopLeftRadius:5,
+    // borderBottomLeftRadius:5,
+  },
+  itemViewText: {
+    marginHorizontal: 10,
+    marginVertical: 10,
   },
 });
 

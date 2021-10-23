@@ -1,6 +1,6 @@
 import React from "react";
 import {
-  SafeAreaView,
+  // SafeAreaView,
   Text,
   StyleSheet,
   View,
@@ -10,6 +10,7 @@ import {
   ImageBackground,
   Image,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import colors from "../assets/color/colors";
 import SearchBar from "react-native-dynamic-search-bar";
 import hotelData from "../assets/data/hotelData";
@@ -73,10 +74,10 @@ const Find = ({ navigation }) => {
     );
   };
   return (
-    <View style={styles.container}>
+    <SafeAreaView forceInset={{ bottom: "never" }}
+    style={{ backgroundColor: colors.white }}>
       <ScrollView>
-        {/* Header */}
-        <SafeAreaView>
+        
           <View style={styles.logo}>
             <Image
               source={require("../assets/image/logo2.png")}
@@ -86,22 +87,26 @@ const Find = ({ navigation }) => {
                 width: 100,
               }}
             />
-            <Text style={styles.logoName}>Go Go</Text>
-          </View>
 
-          <SearchBar
+            <SearchBar
             style={{
               height: 68,
-              width: 344,
-              borderRadius: 20,
-              marginTop: 20,
+              width: 300,
+              borderRadius: 10,
+              marginLeft:10,
+              // marginTop: 10,
             }}
             fontSize={20}
-            searchIconImageStyle={{ height: 25, width: 25 }}
-            clearIconImageStyle={{ paddingRight: 40 }}
+            searchIconImageStyle={{height: 25, width: 18 }}
+            // clearIconImageStyle={{ paddingRight: 40 }}
             placeholder="Bạn sắp đến đâu?"
+            placeholderTextColor='#919191'
             onFocus={() => navigation.navigate("SearchView")}
           />
+            {/* <Text style={styles.logoName}>Go Go</Text> */}
+          </View>
+
+          
           {/* last search */}
           <View style={styles.cityHighContainer}>
             <Text style={styles.highTitle}>Tìm kiếm gần đây của bạn</Text>
@@ -128,9 +133,8 @@ const Find = ({ navigation }) => {
               />
             </View>
           </View>
-        </SafeAreaView>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -167,18 +171,18 @@ const styles = StyleSheet.create({
   itemContainer: {
     marginVertical: 5,
     marginHorizontal: 5,
-    borderRadius: 20,
+    borderRadius: 10,
   },
   discorverItem: {
     width: 220,
     height: 130,
     resizeMode: "stretch",
-    borderTopRightRadius: 20,
-    borderTopLeftRadius: 20,
+    borderTopRightRadius: 10,
+    borderTopLeftRadius: 10,
   },
   itemViewText: {
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
     backgroundColor: colors.white,
     shadowColor: "#000",
     shadowOffset: {
@@ -199,7 +203,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     width: 164,
     height: 68,
-    borderRadius: 20,
+    borderRadius: 10,
     marginRight: 10,
     alignItems: "center",
     alignContent: "center",

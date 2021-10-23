@@ -143,7 +143,7 @@ const FoodDetails = ({ route, navigation }) => {
                 onPress={() =>
                   navigation.navigate("FoodBooking", {
                     item: item,
-                    name: item.location,
+                    name: item.location,s
                   })
                 }
               >

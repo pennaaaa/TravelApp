@@ -53,8 +53,7 @@ const OverviewCity = (props) => {
       {/* Hotel in city */}
       <View style={styles.containerHotel}>
         <View style={styles.headerHotel}>
-          <Text style={{ fontSize: 20 }}>Khách sạn ở {item.location}</Text>
-          <Text>Xem tất cả</Text>
+          <Text style={styles.categoryTitle}>Khách sạn</Text>
         </View>
         <View style={{ paddingTop: 10 }}>
           <FlatList
@@ -68,8 +67,7 @@ const OverviewCity = (props) => {
       </View>
       <View style={styles.containerHotel}>
         <View style={styles.headerHotel}>
-          <Text style={{ fontSize: 20 }}>Nhà hàng ở {item.location}</Text>
-          <Text>Xem tất cả</Text>
+          <Text style={styles.categoryTitle}>Nhà hàng</Text>
         </View>
         <View style={{ paddingTop: 10 }}>
           <FlatList
@@ -139,6 +137,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: colors.white,
     marginLeft: 5,
+  },
+  categoryTitle:{
+    fontFamily: "SourceSans-Bold",
+    fontSize:24,
+    color:'#333333'
   },
 });
 export default OverviewCity;
