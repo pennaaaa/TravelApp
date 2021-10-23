@@ -29,11 +29,7 @@ const AppLoading = ({ navigation, isFirst }) => {
         toValue: 1,
         duration: 1200,
         useNativeDriver: false,
-      }).start(() => {
-        if (isFirst == null)
-          setTimeout(() => navigation.navigate("OnBoarding"), 2000);
-        // else setTimeout(() => navigation.navigate("TabNavigation"), 2000);
-      }),
+      }).start(() => {}),
     ]);
   }, []);
   return (
@@ -75,6 +71,7 @@ const styles = StyleSheet.create({
     height: 150,
     width: 150,
     // flex:1,
+    width: 300,
   },
   logoText: {
     marginTop: 30,
