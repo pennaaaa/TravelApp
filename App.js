@@ -98,6 +98,11 @@ const App = () => {
           isLoading: false,
           userRefreshToken: action.refreshToken,
         };
+      case "NEXT":
+        return {
+          userToken: "NoToken",
+          isLoading: false,
+        };
       case "LOGIN":
         return {
           ...prevState,
@@ -185,6 +190,10 @@ const App = () => {
         gender: user.gender,
         refreshToken: userToken.refresh.token,
       });
+    },
+    next_guest: async () => {
+      AsyncStorage.setItem("userToken", "NoToken");
+      dispatch({ type: "NEXT" });
     },
     signOut: async () => {
       try {
