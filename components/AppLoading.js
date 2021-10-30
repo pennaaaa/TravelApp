@@ -53,7 +53,7 @@ const AppLoading = ({ navigation, isFirst }) => {
           opacity: state.LogoTextAnimation,
         }}
       >
-        <Text style={styles.logoText}>Go Go</Text>
+        {/* <Text style={styles.logoText}>Go Go</Text> */}
       </Animated.View>
     </SafeAreaView>
   );
@@ -68,6 +68,9 @@ const styles = StyleSheet.create({
   },
   logo: {
     resizeMode: "contain",
+    height: 150,
+    width: 150,
+    // flex:1,
     width: 300,
   },
   logoText: {

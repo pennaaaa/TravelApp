@@ -102,9 +102,9 @@ const FoodBooking = ({ route, navigation }) => {
                 backgroundColor: "white",
                 color: "black",
               },
-              placeholder: {
-                colors: colors.yelow,
-              },
+              // placeholder: {
+              //   colors: colors.yelow,
+              // },
               inputAndroid: {
                 color: colors.yelow,
                 paddingHorizontal: 10,
@@ -118,8 +118,6 @@ const FoodBooking = ({ route, navigation }) => {
             onValueChange={(value) => setSelectedValue(value)}
             style={{
               inputAndroid: {
-                // fontSize:32,
-                // marginTop:10,
                 backgroundColor: "transparent",
                 width: 100,
                 color: colors.black,
