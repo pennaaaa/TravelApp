@@ -68,10 +68,10 @@ const styles = StyleSheet.create({
   },
   logo: {
     resizeMode: "contain",
-    height: 150,
-    width: 150,
+    height: "30%",
+    width: "50%",
     // flex:1,
-    width: 300,
+    // width: 300,
   },
   logoText: {
     marginTop: 30,

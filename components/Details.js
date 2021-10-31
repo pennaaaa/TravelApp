@@ -18,10 +18,10 @@ const Details = ({ route, navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <Tab.Navigator>
-        <Tab.Screen
+        {/* <Tab.Screen
           name="Tổng quan"
           children={() => <OverviewCity item={item} />}
-        />
+        /> */}
         <Tab.Screen
           name="Khách sạn"
           // children={() => <HotelList item={item} navigation={navigation} />}

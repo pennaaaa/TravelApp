@@ -8,79 +8,139 @@ import {
   Dimensions,
   SafeAreaView,
   Button,
+  Image,
 } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import foodData from "../assets/data/foodData";
 import colors from "../assets/color/colors";
 
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import Entypo from "react-native-vector-icons/Entypo";
+import { Rating } from "react-native-elements";
+import { useFonts } from "@use-expo/font";
+import Ionicons from "react-native-vector-icons/Ionicons";
+
 const height = Dimensions.get("window").height;
 const width = Dimensions.get("window").width;
+FontAwesome.loadFont();
+Entypo.loadFont();
+Ionicons.loadFont();
 
 const FoodCityList = (props) => {
   const item = props.item;
   const navigation = props.navigation;
   const renderFoodDataItem = ({ item }) => {
     return (
-      <View style={[styles.card, styles.shadowProp]}>
-        <ImageBackground
-          source={item.image}
-          style={styles.restaurantItem}
-          imageStyle={styles.restaurantItemImage}
-        >
-        </ImageBackground>
-        <View style={styles.descriptionFood}>
-          <View>
-            <Text style={styles.itemTitleText} numberOfLines={1}>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate("FoodDetails", {
+            item: item,
+            name: item.location,
+          })
+        }
+      >
+        <View style={styles.itemContainer}>
+          <View
+            style={{
+              borderTopLeftRadius: 10,
+              borderTopRightRadius: 10,
+            }}
+          >
+            <Image source={item.image} style={styles.discorverItem} />
+          </View>
+          <View style={styles.itemText}>
+            <Text style={styles.itemTitle}>
+              <FontAwesome name="flash" size={20} color={"#87BB73"} />{" "}
               {item.title}
             </Text>
-            <Text style={styles.itemAddress} numberOfLines={1}>
-              Địa chỉ: {item.address}
-            </Text>
-            <Text style={styles.itemFastReview} numberOfLines={1}>
-              Chuyên món Việt (Cơm niêu)
-            </Text>
-            <Text style={styles.rangePrice} numberOfLines={1}>
-              Giá từ: {item.pricefrom}- {item.priceto} đ/ Món
-            </Text>
-            <Text style={styles.itemAlivableTime} numberOfLines={1}>
-              Đặt chỗ: 19h-22h các ngày trong tuần
-            </Text>
+            <Text style={styles.itemName}> {item.address}</Text>
           </View>
 
-          <TouchableOpacity
-            style={styles.bookButton}
-            onPress={() =>
-              navigation.navigate("FoodDetails", {
-                item: item,
-                name: item.location,
-              })
-            }
+          <View style={styles.infoWrapper}>
+            <View style={styles.infoRoom}>
+              <Text style={styles.addressText}>
+                <Entypo name="home" size={16} color={"#87BB73"} />{" "}
+                {"   Món Việt"}
+              </Text>
+
+              <Text style={styles.addressText}>
+                <Ionicons name="time" size={16} color={"#87BB73"} />{" "}
+                {"   19h-22h"}
+              </Text>
+            </View>
+          </View>
+
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              marginBottom: 10,
+              paddingLeft: 10,
+              paddingRight: 10,
+            }}
           >
-            <Text style={styles.buttonText}>Xem chi tiết</Text>
-          </TouchableOpacity>
+            <View style={styles.roomPrice}>
+              <Text style={styles.priceText}>
+                {item.pricefrom}-{item.priceto}đ
+              </Text>
+              <Text style={styles.perdayText}>/món</Text>
+            </View>
+            <Rating
+              imageSize={20}
+              fractions="{1}"
+              readonly
+              startingValue={item.rating}
+            />
+          </View>
         </View>
-      </View>
+      </TouchableOpacity>
+      // <View style={[styles.card, styles.shadowProp]}>
+      //   <ImageBackground
+      //     source={item.image}
+      //     style={styles.restaurantItem}
+      //     imageStyle={styles.restaurantItemImage}
+      //   >
+      //   </ImageBackground>
+      //   <View style={styles.descriptionFood}>
+      //     <View>
+      //       <Text style={styles.itemTitleText} numberOfLines={1}>
+      //         {item.title}
+      //       </Text>
+      //       <Text style={styles.itemAddress} numberOfLines={1}>
+      //         Địa chỉ: {item.address}
+      //       </Text>
+      //       <Text style={styles.itemFastReview} numberOfLines={1}>
+      //         Chuyên món Việt (Cơm niêu)
+      //       </Text>
+      //       <Text style={styles.rangePrice} numberOfLines={1}>
+      //         Giá từ: {item.pricefrom}- {item.priceto} đ/ Món
+      //       </Text>
+      //       <Text style={styles.itemAlivableTime} numberOfLines={1}>
+      //         Đặt chỗ: 19h-22h các ngày trong tuần
+      //       </Text>
+      //     </View>
+
+      //     <TouchableOpacity
+      //       style={styles.bookButton}
+      //
+      //       <Text style={styles.buttonText}>Xem chi tiết</Text>
+      //     </TouchableOpacity>
+      //   </View>
+      // </View>
 
       // </TouchableOpacity>
     );
   };
   return (
     <SafeAreaView style={styles.container}>
-      {/* <ScrollView> */}
-      <View style={styles.restaurantHighContainer}>
-        {/* <Text style={styles.highTitle}>Ẩm thực nổi bật</Text> */}
-        <View style={styles.highItemWrapper}>
-          <FlatList
-            data={foodData}
-            renderItem={renderFoodDataItem}
-            keyExtractor={(item) => item.id}
-
-            // horizontal
-            // showsHorizontalScrollIndicator={false}
-          />
-        </View>
+      <View style={styles.highItemWrapper}>
+        <FlatList
+          data={foodData}
+          renderItem={renderFoodDataItem}
+          keyExtractor={(item) => item.id}
+          showsHorizontalScrollIndicator={false}
+        />
       </View>
-      {/* </ScrollView> */}
     </SafeAreaView>
   );
 };
@@ -91,116 +151,83 @@ const styles = StyleSheet.create({
     color: colors.white,
     marginBottom: 0,
   },
-  restaurantItem: {
-    width: width * 0.3,
-    height: height * 0.35,
-    justifyContent: "space-between",
-    // paddingHorizontal: 10,
-    // paddingVertical: 15,
-    marginRight: 20,
-    // marginTop: 20,
+  itemContainer: {
+    alignSelf: "center",
+    marginBottom: 15,
+    borderRadius: 10,
+    width: "98%",
+    backgroundColor: colors.white,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
-  restaurantItemImage: {
-    borderTopLeftRadius: 8,
-    borderBottomLeftRadius: 8,
+  discorverItem: {
+    width: "100%",
+    // height:height*0.3,
+    height: 200,
+    resizeMode: "cover",
+    borderTopRightRadius: 10,
+    borderTopLeftRadius: 10,
   },
-  restaurantHighContainer: {
-    // marginTop: 10,
-    marginHorizontal: 10,
-    marginBottom: 10,
+  itemText: {
+    marginTop: 10,
+    marginHorizontal: 15,
   },
-  highTitle: {
-    fontSize: 24,
-    justifyContent: "center",
+  addressText: {
+    width: "50%",
+    fontSize: 16,
+    fontFamily: "SourceSans-Regular",
+    marginTop: 8,
+    marginBottom: 8,
+    marginLeft: 15,
+  },
+  infoRoom: {
+    flexDirection: "row",
+  },
+  infoWrapper: {
+    width: width * 0.8,
+    marginVertical: 10,
+    backgroundColor: "#F7F8FB",
+    padding: 5,
+    alignSelf: "center",
+    flexDirection: "row",
+  },
+  roomPrice: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  priceText: {
+    fontSize: 20,
+    fontFamily: "SourceSans-SemiBold",
+    color: "#87BB73",
+  },
+  perdayText: {
+    fontSize: 16,
+    fontFamily: "SourceSans-Regular",
+    color: "#767676",
+  },
+  itemName: {
+    width: width * 0.8,
+    // marginLeft: 10,
+    fontSize: 15,
+    fontFamily: "SourceSans-Regular",
+    color: "#767676",
   },
   highItemWrapper: {
-    flexDirection: "row",
-    marginTop: 10,
+    marginTop: 15,
+    marginHorizontal: 15,
   },
-
-  itemTitleText: {
-    width: width * 0.6,
-    // height: height * 0.1,
+  itemTitle: {
+    // alignSelf:'center',
+    // width: width * 0.7,
     fontSize: 24,
-    marginTop: 10,
-    // marginLeft:0,
-  },
-  card: {
-    // height:height*0.3,
-    flexDirection: "row",
-    backgroundColor: "white",
-    borderRadius: 8,
-    // paddingVertical: 45,
-    // paddingHorizontal: 25,
-    width: "100%",
-    marginVertical: 5,
-  },
-  shadowProp: {
-    shadowColor: "#171717",
-    shadowOffset: { width: -2, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
-  },
-  descriptionFood: {
-    flexDirection: "column",
-
-    // justifyContent:"space-between"
-
-  },
-  itemAddress: {
-    width: width * 0.6,
-    marginTop: height * 0.02,
-  },
-  itemAlivableTime: {
-
-    color: colors.black,
-
-    width: width * 0.6,
-    marginTop: height * 0.02,
-  },
-  itemFastReview: {
-    width: width * 0.6,
-    marginTop: height * 0.02,
-  },
-  rangePrice: {
-    color: colors.orange,
-
-    // color: colors.orange,
-
-    width: width * 0.6,
-    marginTop: height * 0.02,
-  },
-  bookButton: {
-    // height:height*0.2,
-    marginTop: "auto",
-    marginHorizontal: 20,
-    bottom: -20,
-    // marginBottom:100,
-
-    // color:colors.orange,
-    // backgroundColor: colors.orange,
-    // position:'relative',
-    // borderRadius:10,
-    marginHorizontal: 20,
-    // height:50,
-    // paddingBottom:0,
-    // bottom: ,
-
-    marginTop: 10,
-    // marginBottom:10,
-    // marginTop: height*0.1,
-
-    backgroundColor: colors.orange,
-    alignItems: "center",
-    paddingVertical: 15,
-    borderRadius: 10,
-    // alignSelf:"flex-end",
-    // alignContent:"flex-end"
-  },
-
-  buttonText: {
-    fontSize: 18,
-    color: colors.white,
+    fontFamily: "SourceSans-SemiBold",
+    color: "black",
   },
 });
 

@@ -3,7 +3,6 @@ import {
   View,
   Text,
   FlatList,
-  ImageBackground,
   StyleSheet,
   Dimensions,
   SafeAreaView,
@@ -12,52 +11,91 @@ import {
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import hotelData from "../assets/data/hotelData";
 import colors from "../assets/color/colors";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import Entypo from "react-native-vector-icons/Entypo";
+import { Rating } from "react-native-elements";
+import { useFonts } from "@use-expo/font";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 const height = Dimensions.get("window").height;
 const width = Dimensions.get("window").width;
+FontAwesome.loadFont();
+Entypo.loadFont();
+Ionicons.loadFont();
 
-// const HotelList = ({ navigation }) => {
 const HotelList = (props) => {
+  const [isLoaded] = useFonts({
+    "SourceSans-Light": require("../assets/fonts/LexendDeca-ExtraBold/SourceSansPro-Light.ttf"),
+    "SourceSans-Regular": require("../assets/fonts/LexendDeca-ExtraBold/SourceSansPro-Regular.ttf"),
+    "SourceSans-SemiBold": require("../assets/fonts/LexendDeca-ExtraBold/SourceSansPro-SemiBold.ttf"),
+    "SourceSans-Bold": require("../assets/fonts/LexendDeca-ExtraBold/SourceSansPro-Bold.ttf"),
+  });
   const item = props.item;
   const navigation = props.navigation;
   const renderHotelDataItem = ({ item }) => {
     return (
-      <TouchableOpacity
-        style={styles.card}
-        onPress={() =>
-          navigation.navigate("HotelDetails", {
-            item: item,
-            name: item.location,
-          })
-        }
-      >
-        <View style={[styles.itemContainer,styles.shadowProp]} >
-          <Image source={item.image} style={styles.discorverItem}></Image>
-          <View style={styles.itemViewText}>
-            <Text
-              style={{
-                marginLeft: 10,
-                marginTop: 5,
-                fontFamily: "SourceSans-SemiBold",
-                fontSize: 22,
-                alignSelf: "center",
-              }}
-            >
-              {item.title}
+      <TouchableOpacity>
+        <View style={styles.itemContainer}>
+          <View
+            style={{
+              borderTopLeftRadius: 10,
+              borderTopRightRadius: 10,
+            }}
+          >
+            <Image source={item.image} style={styles.discorverItem} />
+          </View>
+          <View style={styles.itemText}>
+            <Text style={styles.itemName}>
+              <FontAwesome name="flash" size={20} color={"#87BB73"} />
+              {"  "}
+              {item.title}, {item.location}
             </Text>
-            <Text
-              style={{
-                marginLeft: 10,
-                marginVertical: 5,
-                fontFamily: "SourceSans-Regular",
-                fontSize: 20,
-                color: "#7B7B7B",
-                marginTop:15,
-                alignSelf: "center",
-              }}
-            >
-              {item.price}đ/ngày
-            </Text>
+          </View>
+
+          <View style={styles.infoWrapper}>
+            <View style={styles.infoRoom}>
+              <Text style={styles.addressText}>
+                <Entypo name="home" size={16} color={"#87BB73"} />{" "}
+                {"   Phòng đôi"}
+              </Text>
+
+              <Text style={styles.addressText}>
+                <Ionicons name="person" size={16} color={"#87BB73"} />{" "}
+                {"   1 người"}
+              </Text>
+            </View>
+
+            <View style={styles.infoRoom}>
+              <Text style={styles.addressText}>
+                <FontAwesome name="bath" size={16} color={"#87BB73"} /> {"  "} 1
+                Phòng tắm
+              </Text>
+              <Text style={styles.addressText}>
+                <Ionicons name="bed" size={16} color={"#87BB73"} /> {"   "} 1
+                Giường
+              </Text>
+            </View>
+          </View>
+
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              marginBottom: 10,
+              paddingLeft:10,
+              paddingRight:10,
+            }}
+          >
+            <View style={styles.roomPrice}>
+              <Text style={styles.priceText}>{item.price}đ</Text>
+              <Text style={styles.perdayText}>/ngày</Text>
+            </View>
+            <Rating
+              imageSize={20}
+              fractions="{1}"
+              readonly
+              startingValue={item.rating}
+            />
           </View>
         </View>
       </TouchableOpacity>
@@ -65,19 +103,14 @@ const HotelList = (props) => {
   };
   return (
     <SafeAreaView style={styles.container}>
-      {/* <ScrollView> */}
-      <View style={styles.restaurantHighContainer}>
-        {/* <Text style={styles.highTitle}>Ẩm thực nổi bật</Text> */}
-        <View style={styles.highItemWrapper}>
-          <FlatList
-            data={hotelData}
-            renderItem={renderHotelDataItem}
-            keyExtractor={(item) => item.id}
-            showsHorizontalScrollIndicator={false}
-          />
-        </View>
+      <View style={styles.highItemWrapper}>
+        <FlatList
+          data={hotelData}
+          renderItem={renderHotelDataItem}
+          keyExtractor={(item) => item.id}
+          showsHorizontalScrollIndicator={false}
+        />
       </View>
-      {/* </ScrollView> */}
     </SafeAreaView>
   );
 };
@@ -92,17 +125,13 @@ const styles = StyleSheet.create({
     width: width * 0.3,
     height: height * 0.35,
     justifyContent: "space-between",
-    // paddingHorizontal: 10,
-    // paddingVertical: 15,
     marginRight: 20,
-    // marginTop: 20,
   },
   restaurantItemImage: {
     borderTopLeftRadius: 8,
     borderBottomLeftRadius: 8,
   },
   restaurantHighContainer: {
-    // marginTop: 10,
     marginHorizontal: 10,
     marginBottom: 10,
   },
@@ -111,27 +140,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   highItemWrapper: {
-    flexDirection: "row",
-    marginTop: 10,
+    marginTop: 15,
+    marginHorizontal: 15,
   },
 
-  itemTitleText: {
-    width: width * 0.6,
-    // height: height * 0.1,
-    fontSize: 20,
-    marginTop: 10,
-    // marginLeft:0,
-  },
-  card: {
-    // height:height*0.3,
-    flexDirection: "column",
-    backgroundColor: "white",
-    borderRadius: 10,
-    // paddingVertical: 45,
-    // paddingHorizontal: 25,
-    width: "100%",
-    marginVertical: 5,
-  },
   shadowProp: {
     shadowColor: "#171717",
     shadowOffset: { width: -2, height: 4 },
@@ -142,22 +154,95 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: colors.white,
   },
-  itemContainer: {   
-    flexDirection: "row",
-    marginVertical: 10,
-    marginHorizontal: 10,
+  itemContainer: {
+    alignSelf: "center",
+    marginBottom: 15,
+    borderRadius: 10,
+    width: "98%",
+    backgroundColor: colors.white,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   discorverItem: {
-    width: 200,
-    height: 120,
-    resizeMode: "stretch",
-    borderRadius: 10,
-    // borderTopLeftRadius:5,
-    // borderBottomLeftRadius:5,
+    width: "100%",
+    // height:height*0.3,
+    height: 200,
+    resizeMode: "cover",
+    borderTopRightRadius: 10,
+    borderTopLeftRadius: 10,
   },
   itemViewText: {
-    marginHorizontal: 10,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    backgroundColor: colors.white,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+
+  itemText: {
+    marginTop: 10,
+    marginHorizontal: 15,
+  },
+  itemName: {
+    fontSize: 20,
+    fontFamily: "SourceSans-SemiBold",
+  },
+  itemPrice: {
+    fontSize: 20,
+    fontFamily: "SourceSans-SemiBold",
+  },
+  // addressText: {
+  //   fontSize: 16,
+  //   fontFamily: "SourceSans-Regular",
+  //   marginLeft: 15,
+  //   marginBottom: 5,
+  // },
+  addressText: {
+    fontSize: 16,
+    fontFamily: "SourceSans-Regular",
+    marginTop: 8,
+    marginBottom: 8,
+    marginLeft: 15,
+  },
+  infoRoom: {
+    width: "50%",
+    flexDirection: "column",
+    // marginHorizontal: width * 0.07,
+    textAlign: "center",
+  },
+  infoWrapper: {
+    width: width * 0.8,
     marginVertical: 10,
+    backgroundColor: "#F7F8FB",
+    padding: 5,
+    alignSelf: "center",
+    flexDirection: "row",
+  },
+  roomPrice: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  priceText: {
+    fontSize: 20,
+    fontFamily: "SourceSans-SemiBold",
+    color: "#87BB73",
+  },
+  perdayText: {
+    fontSize: 16,
+    fontFamily: "SourceSans-Regular",
+    color: "#767676",
   },
 });
 

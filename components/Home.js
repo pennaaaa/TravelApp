@@ -22,6 +22,7 @@ import cityData from "../assets/data/cityData";
 import AppLoading from "./AppLoading";
 import ContentLoader from "react-content-loader";
 import MyLoader from "./skeleton";
+import { height, width } from "react-native-daterange-picker/src/modules";
 Entypo.loadFont();
 FontAwesome.loadFont();
 
@@ -128,10 +129,13 @@ const Home = ({ navigation }) => {
             source={require("../assets/image/logo2.png")}
             style={{
               resizeMode: "stretch",
-              height: 50,
-              width: 100,
+              height:height*0.052,
+              width:width*0.21,
+              // height: 40,
+              // width: 70,
             }}
           />
+          
           <Text style={styles.logoName}>Go Go</Text>
         </View>
         <ScrollView>
@@ -181,6 +185,23 @@ const Home = ({ navigation }) => {
                 )}
               </View>
             </View>
+
+            <View style={styles.cityHighContainerBottom}>
+              <Text style={styles.highTitle}>Khách sạn nổi bật</Text>
+              <View style={styles.highItemWrapper}>
+                {isHotelLoading ? (
+                  <Text>Loading...</Text>
+                ) : (
+                  <FlatList
+                    data={hotelData}
+                    renderItem={renderHotelDataItem}
+                    keyExtractor={(item) => item.id}
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                  />
+                )}
+              </View>
+            </View>
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -196,7 +217,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   logoName: {
-    fontSize: 40,
+    fontSize: 30,
     fontWeight: "300",
     marginLeft: 10,
   },
@@ -205,14 +226,19 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
   },
   title: {
-    fontSize: 34,
-    marginTop: 10,
+    fontSize: 28,
+    marginTop: 20,
     marginHorizontal: 10,
     fontFamily: "SourceSans-SemiBold",
   },
   cityHighContainer: {
     marginTop: 15,
     marginLeft: 10,
+  },
+  cityHighContainerBottom: {
+    marginTop: 15,
+    marginLeft: 10,
+    marginBottom:70
   },
   highTitle: {
     fontSize: 24,

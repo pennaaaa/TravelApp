@@ -295,10 +295,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 1,
-    // paddingLeft: 22,
-    // paddingRight: 22,
-    // paddingTop: 10,
-    // paddingBottom: 10,
     padding: 10,
   },
   roomPrice: {
