@@ -55,8 +55,8 @@ const SearchView = ({ navigation }) => {
               }}
             >
               <Text style={styles.addressText}>
-                <Entypo name="location-pin" size={16} color={"#87BB73"} /> {"   "}{" "}
-                Đây là chỗ của địa chỉ nè!
+                <Entypo name="location-pin" size={16} color={"#87BB73"} />{" "}
+                {"   "} Đây là chỗ của địa chỉ nè!
               </Text>
               <Text style={styles.addressText}>
                 <FontAwesome name="bed" size={16} color={"#87BB73"} /> {"   "} 1
@@ -113,10 +113,10 @@ const SearchView = ({ navigation }) => {
           marginTop: 10,
         }}
         fontSize={20}
-        searchIconImageStyle={{ height: 25, width:18 }}
+        searchIconImageStyle={{ height: 25, width: 18 }}
         clearIconImageStyle={{ paddingRight: 40 }}
         placeholder="Bạn sắp đến đâu?"
-        placeholderTextColor='#919191'
+        placeholderTextColor="#919191"
         onChangeText={(text) => onChangeText(text)}
         autoFocus
       />

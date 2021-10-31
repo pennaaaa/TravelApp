@@ -43,7 +43,7 @@ const Home = ({ navigation }) => {
         .then((json) => sethotelData(json))
         .catch((error) => console.error(error))
         .finally(() => setHotelLoading(false));
-    },0);
+    }, 0);
   }, []);
 
   const renderHotelDataItem = ({ item }) => {

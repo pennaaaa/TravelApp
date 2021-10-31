@@ -12,7 +12,6 @@ import {
 } from "react-native";
 import colors from "../assets/color/colors";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import RNPPickerSelect from "react-native-picker-select";
 import { LinearGradient } from "expo-linear-gradient";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { ScrollView } from "react-native-gesture-handler";

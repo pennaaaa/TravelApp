@@ -22,12 +22,15 @@ const SignIn = ({ navigation }) => {
     password: "",
     secureTextEntry: true,
   });
-  const { signIn } = React.useContext(AuthContext);
+  const { signIn, next_guest } = React.useContext(AuthContext);
 
   const loginHandel = (email, password) => {
     signIn(email, password);
   };
 
+  const nextHandel = () => {
+    next_guest();
+  };
   const textUserChange = (val) => {
     setData({
       ...data,
@@ -102,6 +105,17 @@ const SignIn = ({ navigation }) => {
             ]}
           >
             <Text style={[styles.textSign, { color: "#4EAB4D" }]}>Sign Up</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => nextHandel()}
+            style={[
+              styles.signIn,
+              { borderColor: "#4EAB4D", borderWidth: 1, marginTop: 15 },
+            ]}
+          >
+            <Text style={[styles.textSign, { color: "#4EAB4D" }]}>
+              Continue without sign in
+            </Text>
           </TouchableOpacity>
           <Text style={{ marginTop: 15 }}> Login with </Text>
           <View style={styles.anotherButton}>

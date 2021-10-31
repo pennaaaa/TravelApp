@@ -74,65 +74,65 @@ const Find = ({ navigation }) => {
     );
   };
   return (
-    <SafeAreaView forceInset={{ bottom: "never" }}
-    style={{ backgroundColor: colors.white }}>
+    <SafeAreaView
+      forceInset={{ bottom: "never" }}
+      style={{ backgroundColor: colors.white }}
+    >
       <ScrollView>
-        
-          <View style={styles.logo}>
-            <Image
-              source={require("../assets/image/logo2.png")}
-              style={{
-                resizeMode: "stretch",
-                height: 50,
-                width: 100,
-              }}
-            />
+        <View style={styles.logo}>
+          <Image
+            source={require("../assets/image/logo2.png")}
+            style={{
+              resizeMode: "stretch",
+              height: 50,
+              width: 100,
+            }}
+          />
 
-            <SearchBar
+          <SearchBar
             style={{
               height: 68,
               width: 300,
               borderRadius: 10,
-              marginLeft:10,
+              marginLeft: 10,
               // marginTop: 10,
             }}
             fontSize={20}
-            searchIconImageStyle={{height: 25, width: 18 }}
+            searchIconImageStyle={{ height: 25, width: 18 }}
             // clearIconImageStyle={{ paddingRight: 40 }}
             placeholder="Bạn sắp đến đâu?"
-            placeholderTextColor='#919191'
+            placeholderTextColor="#919191"
             onFocus={() => navigation.navigate("SearchView")}
           />
-            {/* <Text style={styles.logoName}>Go Go</Text> */}
-          </View>
+          {/* <Text style={styles.logoName}>Go Go</Text> */}
+        </View>
 
-          
-          {/* last search */}
-          <View style={styles.cityHighContainer}>
-            <Text style={styles.highTitle}>Tìm kiếm gần đây của bạn</Text>
-            <View style={styles.allActivity}>
-              <FlatList
-                data={activityData}
-                renderItem={renderActivityData}
-                keyExtractor={(item) => item.id}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-              />
-            </View>
+        {/* last search */}
+        <View style={styles.cityHighContainer}>
+          <Text style={styles.highTitle}>Tìm kiếm gần đây của bạn</Text>
+          <View style={styles.allActivity}>
+            <FlatList
+              data={activityData}
+              renderItem={renderActivityData}
+              keyExtractor={(item) => item.id}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+            />
           </View>
-          {/* Hotel */}
-          <View style={styles.cityHighContainer}>
-            <Text style={styles.highTitle}>Địa điểm yêu thích</Text>
-            <View style={styles.highItemWrapper}>
-              <FlatList
-                data={hotelData}
-                renderItem={renderHotelDataItem}
-                keyExtractor={(item) => item.id}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-              />
-            </View>
+        </View>
+        {/* Hotel */}
+        <View style={styles.cityHighContainer}>
+          <Text style={styles.highTitle}>Địa điểm yêu thích</Text>
+          <View style={styles.highItemWrapper}>
+            <FlatList
+              data={hotelData}
+              renderItem={renderHotelDataItem}
+              keyExtractor={(item) => item.id}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+            />
           </View>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );

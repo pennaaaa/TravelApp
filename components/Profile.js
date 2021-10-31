@@ -22,6 +22,7 @@ const width = Dimensions.get("window").width;
 
 const Profile = () => {
   const authContext = React.useContext(AuthContext);
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ImageBackground
@@ -30,34 +31,53 @@ const Profile = () => {
       ></ImageBackground>
       <View style={styles.view}>
         <View style={styles.profile}>
-          <View
-            style={{ flex: 3.5 }}
-            // onPress={() => authContext.signOut()}
-          >
+          <View style={{ flex: 3.5 }}>
             <Image
               source={require("../assets/image/avata.png")}
               style={styles.avatar}
             />
           </View>
-          <View style={styles.infoView}>
-            <Text style={styles.name}>{authContext.userName}</Text>
-            <Text style={styles.phone}>{authContext.phone}</Text>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => alert("xem xem cai l")}
-            >
-              <LinearGradient
-                colors={["#3FA344", "#8DCA70"]}
-                start={{ x: 0, y: 1 }}
-                end={{ x: 1, y: 1 }}
+          {authContext.userToken == "NoToken" ? (
+            <View style={styles.infoView}>
+              <Text style={styles.name}>Đăng kí/Đăng nhập </Text>
+              <Text style={styles.phone}>Đăng nhập với email</Text>
+              <TouchableOpacity
                 style={styles.button}
+                onPress={() => alert("Đăng nhập đi rồi xem ^^")}
               >
-                <Text style={[styles.buttonText, { color: "#fff" }]}>
-                  Xem thông tin
-                </Text>
-              </LinearGradient>
-            </TouchableOpacity>
-          </View>
+                <LinearGradient
+                  colors={["#3FA344", "#8DCA70"]}
+                  start={{ x: 0, y: 1 }}
+                  end={{ x: 1, y: 1 }}
+                  style={styles.button}
+                >
+                  <Text style={[styles.buttonText, { color: "#fff" }]}>
+                    Xem thông tin
+                  </Text>
+                </LinearGradient>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <View style={styles.infoView}>
+              <Text style={styles.name}>{authContext.userName}</Text>
+              <Text style={styles.phone}>{authContext.phone}</Text>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => alert("xem xem cai l")}
+              >
+                <LinearGradient
+                  colors={["#3FA344", "#8DCA70"]}
+                  start={{ x: 0, y: 1 }}
+                  end={{ x: 1, y: 1 }}
+                  style={styles.button}
+                >
+                  <Text style={[styles.buttonText, { color: "#fff" }]}>
+                    Xem thông tin
+                  </Text>
+                </LinearGradient>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
         <View
           style={{
@@ -82,50 +102,80 @@ const Profile = () => {
             <Text style={styles.supportText2}>Chính sách bảo mật</Text>
           </TouchableOpacity>
         </View>
-        <View
-          style={{
-            flexDirection: "row",
-            padding: 20,
-            justifyContent: "space-around",
-          }}
-        >
-          <TouchableOpacity style={styles.support}>
-            <MaterialIcons name="history" size={40} color="green" />
-            <Text style={styles.supportText1}>Lịch sử</Text>
-            <Text style={styles.supportText2}>Hóa đơn của bạn</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.support}>
-            <MaterialIcons name="search" size={40} color="green" />
-            <Text style={styles.supportText1}>Đánh giá</Text>
-            <Text style={styles.supportText2}>Đánh giá của bạn</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.support}>
-            <MaterialIcons name="favorite" size={40} color="green" />
-            <Text style={styles.supportText1}>Yêu thích</Text>
-            <Text style={styles.supportText2}>Khách sạn đã thích</Text>
-          </TouchableOpacity>
-        </View>
-        <TouchableOpacity
-          style={[
-            styles.button,
-            { width: "80%", alignSelf: "center", padding: 12 },
-          ]}
-          onPress={() => authContext.signOut()}
-        >
-          <LinearGradient
-            colors={["#3FA344", "#8DCA70"]}
-            start={{ x: 0, y: 1 }}
-            end={{ x: 1, y: 1 }}
-            style={[
-              styles.button,
-              { width: "100%", alignSelf: "center", padding: 10 },
-            ]}
+        {authContext.userToken !== "NoToken" && (
+          <View
+            style={{
+              flexDirection: "row",
+              padding: 20,
+              justifyContent: "space-around",
+            }}
           >
-            <Text style={[styles.buttonText, { color: "#fff" }]}>
-              Đăng xuất
-            </Text>
-          </LinearGradient>
-        </TouchableOpacity>
+            <TouchableOpacity style={styles.support}>
+              <MaterialIcons name="history" size={40} color="green" />
+              <Text style={styles.supportText1}>Lịch sử</Text>
+              <Text style={styles.supportText2}>Hóa đơn của bạn</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.support}>
+              <MaterialIcons name="search" size={40} color="green" />
+              <Text style={styles.supportText1}>Đánh giá</Text>
+              <Text style={styles.supportText2}>Đánh giá của bạn</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.support}>
+              <MaterialIcons name="favorite" size={40} color="green" />
+              <Text style={styles.supportText1}>Yêu thích</Text>
+              <Text style={styles.supportText2}>Khách sạn đã thích</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+        {authContext.userToken != "NoToken" ? (
+          <View>
+            <TouchableOpacity
+              style={[
+                styles.button,
+                { width: "80%", alignSelf: "center", padding: 12 },
+              ]}
+              onPress={() => authContext.signOut()}
+            >
+              <LinearGradient
+                colors={["#3FA344", "#8DCA70"]}
+                start={{ x: 0, y: 1 }}
+                end={{ x: 1, y: 1 }}
+                style={[
+                  styles.button,
+                  { width: "100%", alignSelf: "center", padding: 10 },
+                ]}
+              >
+                <Text style={[styles.buttonText, { color: "#fff" }]}>
+                  Đăng xuất
+                </Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <View>
+            <TouchableOpacity
+              style={[
+                styles.button,
+                { width: "80%", alignSelf: "center", padding: 12 },
+              ]}
+              onPress={() => authContext.signOut()}
+            >
+              <LinearGradient
+                colors={["#3FA344", "#8DCA70"]}
+                start={{ x: 0, y: 1 }}
+                end={{ x: 1, y: 1 }}
+                style={[
+                  styles.button,
+                  { width: "100%", alignSelf: "center", padding: 10 },
+                ]}
+              >
+                <Text style={[styles.buttonText, { color: "#fff" }]}>
+                  Đăng nhập
+                </Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
     </SafeAreaView>
   );

@@ -99,6 +99,11 @@ const App = () => {
           isLoading: false,
           userRefreshToken: action.refreshToken,
         };
+      case "NEXT":
+        return {
+          userToken: "NoToken",
+          isLoading: false,
+        };
       case "LOGIN":
         return {
           ...prevState,
@@ -187,6 +192,10 @@ const App = () => {
         refreshToken: userToken.refresh.token,
       });
     },
+    next_guest: async () => {
+      AsyncStorage.setItem("userToken", "NoToken");
+      dispatch({ type: "NEXT" });
+    },
     signOut: async () => {
       try {
         // gui token
@@ -215,8 +224,23 @@ const App = () => {
       }
       dispatch({ type: "LOGOUT" });
     },
-    signUp: () => {
-      setUserToken("abcdef");
+    signUp: async (email, name, password) => {
+      let data = {
+        email: email,
+        name: name,
+        password: password,
+        role: "partner",
+      };
+      await fetch("https://pbl6-travelapp.herokuapp.com/auth/register", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }).then((response) => {
+        console.log(response.status);
+      });
     },
     userName: loginState.userName,
     userToken: loginState.userToken,
@@ -266,7 +290,7 @@ const App = () => {
 
   return (
     <AuthContext.Provider value={authContext}>
-      {loginState.userToken == null ? (
+      {!loginState.userToken ? (
         <NavigationContainer>
           <Stack.Navigator>
             <Stack.Screen
