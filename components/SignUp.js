@@ -11,6 +11,7 @@ import { TextInput } from "react-native-gesture-handler";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Feather from "react-native-vector-icons/Feather";
 import { LinearGradient } from "expo-linear-gradient";
+import AuthContext from "../store/context";
 
 Feather.loadFont();
 FontAwesome.loadFont();
@@ -18,14 +19,27 @@ FontAwesome.loadFont();
 const SignUp = ({ navigation }) => {
   const [data, setData] = useState({
     email: "",
+    name: "",
     password: "",
     secureTextEntry: true,
   });
+
+  const { signUp } = React.useContext(AuthContext);
+
+  const signUpHandel = (email, name, password) => {
+    signUp(email, name, password);
+  };
 
   const textUserChange = (val) => {
     setData({
       ...data,
       email: val,
+    });
+  };
+  const textNameChange = (val) => {
+    setData({
+      ...data,
+      name: val,
     });
   };
   const textPasswordChange = (val) => {
@@ -48,37 +62,35 @@ const SignUp = ({ navigation }) => {
         style={styles.logo}
       />
       <View style={{ width: "80%", marginTop: 10 }}>
-        <Text>Email</Text>
+        <Text>Email của bạn</Text>
         <View style={styles.action}>
-          <FontAwesome name="user-o" color={"green"} size={20} />
+          <View style={{ width: 20 }}>
+            <Feather name="mail" color={"green"} size={20} />
+          </View>
           <TextInput
-            placeholder="Your Email"
+            placeholder="Nhập email của bạn"
             onChangeText={(val) => textUserChange(val)}
             style={styles.textInput}
           />
         </View>
-        <Text style={{ marginTop: 20 }}>Password</Text>
+        <Text style={{ marginTop: 20 }}>Tên của bạn</Text>
         <View style={styles.action}>
-          <FontAwesome name="lock" color={"green"} size={20} />
+          <View style={{ width: 20 }}>
+            <FontAwesome name="user-o" color={"green"} size={20} />
+          </View>
           <TextInput
-            placeholder="Your Password"
-            onChangeText={(val) => textPasswordChange(val)}
+            placeholder="Nhập tên của bạn"
+            onChangeText={(val) => textNameChange(val)}
             style={styles.textInput}
-            secureTextEntry={data.secureTextEntry ? true : false}
           />
-          <TouchableOpacity onPress={updateSecureText}>
-            {data.secureTextEntry ? (
-              <Feather name="eye-off" color={"green"} size={20} />
-            ) : (
-              <Feather name="eye" color={"green"} size={20} />
-            )}
-          </TouchableOpacity>
         </View>
-        <Text style={{ marginTop: 20 }}>Confirm Password</Text>
+        <Text style={{ marginTop: 20 }}>Mật khẩu</Text>
         <View style={styles.action}>
-          <FontAwesome name="lock" color={"green"} size={20} />
+          <View style={{ width: 20 }}>
+            <FontAwesome name="lock" color={"green"} size={20} />
+          </View>
           <TextInput
-            placeholder="Confirm Your Password"
+            placeholder="Nhập mật khẩu"
             onChangeText={(val) => textPasswordChange(val)}
             style={styles.textInput}
             secureTextEntry={data.secureTextEntry ? true : false}
@@ -92,16 +104,21 @@ const SignUp = ({ navigation }) => {
           </TouchableOpacity>
         </View>
         <View style={styles.button}>
-          <LinearGradient
-            colors={["#3FA344", "#8DCA70"]}
-            start={{ x: 0, y: 1 }}
-            end={{ x: 1, y: 1 }}
-            style={styles.signIn}
-          >
-            <Text style={[styles.textSign, { color: "#fff" }]}>Sign In</Text>
-          </LinearGradient>
           <TouchableOpacity
-            onPress={() => navigation.navigate("SignUp")}
+            style={styles.signIn}
+            onPress={() => signUpHandel(data.email, data.name, data.password)}
+          >
+            <LinearGradient
+              colors={["#3FA344", "#8DCA70"]}
+              start={{ x: 0, y: 1 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.signIn}
+            >
+              <Text style={[styles.textSign, { color: "#fff" }]}>Đăng kí</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("SignIn")}
             style={[
               styles.signIn,
               {
@@ -111,7 +128,7 @@ const SignUp = ({ navigation }) => {
               },
             ]}
           >
-            <Text style={[styles.textSign, { color: "#4EAB4D" }]}>Sign Up</Text>
+            <Text style={[styles.textSign, { color: "#4EAB4D" }]}>Trở về</Text>
           </TouchableOpacity>
         </View>
       </View>

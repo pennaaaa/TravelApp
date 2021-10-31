@@ -113,7 +113,9 @@ const SignIn = ({ navigation }) => {
               { borderColor: "#4EAB4D", borderWidth: 1, marginTop: 15 },
             ]}
           >
-            <Text style={[styles.textSign, { color: "#4EAB4D" }]}>Next</Text>
+            <Text style={[styles.textSign, { color: "#4EAB4D" }]}>
+              Continue without sign in
+            </Text>
           </TouchableOpacity>
           <Text style={{ marginTop: 15 }}> Login with </Text>
           <View style={styles.anotherButton}>

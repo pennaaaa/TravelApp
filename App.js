@@ -16,7 +16,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import FoodDetails from "./components/FoodDetails";
 import FoodBooking from "./components/FoodBooking";
-import HotelBooking from "./components/HotelBooking"
+import HotelBooking from "./components/HotelBooking";
 import VehicleDetails from "./components/VehicleDetails";
 import AppLoading from "./components/AppLoading";
 import OnBoarding from "./components/OnBoarding";
@@ -224,8 +224,23 @@ const App = () => {
       }
       dispatch({ type: "LOGOUT" });
     },
-    signUp: () => {
-      setUserToken("abcdef");
+    signUp: async (email, name, password) => {
+      let data = {
+        email: email,
+        name: name,
+        password: password,
+        role: "partner",
+      };
+      await fetch("https://pbl6-travelapp.herokuapp.com/auth/register", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }).then((response) => {
+        console.log(response.status);
+      });
     },
     userName: loginState.userName,
     userToken: loginState.userToken,
@@ -275,7 +290,7 @@ const App = () => {
 
   return (
     <AuthContext.Provider value={authContext}>
-      {loginState.userToken == null ? (
+      {!loginState.userToken ? (
         <NavigationContainer>
           <Stack.Navigator>
             <Stack.Screen
@@ -346,6 +361,11 @@ const App = () => {
             <Stack.Screen
               name="SearchView"
               component={SearchView}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="HotelBooking"
+              component={HotelBooking}
               options={{ headerShown: false }}
             />
           </Stack.Navigator>
