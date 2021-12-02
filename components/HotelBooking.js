@@ -9,29 +9,60 @@ import {
   Dimensions,
   TextInput,
   Image,
+  ActivityIndicator,
+  Modal,
 } from "react-native";
 import colors from "../assets/color/colors";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { LinearGradient } from "expo-linear-gradient";
 import AntDesign from "react-native-vector-icons/AntDesign";
+import Feather from "react-native-vector-icons/Feather";
 import { ScrollView } from "react-native-gesture-handler";
+import { WebView } from "react-native-webview";
+import { useRoute } from "@react-navigation/native";
 
 const Listpeople = Array.from({ length: 10 }, (_, i) => i + 1);
 const height = Dimensions.get("window").height;
 const width = Dimensions.get("window").width;
 
 AntDesign.loadFont();
+Feather.loadFont();
 
 const HotelBooking = ({ route, navigation }) => {
+  function onMessage(e) {
+    let data = e.nativeEvent.data;
+    setShowGateway(false);
+    console.log(data);
+    let payment = JSON.parse(data);
+    if (payment.status === "COMPLETED") {
+      alert("PAYMENT MADE SUCCESSFULLY!");
+    } else {
+      alert("PAYMENT FAILED. PLEASE TRY AGAIN.");
+    }
+  }
   const { item } = route.params;
+  const router = useRoute();
   const [dateIn, setDateIn] = useState(new Date());
   const [dateOut, setDateOut] = useState(new Date());
   const [mode, setMode] = useState("date");
   const [showIn, setShowIn] = useState(false);
   const [showOut, setShowOut] = useState(false);
-
+  const [showGateway, setShowGateway] = useState(false);
+  const [prog, setProg] = useState(false);
+  const [progClr, setProgClr] = useState("#000");
   const [selectedValue, setSelectedValue] = useState(1);
-
+  function onMessage(e) {
+    let data = e.nativeEvent.data;
+    setShowGateway(false);
+    console.log(data);
+    let payment = JSON.parse(data);
+    if (payment.status === "COMPLETED") {
+      alert("PAYMENT MADE SUCCESSFULLY!");
+    } else {
+      alert("PAYMENT FAILED. PLEASE TRY AGAIN.");
+    }
+  }
+  const [price, setprice] = useState("3");
   const onChangeIn = (event, selectedDate) => {
     const currentDate = selectedDate || dateIn;
     setShowIn(Platform.OS === "ios");
@@ -177,9 +208,7 @@ const HotelBooking = ({ route, navigation }) => {
           </View>
           <TouchableOpacity
             style={styles.signIn}
-            onPress={() => {
-              alert("Dat thanh cong!");
-            }}
+            onPress={() => setShowGateway(true)}
           >
             <LinearGradient
               colors={["#3FA344", "#8DCA70"]}
@@ -194,6 +223,59 @@ const HotelBooking = ({ route, navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
+      {showGateway ? (
+        <Modal
+          visible={showGateway}
+          onDismiss={() => setShowGateway(false)}
+          onRequestClose={() => setShowGateway(false)}
+          animationType={"fade"}
+          transparent
+        >
+          <View style={styles.webViewCon}>
+            <View style={styles.wbHead}>
+              <TouchableOpacity
+                style={{ padding: 13 }}
+                onPress={() => setShowGateway(false)}
+              >
+                <Feather name={"x"} size={24} />
+              </TouchableOpacity>
+              <Text
+                style={{
+                  flex: 1,
+                  textAlign: "center",
+                  fontSize: 16,
+                  fontWeight: "bold",
+                  color: "#00457C",
+                }}
+              >
+                PayPal GateWay
+              </Text>
+              <View style={{ padding: 13, opacity: prog ? 1 : 0 }}>
+                <ActivityIndicator size={24} color={progClr} />
+              </View>
+            </View>
+            <WebView
+              source={{ uri: "http://localhost:3000/" + router.params.price }}
+              style={{ flex: 1 }}
+              onLoadStart={() => {
+                setProg(true);
+                setProgClr("#000");
+              }}
+              onLoadProgress={() => {
+                setProg(true);
+                setProgClr("#00457C");
+              }}
+              onLoadEnd={() => {
+                setProg(false);
+              }}
+              onLoad={() => {
+                setProg(false);
+              }}
+              onMessage={onMessage}
+            />
+          </View>
+        </Modal>
+      ) : null}
     </ScrollView>
   );
 };
@@ -206,6 +288,20 @@ const styles = StyleSheet.create({
 
   dateTimeStyle: {
     fontSize: 30,
+  },
+  webViewCon: {
+    position: "absolute",
+    top: 30,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  wbHead: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#f9f9f9",
+    zIndex: 25,
+    elevation: 2,
   },
 
   line: {
