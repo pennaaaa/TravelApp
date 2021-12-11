@@ -1,0 +1,31 @@
+const cartItemData = [
+  {
+    idBill: "bill001",
+    title: "Quan Hoa",
+    address: "29 Hang Buom, Hoan Kiem, Ha Noi",
+    image: require("../image/paragon.jpeg"),
+    additionalFee: 100000,
+    checkIn: "11/28/21",
+    checkOut: "12/5/21",
+    guest: "616e74712bf8691ecfe19590",
+    room: "61507394ba9dff0021a35555",
+    service: "Thuê phòng",
+    status: false,
+    total: 1000000,
+  },
+  {
+    idBill: "bill002",
+    title: "Quan Hoa",
+    address: "29 Hang Buom, Hoan Kiem, Ha Noi",
+    image: require("../image/paragon.jpeg"),
+    additionalFee: 100000,
+    checkIn: "11/28/21",
+    checkOut: "12/5/21",
+    guest: "616e74712bf8691ecfe19590",
+    room: "61507394ba9dff0021a35555",
+    service: "Thuê phòng",
+    status: false,
+    total: 1000000,
+  },
+];
+export default cartItemData;

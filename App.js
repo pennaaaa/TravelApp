@@ -24,6 +24,8 @@ import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
 import AuthContext from "./store/context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import UserInfo from "./components/UserInfo";
+import cart from "./components/cart";
 
 Entypo.loadFont();
 AntDesign.loadFont();
@@ -82,6 +84,8 @@ const App = () => {
     userId: "",
     gender: "",
     phone: "",
+    birth: "",
+    iNum:"",
     userRefreshToken: "",
   };
 
@@ -96,6 +100,8 @@ const App = () => {
           userId: action.id,
           gender: action.gender,
           phone: action.phone,
+          birth: action.birth,
+          iNum: action.identityNumber,
           isLoading: false,
           userRefreshToken: action.refreshToken,
         };
@@ -112,6 +118,8 @@ const App = () => {
           userId: action.id,
           gender: action.gender,
           phone: action.phone,
+          birth: action.birth,
+          iNum: action.identityNumber,
           userToken: action.token,
           userRefreshToken: action.refreshToken,
           isLoading: false,
@@ -165,6 +173,8 @@ const App = () => {
                 AsyncStorage.setItem("userEmail", user.email);
                 AsyncStorage.setItem("userName", user.name);
                 AsyncStorage.setItem("userPhone", user.phone);
+                AsyncStorage.setItem("userBirth", user.birth);
+                AsyncStorage.setItem("userINum", user.identityNumber);
                 AsyncStorage.setItem("Gender", user.gender);
                 AsyncStorage.setItem(
                   "userRefreshToken",
@@ -187,7 +197,9 @@ const App = () => {
         token: userToken.access.token,
         id: user.id,
         name: user.name,
-        phone: user.phone,
+        phone: user.phone,     
+        birth: user.birth,
+        iNum: user.identityNumber,
         gender: user.gender,
         refreshToken: userToken.refresh.token,
       });
@@ -216,6 +228,8 @@ const App = () => {
         await AsyncStorage.removeItem("userEmail");
         await AsyncStorage.removeItem("userName");
         await AsyncStorage.removeItem("userPhone");
+        await AsyncStorage.removeItem("userBirth");
+        await AsyncStorage.removeItem("userINum");
         await AsyncStorage.removeItem("Gender");
         await AsyncStorage.removeItem("userRefreshToken");
         // console.log(loginState.userRefreshToken);
@@ -248,6 +262,8 @@ const App = () => {
     userId: loginState.userId,
     gender: loginState.gender,
     phone: loginState.phone,
+    birth: loginState.birth,
+    iNum: loginState.iNum,
     userRefreshToken: loginState.userRefreshToken,
   }));
 
@@ -258,6 +274,8 @@ const App = () => {
         userEmail,
         userName,
         userPhone,
+        userBirth,
+        userINum,
         gender,
         userRefreshToken;
       try {
@@ -267,6 +285,8 @@ const App = () => {
         userEmail = await AsyncStorage.getItem("userEmail");
         userName = await AsyncStorage.getItem("userName");
         userPhone = await AsyncStorage.getItem("userPhone");
+        userBirth = await AsyncStorage.getItem("userBirth");
+        userINum = await AsyncStorage.getItem("userINum");
         gender = await AsyncStorage.getItem("Gender");
       } catch (e) {
         console.log(e);
@@ -279,6 +299,8 @@ const App = () => {
         email: userEmail,
         name: userName,
         phone: userPhone,
+        birth: userBirth,
+        iNum: userINum,
         gender: gender,
       });
     }, 2000);
@@ -367,6 +389,23 @@ const App = () => {
             <Stack.Screen
               name="HotelBooking"
               component={HotelBooking}
+              options={({ route }) => ({
+                headerBackTitle: "",
+                headerTitle: route.params.name,
+              })}
+            />
+
+            <Stack.Screen
+              name="UserInfo"
+              component={UserInfo}
+              options={({ route }) => ({
+                headerBackTitle: "",
+                headerTitle: route.params.name,
+              })}
+            />
+            <Stack.Screen
+              name="cart"
+              component={cart}
               options={({ route }) => ({
                 headerBackTitle: "",
                 headerTitle: route.params.name,

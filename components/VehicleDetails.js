@@ -1,260 +1,270 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  ImageBackground,
-  Dimensions,
-  FlatList,
-  Image,
-} from "react-native";
+import { View, Text, StyleSheet, Dimensions, Image } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import colors from "../assets/color/colors";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import RNPPickerSelect from "react-native-picker-select";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import { LinearGradient } from "expo-linear-gradient";
 
 const height = Dimensions.get("window").height;
 const width = Dimensions.get("window").width;
 
+AntDesign.loadFont();
+
 const VehicleDetails = ({ route, navigation }) => {
   const { item } = route.params;
 
-  const [date, setDate] = useState(new Date());
-  const [hour, setHour] = useState(new Date().toLocaleTimeString().slice(0, 5));
+  const [dateIn, setDateIn] = useState(new Date());
+  const [dateOut, setDateOut] = useState(new Date());
+  const [price, setPrice] = useState(0);
   const [mode, setMode] = useState("date");
-  const [show, setShow] = useState(false);
+  const [showIn, setShowIn] = useState(false);
+  const [showOut, setShowOut] = useState(false);
+  const [hourIn, setHourIn] = useState(
+    new Date().toLocaleTimeString().slice(0, 5)
+  );
+  const [hourOut, setHourOut] = useState(
+    new Date().toLocaleTimeString().slice(0, 5)
+  );
 
   const [selectedValue, setSelectedValue] = useState(1);
-  const [note, setNote] = useState("");
 
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setShow(Platform.OS === "ios");
-    setDate(currentDate);
-    setHour(currentDate.toLocaleTimeString().slice(0, 5));
+  const onChangeIn = (event, selectedDate) => {
+    const currentDate = selectedDate || dateIn;
+    setShowIn(Platform.OS === "ios");
+    setDateIn(currentDate);
+    setHourIn(currentDate.toLocaleTimeString().slice(0, 5));
   };
 
-  const showMode = (currentMode) => {
-    setShow(true);
+  const onChangeOut = (event, selectedDate) => {
+    const currentDate = selectedDate || dateOut;
+    setShowOut(Platform.OS === "ios");
+    setDateOut(currentDate);
+    setHourOut(currentDate.toLocaleTimeString().slice(0, 5));
+    calPrice();
+  };
+
+  const calPrice = () => {
+    // console.log(dateIn.getDate())
+    console.log(dateOut.getDate())
+    setPrice(
+      50000 *
+        ((dateOut.getDate() - dateIn.getDate()) * 24)
+    );
+  };
+
+  const showModeIn = (currentMode) => {
+    setShowIn(true);
     setMode(currentMode);
   };
 
-  const showDatepicker = () => {
-    showMode("date");
+  const showModeOut = (currentMode) => {
+    setShowOut(true);
+    setMode(currentMode);
   };
 
-  const showTimepicker = () => {
-    showMode("time");
+  const showDatepickerIn = () => {
+    showModeIn("date");
+  };
+
+  const showTimepickerIn = () => {
+    showModeIn("time");
+  };
+
+  const showDatepickerOut = () => {
+    showModeOut("date");
+  };
+
+  const showTimepickerOut = () => {
+    showModeOut("time");
   };
 
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        <ImageBackground
-          source={item.imageBig}
-          style={styles.backgroundImage}
-        ></ImageBackground>
+    <ScrollView style={styles.container}>
+      <View style={styles.infoWrapper}>
+        <Image source={item.imageBig} style={styles.backgroundImage}></Image>
+        <Text style={styles.vehicleTitle}>{item.title}</Text>
+        <Text style={styles.vehicleAddress}>{item.address}</Text>
       </View>
-      <Text style={styles.titleText}>Thông tin đặt chỗ</Text>
-
-      <View style={styles.dateWrapper}>
-        <Text style={styles.dateTitle}>Ngày thuê</Text>
-        <View
-          style={{ height: "100%", width: 1, backgroundColor: "#909090" }}
-        ></View>
+      <View style={styles.detailWrapper}>
+        <Text style={styles.bookingTitle}>Thông tin đặt xe</Text>
+        <Text style={styles.dateTitle}>Nhận xe</Text>
         <View style={styles.dateText}>
-          <TouchableOpacity onPress={showDatepicker}>
-            <Text>{date.toLocaleDateString()}</Text>
+          <Text>{dateIn.toLocaleDateString()}</Text>
+          <TouchableOpacity onPress={showDatepickerIn}>
+            <AntDesign name="calendar" size={20} color={"#87BB73"}></AntDesign>
           </TouchableOpacity>
         </View>
-      </View>
-
-      <View style={styles.line}></View>
-
-      <View style={styles.hourWrapper}>
-        <Text style={styles.hourTitle}>Giờ thuê</Text>
-        <View
-          style={{ height: "100%", width: 1, backgroundColor: "#909090" }}
-        ></View>
-        <View style={styles.hourText}>
-          <TouchableOpacity onPress={showTimepicker}>
-            <Text>{hour}</Text>
+        <View style={styles.dateText}>
+          <Text>{hourIn}</Text>
+          <TouchableOpacity onPress={showTimepickerIn}>
+            <AntDesign
+              name="clockcircleo"
+              size={20}
+              color={"#87BB73"}
+            ></AntDesign>
           </TouchableOpacity>
         </View>
+        {showIn && (
+          <DateTimePicker
+            locale
+            style={styles.dateTimeStyle}
+            testID="dateTimePickerIn"
+            value={dateIn}
+            mode={mode}
+            is24Hour={true}
+            display="default"
+            onChange={onChangeIn}
+            minimumDate={new Date()}
+          />
+        )}
+        <Text style={styles.dateTitle}>Trả xe</Text>
+        <View style={styles.dateText}>
+          <Text>{dateOut.toLocaleDateString()}</Text>
+          <TouchableOpacity onPress={showDatepickerOut}>
+            <AntDesign name="calendar" size={24} color={"#87BB73"}></AntDesign>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.dateText}>
+          <Text>{hourOut}</Text>
+          <TouchableOpacity onPress={showTimepickerOut}>
+            <AntDesign
+              name="clockcircleo"
+              size={20}
+              color={"#87BB73"}
+            ></AntDesign>
+          </TouchableOpacity>
+        </View>
+        {showOut && (
+          <DateTimePicker
+            locale
+            style={styles.dateTimeStyle}
+            testID="dateTimePickerOut"
+            value={dateOut}
+            mode={mode}
+            is24Hour={true}
+            display="default"
+            onChange={onChangeOut}
+            minimumDate={dateIn}
+          />
+        )}
       </View>
+      <View style={styles.confirmWrapper}>
+        <Text style={styles.bookingTitle}>Chi tiết thanh toán</Text>
+        <View style={styles.datePrice}>
+          <Text style={styles.dateTitle}>Tổng tiền(VND)</Text>
+          <Text style={styles.resultDatePrice}>
+            {/* {item.price *
+              ((dateOut.getDate() - dateIn.getDate()) * 24 +
+                (dateOut.getHours() - dateIn.getHours()))} */}
+            {price} đ
+          </Text>
+        </View>
 
-      <TouchableOpacity
-        style={styles.buttonWrapper}
-        onPress={() => console.log(hour,date.toLocaleDateString())}
-      >
-        <Text style={styles.buttonText}>Xác nhận</Text>
-      </TouchableOpacity>
-      {show && (
-        <DateTimePicker
-          locale
-          style={styles.dateTimeStyle}
-          testID="dateTimePicker"
-          value={date}
-          mode={mode}
-          is24Hour={true}
-          display="default"
-          onChange={onChange}
-        />
-      )}
+        <TouchableOpacity
+          style={styles.signIn}
+          onPress={() => {
+            alert("Đặt xe thành công!");
+          }}
+        >
+          <LinearGradient
+            colors={["#3FA344", "#8DCA70"]}
+            start={{ x: 0, y: 1 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.signIn}
+          >
+            <Text style={[styles.buttonText, { color: "#fff" }]}>Đặt xe</Text>
+          </LinearGradient>
+        </TouchableOpacity>
+      </View>
     </ScrollView>
   );
 };
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.white,
+    backgroundColor: "#DDDDDD",
   },
   backgroundImage: {
-    height: height * 0.6,
-    justifyContent: "space-between",
-  },
-  descriptionWrapper: {
-    flex: 1,
-    backgroundColor: colors.white,
-    marginTop: -20,
-    // marginBottom:20,
-    borderRadius: 25,
-    // height: height,
-  },
-
-  descriptionTextWrapper: {
-    marginTop: 10,
-    marginHorizontal: 20,
-    // height: height * 0.2,
-  },
-  titleText: {
-    // fontFamily: 'Lato-Bold',
-    // width:width,
-    fontSize: 26,
-    color: colors.black,
-    // justifyContent: "center",
-    // alignItems: "center",
-    textAlign: "center",
-  },
-  address: {
-    marginTop: 10,
-    fontSize: 16,
-    color: colors.darkgray,
-    textAlign: "center",
-  },
-  timeAvailableWrapper: {
-    marginTop: 10,
-    flexDirection: "row",
-    justifyContent: "center",
-  },
-  titleTimeAvailable: {
-    fontSize: 16,
-    color: colors.orange,
-  },
-  itemTimeAvailable: {
-    fontSize: 16,
-    color: colors.black,
-  },
-  typePriceWrapper: {
-    marginTop: 10,
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-  },
-  typeWrapper: {
-    flexDirection: "column",
-  },
-  typeTitle: {
-    color: colors.darkgray,
-    textAlign: "center",
-  },
-  typeText: {
-    color: colors.orange,
-    textAlign: "center",
-  },
-  priceTitle: {
-    color: colors.darkgray,
-    textAlign: "center",
-  },
-  priceText: {
-    color: colors.orange,
-    textAlign: "center",
-  },
-  descriptionTitle: {
-    fontSize: 26,
-    color: colors.black,
-    marginLeft: 20,
-  },
-  descriptionText: {
-    marginHorizontal: 10,
-    marginTop: 10,
-    fontSize: 16,
-    color: colors.darkgray,
-  },
-  imageMenu: {
-    marginTop: 10,
+    height: height * 0.4,
     width: width * 0.9,
-    marginLeft: width * 0.05,
     justifyContent: "space-between",
-  },
-  buttonWrapper: {
-    marginHorizontal: 20,
-    marginTop: 20,
-    marginBottom: 50,
-    width:width*0.5,
-    marginLeft:width*0.25,
-    backgroundColor: colors.orange,
-    alignItems: "center",
-    paddingVertical: 20,
-    borderRadius: 15,
+    alignSelf: "center",
+    borderRadius: 5,
   },
   buttonText: {
     fontSize: 18,
     color: colors.white,
   },
-  titleText: {
-    fontSize: 26,
-    color: colors.black,
-    marginLeft: 10,
-    marginTop: 10,
-  },
-  dateWrapper: {
-    flexDirection: "row",
-    marginTop: 10,
-    justifyContent: "flex-start",
-    alignItems: "center",
-  },
-  datePickerStyle: {
-    marginLeft: 50,
-  },
   dateTitle: {
-    width: width * 0.3,
+    width: width * 0.4,
     fontSize: 20,
-    color: colors.orange,
-    // textAlign: "center",
-    marginLeft: 20,
+    color: colors.black,
+    marginTop: 12,
+    fontFamily: "SourceSans-SemiBold",
+    color: "black",
   },
   dateText: {
-    width: width * 0.3,
-    fontSize: 20,
-    marginLeft: 30,
-  },
-  hourWrapper: {
+    marginTop: 12,
     flexDirection: "row",
-    marginTop: 10,
-    justifyContent: "flex-start",
     alignItems: "center",
+    justifyContent: "space-between",
+    paddingRight: width * 0.08,
+    paddingLeft: width * 0.08,
   },
-  hourTitle: {
-    width: width * 0.3,
-    fontSize: 20,
-    color: colors.orange,
-    // textAlign: "center",
-    marginLeft: 20,
+  infoWrapper: {
+    width: "100%",
+    backgroundColor: colors.white,
+    padding: width * 0.05,
   },
-  hourText: {
+  detailWrapper: {
+    marginTop: 10,
+    flexDirection: "column",
+    padding: width * 0.05,
+    backgroundColor: "white",
+  },
+  confirmWrapper: {
+    marginTop: 10,
+    flexDirection: "column",
+    padding: width * 0.05,
+    backgroundColor: "white",
+  },
+  vehicleTitle: {
+    marginTop: 12,
+    fontSize: 28,
+    fontFamily: "SourceSans-SemiBold",
+    color: "black",
+  },
+  vehicleAddress: {
+    fontSize: 15,
+    fontFamily: "SourceSans-Regular",
+    color: "#767676",
+  },
+  bookingTitle: {
+    fontSize: 24,
+    fontFamily: "SourceSans-SemiBold",
+    color: "black",
+  },
+  datePrice: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingRight: width * 0.08,
+  },
+  resultDatePrice: {
     fontSize: 20,
-    alignItems: "flex-end",
-    marginLeft: 30,
+    fontFamily: "SourceSans-SemiBold",
+    color: "#2E833E",
+  },
+  signIn: {
+    marginTop: 30,
+    marginBottom: 30,
+    width: width * 0.6,
+    height: height * 0.07,
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
+    borderRadius: 10,
   },
 });
 

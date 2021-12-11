@@ -4,25 +4,23 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Button,
   Platform,
   Dimensions,
-  TextInput,
   Image,
+  Alert,
 } from "react-native";
 import colors from "../assets/color/colors";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { LinearGradient } from "expo-linear-gradient";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { ScrollView } from "react-native-gesture-handler";
-
-const Listpeople = Array.from({ length: 10 }, (_, i) => i + 1);
+import AuthContext from "../store/context";
 const height = Dimensions.get("window").height;
 const width = Dimensions.get("window").width;
 
 AntDesign.loadFont();
-
 const HotelBooking = ({ route, navigation }) => {
+  const authContext = React.useContext(AuthContext);
   const { item } = route.params;
   const [dateIn, setDateIn] = useState(new Date());
   const [dateOut, setDateOut] = useState(new Date());
@@ -61,7 +59,6 @@ const HotelBooking = ({ route, navigation }) => {
   const showDatepickerOut = () => {
     showModeOut("dateOut");
   };
-
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -138,6 +135,7 @@ const HotelBooking = ({ route, navigation }) => {
             )}
           </View>
         </View>
+
         <View style={styles.priceDetailContainer}>
           <Text style={styles.bookingTitle}>Chi tiết thanh toán</Text>
           <View style={styles.datePrice}>
@@ -175,23 +173,62 @@ const HotelBooking = ({ route, navigation }) => {
               đ
             </Text>
           </View>
-          <TouchableOpacity
-            style={styles.signIn}
-            onPress={() => {
-              alert("Dat thanh cong!");
-            }}
-          >
-            <LinearGradient
-              colors={["#3FA344", "#8DCA70"]}
-              start={{ x: 0, y: 1 }}
-              end={{ x: 1, y: 1 }}
+          <View style={styles.datePrice}>
+            <TouchableOpacity
               style={styles.signIn}
+              onPress={() => {
+                Alert.alert("Thành công", "Đã thêm phòng vào hàng chờ!");
+                const data = {
+                  service: "room",
+                  additionalFee:
+                    500000 *
+                    ((dateOut.getTime() - dateIn.getTime()) /
+                      (1000 * 60 * 60 * 24)) *
+                    0.1,
+                  total:
+                    500000 *
+                    ((dateOut.getTime() - dateIn.getTime()) /
+                      (1000 * 60 * 60 * 24)) *
+                    1.1,
+                  checkIn: dateIn.toLocaleDateString(),
+                  checkOut: dateOut.toLocaleDateString(),
+                  status: false,
+                  room: item.id,
+                  guest: authContext.userId,
+                };
+                console.log(data);
+              }}
             >
-              <Text style={[styles.buttonText, { color: "#fff" }]}>
-                Đặt phòng
-              </Text>
-            </LinearGradient>
-          </TouchableOpacity>
+              <LinearGradient
+                colors={["#3FA344", "#8DCA70"]}
+                start={{ x: 0, y: 1 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.signIn}
+              >
+                <Text style={[styles.buttonText, { color: "#fff" }]}>
+                  Chọn phòng
+                </Text>
+              </LinearGradient>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.signIn}
+              onPress={() => {
+                alert("Dat thanh cong!");
+              }}
+            >
+              <LinearGradient
+                colors={["#3FA344", "#8DCA70"]}
+                start={{ x: 0, y: 1 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.signIn}
+              >
+                <Text style={[styles.buttonText, { color: "#fff" }]}>
+                  Đặt phòng nhanh
+                </Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </ScrollView>
@@ -203,18 +240,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#DDDDDD",
   },
-
   dateTimeStyle: {
     fontSize: 30,
   },
-
-  line: {
-    width: width,
-    marginTop: 10,
-    backgroundColor: "red",
-    borderWidth: 3,
-  },
-
   roomContainer: {
     width: "100%",
     flexDirection: "row",
@@ -230,14 +258,12 @@ const styles = StyleSheet.create({
   roomOverViewWrapper: {
     width: width * 0.496,
   },
-
   roomTitle: {
     marginLeft: 12,
     fontSize: 24,
     fontFamily: "SourceSans-SemiBold",
     color: "black",
   },
-
   ratingWrapper: {
     marginLeft: 12,
     flexDirection: "row",
@@ -255,13 +281,11 @@ const styles = StyleSheet.create({
     fontFamily: "SourceSans-Bold",
     color: "#437014",
   },
-
   totalFeedback: {
     fontSize: 18,
     fontFamily: "SourceSans-SemiBold",
     color: "#767676",
   },
-
   bookingContainer: {
     marginTop: 10,
     flexDirection: "column",
@@ -280,16 +304,11 @@ const styles = StyleSheet.create({
     fontFamily: "SourceSans-SemiBold",
     color: "black",
   },
-
   dateText: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
   },
-  changeDate: {
-    textDecorationLine: "underline",
-  },
-
   priceDetailContainer: {
     marginTop: 10,
     flexDirection: "column",
@@ -305,7 +324,7 @@ const styles = StyleSheet.create({
   signIn: {
     marginTop: 24,
     marginBottom: 12,
-    width: width * 0.6,
+    width: width * 0.4,
     height: height * 0.07,
     justifyContent: "center",
     alignItems: "center",

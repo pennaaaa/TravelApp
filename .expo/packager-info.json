@@ -1,10 +1,10 @@
 {
-  "devToolsPort": 19002,
   "expoServerPort": 19000,
   "packagerPort": 19000,
-  "expoServerNgrokUrl": "https://jc-s3c.vnd2k.travelapp.exp.direct",
-  "packagerNgrokUrl": "https://packager.jc-s3c.vnd2k.travelapp.exp.direct",
-  "ngrokPid": 10528,
   "packagerPid": null,
-  "webpackServerPort": null
+  "expoServerNgrokUrl": null,
+  "packagerNgrokUrl": null,
+  "ngrokPid": null,
+  "webpackServerPort": null,
+  "devToolsPort": 19002
 }

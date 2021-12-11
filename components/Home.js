@@ -29,6 +29,10 @@ FontAwesome.loadFont();
 const Home = ({ navigation }) => {
   const [isHotelLoading, setHotelLoading] = useState(true);
   const [hotelData, sethotelData] = useState([]);
+  const [isRestaurantLoading, setRestaurantLoading] = useState(true);
+  const [restaurantData, setRestaurantData] = useState([]);
+  const [isVehicleLoading, setVehicleLoading] = useState(true);
+  const [vehicleData, setVehicleData] = useState([]);
   const [isLoaded] = useFonts({
     "SourceSans-Light": require("../assets/fonts/LexendDeca-ExtraBold/SourceSansPro-Light.ttf"),
     "SourceSans-Regular": require("../assets/fonts/LexendDeca-ExtraBold/SourceSansPro-Regular.ttf"),
@@ -43,6 +47,18 @@ const Home = ({ navigation }) => {
         .then((json) => sethotelData(json))
         .catch((error) => console.error(error))
         .finally(() => setHotelLoading(false));
+
+      fetch("https://pbl6-travelapp.herokuapp.com/restaurant")
+        .then((response) => response.json())
+        .then((json) => setRestaurantData(json))
+        .catch((error) => console.error(error))
+        .finally(() => setRestaurantLoading(false));
+
+      fetch("https://pbl6-travelapp.herokuapp.com/selfvehicle")
+        .then((response) => response.json())
+        .then((json) => setVehicleData(json))
+        .catch((error) => console.error(error))
+        .finally(() => setVehicleLoading(false));
     }, 0);
   }, []);
 
@@ -88,6 +104,94 @@ const Home = ({ navigation }) => {
       </TouchableOpacity>
     );
   };
+
+  const renderRestaurantDataItem = ({ item }) => {
+    return (
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate("FoodDetails", {
+            item: item,
+            name: item.location,
+          })
+        }
+      >
+        <View style={styles.itemContainer} shadowOffset={{ height: 10 }}>
+          <Image
+            source={{ uri: item.imageCover }}
+            style={styles.discorverItem}
+          />
+          <View style={styles.itemViewText}>
+            <Text
+              style={{
+                marginLeft: 10,
+                marginTop: 5,
+                fontFamily: "SourceSans-SemiBold",
+                fontSize: 18,
+              }}
+            >
+              {/* Restaurant Name */}
+              {item.city}
+            </Text>
+            <Text
+              style={{
+                marginLeft: 10,
+                marginVertical: 5,
+                fontFamily: "SourceSans-Regular",
+                fontSize: 18,
+                color: "#7B7B7B",
+              }}
+            >
+              {item.address}
+            </Text>
+          </View>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
+  const renderVehicleDataItem = ({ item }) => {
+    return (
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate("VehicleDetails", {
+            item: item,
+            name: item.location,
+          })
+        }
+      >
+        <View style={styles.itemContainer} shadowOffset={{ height: 10 }}>
+          <Image
+            source={{ uri: item.imageCover }}
+            style={styles.discorverItem}
+          />
+          <View style={styles.itemViewText}>
+            <Text
+              style={{
+                marginLeft: 10,
+                marginTop: 5,
+                fontFamily: "SourceSans-SemiBold",
+                fontSize: 18,
+              }}
+            >
+              {item.name}
+            </Text>
+            <Text
+              style={{
+                marginLeft: 10,
+                marginVertical: 5,
+                fontFamily: "SourceSans-Regular",
+                fontSize: 18,
+                color: "#7B7B7B",
+              }}
+            >
+              {item.address}
+            </Text>
+          </View>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
   const renderActivityData = ({ item }) => {
     return (
       <TouchableOpacity
@@ -114,7 +218,7 @@ const Home = ({ navigation }) => {
       </TouchableOpacity>
     );
   };
-  if (isHotelLoading) return <MyLoader></MyLoader>;
+  // if (isHotelLoading) return <MyLoader></MyLoader>;
 
   if (!isLoaded) {
     return <AppLoading isFirst={true} />;
@@ -129,13 +233,11 @@ const Home = ({ navigation }) => {
             source={require("../assets/image/logo2.png")}
             style={{
               resizeMode: "stretch",
-              height:height*0.052,
-              width:width*0.21,
-              // height: 40,
-              // width: 70,
+              height: height * 0.052,
+              width: width * 0.21,
             }}
           />
-          
+
           <Text style={styles.logoName}>Go Go</Text>
         </View>
         <ScrollView>
@@ -170,14 +272,14 @@ const Home = ({ navigation }) => {
               </View>
             </View>
             <View style={styles.cityHighContainer}>
-              <Text style={styles.highTitle}>Khách sạn nổi bật</Text>
+              <Text style={styles.highTitle}>Nhà hàng nổi bật</Text>
               <View style={styles.highItemWrapper}>
-                {isHotelLoading ? (
+                {isRestaurantLoading ? (
                   <Text>Loading...</Text>
                 ) : (
                   <FlatList
-                    data={hotelData}
-                    renderItem={renderHotelDataItem}
+                    data={restaurantData}
+                    renderItem={renderRestaurantDataItem}
                     keyExtractor={(item) => item.id}
                     horizontal
                     showsHorizontalScrollIndicator={false}
@@ -187,14 +289,14 @@ const Home = ({ navigation }) => {
             </View>
 
             <View style={styles.cityHighContainerBottom}>
-              <Text style={styles.highTitle}>Khách sạn nổi bật</Text>
+              <Text style={styles.highTitle}>Phương tiện nổi bật</Text>
               <View style={styles.highItemWrapper}>
-                {isHotelLoading ? (
+                {isVehicleLoading ? (
                   <Text>Loading...</Text>
                 ) : (
                   <FlatList
-                    data={hotelData}
-                    renderItem={renderHotelDataItem}
+                    data={vehicleData}
+                    renderItem={renderVehicleDataItem}
                     keyExtractor={(item) => item.id}
                     horizontal
                     showsHorizontalScrollIndicator={false}
@@ -238,7 +340,7 @@ const styles = StyleSheet.create({
   cityHighContainerBottom: {
     marginTop: 15,
     marginLeft: 10,
-    marginBottom:70
+    marginBottom: 70,
   },
   highTitle: {
     fontSize: 24,
@@ -271,7 +373,8 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-
+    width: 220,
+    height: 80,
     elevation: 5,
   },
   activityItemText: {

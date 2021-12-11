@@ -30,17 +30,12 @@ const HotelDetails = ({ route, navigation }) => {
   const { item } = route.params;
 
   const [selectedValue, setSelectedValue] = useState(1);
-
-  state = {
-    images: [item.images[1], item.images[1], item.images[1], item.images[1]],
-  };
-
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <View>
           <SliderBox
-            images={state.images}
+            images={item.images}
             sliderBoxHeight={height * 0.4}
             dotColor="#87BB73"
             inactiveDotColor="white"
@@ -221,9 +216,7 @@ const HotelDetails = ({ route, navigation }) => {
             end={{ x: 1, y: 1 }}
             style={styles.signIn}
           >
-            <Text style={[styles.buttonText, { color: "#fff" }]}>
-              Tiếp tục
-            </Text>
+            <Text style={[styles.buttonText, { color: "#fff" }]}>Tiếp tục</Text>
           </LinearGradient>
         </TouchableOpacity>
       </View>

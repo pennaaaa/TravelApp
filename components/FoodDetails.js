@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import colors from "../assets/color/colors";
-
+import { LinearGradient } from "expo-linear-gradient";
 
 const height = Dimensions.get("window").height;
 const width = Dimensions.get("window").width;
@@ -22,7 +22,7 @@ const FoodDetails = ({ route, navigation }) => {
     <ScrollView>
       <View style={styles.container}>
         <ImageBackground
-          source={item.imageBig}
+          source={{ uri: item.imageCover }}
           style={styles.backgroundImage}
         ></ImageBackground>
         <View style={styles.descriptionWrapper}>
@@ -64,7 +64,7 @@ const FoodDetails = ({ route, navigation }) => {
               <View style={styles.priceWrapper}>
                 <Text style={styles.priceTitle}>Khoảng giá</Text>
                 <Text style={styles.priceText}>
-                  {item.pricefrom}-{item.priceto}đ/món
+                  {item.priceFrom}-{item.priceTo}đ/món
                 </Text>
               </View>
             </View>
@@ -92,22 +92,13 @@ const FoodDetails = ({ route, navigation }) => {
               borderBottomWidth: 3,
             }}
           />
-          <View>
+          {/* <View>
             <Text style={styles.descriptionTitle}>Menu</Text>
             <Image
               style={styles.imageMenu}
               source={require("../assets/image/menuFood.jpg")}
             ></Image>
-          </View>
-          <View
-            style={{
-              marginLeft: 0,
-              width: width,
-              marginTop: 10,
-              borderBottomColor: "#909090",
-              borderBottomWidth: 3,
-            }}
-          />
+          </View> */}
           <View>
             <Text style={styles.descriptionTitle}>Món ăn</Text>
             <View style={{ marginTop: 10 }}>
@@ -138,16 +129,34 @@ const FoodDetails = ({ route, navigation }) => {
                   );
                 }}
               ></FlatList>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 style={styles.buttonWrapper}
                 onPress={() =>
                   navigation.navigate("FoodBooking", {
                     item: item,
-                    name: item.location
+                    name: item.location,
                   })
                 }
               >
                 <Text style={styles.buttonText}>Đặt chỗ ngay</Text>
+              </TouchableOpacity> */}
+              <TouchableOpacity
+                style={styles.signIn}
+                onPress={() =>
+                  navigation.navigate("FoodBooking", {
+                    item: item,
+                    name: item.location,
+                  })
+                }
+              >
+                <LinearGradient
+                  colors={["#3FA344", "#8DCA70"]}
+                  start={{ x: 0, y: 1 }}
+                  end={{ x: 1, y: 1 }}
+                  style={styles.signIn}
+                >
+                  <Text style={styles.buttonText}>Đặt chỗ ngay</Text>
+                </LinearGradient>
               </TouchableOpacity>
             </View>
           </View>
@@ -202,7 +211,8 @@ const styles = StyleSheet.create({
   },
   titleTimeAvailable: {
     fontSize: 16,
-    color: colors.orange,
+    color: "#87BB73",
+    fontFamily: "SourceSans-SemiBold",
   },
   itemTimeAvailable: {
     fontSize: 16,
@@ -221,7 +231,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   typeText: {
-    color: colors.orange,
+    color: "#87BB73",
+    fontFamily: "SourceSans-SemiBold",
     textAlign: "center",
   },
   priceTitle: {
@@ -229,7 +240,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   priceText: {
-    color: colors.orange,
+    color: "#87BB73",
+    fontFamily: "SourceSans-SemiBold",
     textAlign: "center",
   },
   descriptionTitle: {
@@ -261,6 +273,16 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 18,
     color: colors.white,
+  },
+  signIn: {
+    marginTop: 30,
+    marginBottom: 30,
+    width: width * 0.6,
+    height: height * 0.07,
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
+    borderRadius: 10,
   },
 });
 

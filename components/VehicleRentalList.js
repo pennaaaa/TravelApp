@@ -27,7 +27,14 @@ Ionicons.loadFont();
 const VehicleRentalList = ({ navigation }) => {
   const renderVehicleRentalDataItem = ({ item }) => {
     return (
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate("VehicleDetails", {
+            item: item,
+            name: item.location,
+          })
+        }
+      >
         <View style={styles.itemContainer}>
           <View
             style={{
@@ -38,7 +45,10 @@ const VehicleRentalList = ({ navigation }) => {
             <Image source={item.image} style={styles.discorverItem} />
           </View>
           <View style={styles.itemText}>
-            <Text style={styles.itemTitle}><FontAwesome name="flash" size={20} color={"#87BB73"} />{" "}{item.title}</Text>
+            <Text style={styles.itemTitle}>
+              <FontAwesome name="flash" size={20} color={"#87BB73"} />{" "}
+              {item.title}
+            </Text>
             <Text style={styles.itemName}> {item.address}</Text>
           </View>
 
