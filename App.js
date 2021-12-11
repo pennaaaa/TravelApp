@@ -145,26 +145,26 @@ const App = () => {
     loginReducer,
     initialLoginState
   );
-  const data = { email: "hoangnguyenvubk@gmail.com", password: "nguyenvu124" };
+  // const data = { email: "hoangnguyenvubk@gmail.com", password: "nguyenvu124" };
 
   const authContext = React.useMemo(() => ({
     signIn: async (email, password) => {
       let userToken, user;
-      if (email == "A" && password == "b") {
-        try {
-          // userToken = "abdefgh";
-          Promise.all(
-            await fetch("https://pbl6-travelapp.herokuapp.com/auth/login", {
-              method: "POST",
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(data),
-            })
-              .then((response) => response.json())
-              .then((responseJson) => {
-                // console.log(responseJson);
+      try {
+        const data = { email: email, password: password };
+        Promise.all(
+          await fetch("https://pbl6-travelapp.herokuapp.com/auth/login", {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          })
+            .then((response) => response.json())
+            .then((responseJson) => {
+              console.log(responseJson);
+              if (responseJson.tokens != null) {
                 userToken = responseJson.tokens;
                 user = responseJson.user;
                 console.log(responseJson);
@@ -180,15 +180,17 @@ const App = () => {
                   "userRefreshToken",
                   userToken.refresh.token
                 );
-              })
-              .catch((error) => {
-                console.error(error);
-              })
-          );
-          // console.log("day roi", user);
-        } catch (e) {
-          console.log(e);
-        }
+              } else {
+                alert("Incorrect email or password");
+              }
+            })
+            .catch((error) => {
+              console.error(error);
+            })
+        );
+        // console.log("day roi", user);
+      } catch (e) {
+        console.log(e);
       }
       // console.log(userToken.refresh.token);x
       dispatch({
