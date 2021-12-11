@@ -26,6 +26,7 @@ import AuthContext from "./store/context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import UserInfo from "./components/UserInfo";
 import cart from "./components/cart";
+import BookingBill from "./components/BookingBill";
 
 Entypo.loadFont();
 AntDesign.loadFont();
@@ -391,6 +392,14 @@ const App = () => {
             <Stack.Screen
               name="HotelBooking"
               component={HotelBooking}
+              options={({ route }) => ({
+                headerBackTitle: "",
+                headerTitle: route.params.name,
+              })}
+            />
+            <Stack.Screen
+              name="BookingBill"
+              component={BookingBill}
               options={({ route }) => ({
                 headerBackTitle: "",
                 headerTitle: route.params.name,

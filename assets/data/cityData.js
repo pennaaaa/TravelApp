@@ -1,10 +1,10 @@
 const cityData = [
-  {
-    id: "activities-1",
-    title: "Near you",
-    image: require("../image/ny.png"),
-    imageBig: require("../image/ny.png"),
-  },
+  // {
+  //   id: "activities-1",
+  //   title: "Near you",
+  //   image: require("../image/ny.png"),
+  //   imageBig: require("../image/ny.png"),
+  // },
   {
     id: "activities-2",
     title: "Hà Nội",
@@ -37,6 +37,7 @@ const cityData = [
   {
     id: "activities-6",
     title: "Đà Lạt",
+    image: require("../image/dl.jpeg"),
     decription: "Giới thiệu Đà Lạt giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu",
     imageBig: require("../image/dl.jpeg"),
   },

@@ -74,7 +74,7 @@ const Home = ({ navigation }) => {
       >
         <View style={styles.itemContainer} shadowOffset={{ height: 10 }}>
           <Image
-            source={{ uri: item.imageCover }}
+            source={{ uri: item.images[0] }}
             style={styles.discorverItem}
           />
           <View style={styles.itemViewText}>
@@ -117,7 +117,7 @@ const Home = ({ navigation }) => {
       >
         <View style={styles.itemContainer} shadowOffset={{ height: 10 }}>
           <Image
-            source={{ uri: item.imageCover }}
+            source={{ uri: item.images[0] }}
             style={styles.discorverItem}
           />
           <View style={styles.itemViewText}>
@@ -161,7 +161,7 @@ const Home = ({ navigation }) => {
       >
         <View style={styles.itemContainer} shadowOffset={{ height: 10 }}>
           <Image
-            source={{ uri: item.imageCover }}
+            source={{ uri: item.images[0] }}
             style={styles.discorverItem}
           />
           <View style={styles.itemViewText}>

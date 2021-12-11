@@ -5,7 +5,6 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import OverviewCity from "./OverviewCity";
 import HotelCityList from "./HotelCityList";
 import EntertainmetCityList from "./EntertainmeniCityList";
-// import FoodCityList from "./FoodCityList";
 import HotelDetails from "./HotelDetails";
 import FoodCityList from "./FoodCityList";
 import VehicleRentalList from "./VehicleRentalList";
@@ -18,14 +17,8 @@ const Details = ({ route, navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <Tab.Navigator>
-        {/* <Tab.Screen
-          name="Tổng quan"
-          children={() => <OverviewCity item={item} />}
-        /> */}
         <Tab.Screen
           name="Khách sạn"
-          // children={() => <HotelList item={item} navigation={navigation} />}
-
           children={() => <HotelList item={item} navigation={navigation} />}
 
         />

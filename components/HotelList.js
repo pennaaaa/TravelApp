@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -9,7 +9,7 @@ import {
   Image,
 } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
-import hotelData from "../assets/data/hotelData";
+// import hotelData from "../assets/data/hotelData";
 import colors from "../assets/color/colors";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Entypo from "react-native-vector-icons/Entypo";
@@ -24,6 +24,8 @@ Entypo.loadFont();
 Ionicons.loadFont();
 
 const HotelList = (props) => {
+  const [isHotelLoading, setHotelLoading] = useState(true);
+  const [hotelData, sethotelData] = useState([]);
   const [isLoaded] = useFonts({
     "SourceSans-Light": require("../assets/fonts/LexendDeca-ExtraBold/SourceSansPro-Light.ttf"),
     "SourceSans-Regular": require("../assets/fonts/LexendDeca-ExtraBold/SourceSansPro-Regular.ttf"),
@@ -31,10 +33,28 @@ const HotelList = (props) => {
     "SourceSans-Bold": require("../assets/fonts/LexendDeca-ExtraBold/SourceSansPro-Bold.ttf"),
   });
   const item = props.item;
+  // console.log("https://pbl6-travelapp.herokuapp.com/hotel?city=" + item.title);
+  useEffect(() => {
+    setTimeout(() => {
+      fetch("https://pbl6-travelapp.herokuapp.com/hotel?city=" + item.title)
+        .then((response) => response.json())
+        .then((json) => sethotelData(json))
+        .catch((error) => console.error(error))
+        .finally(() => setHotelLoading(false));
+    }, 0);
+  }, []);
+
   const navigation = props.navigation;
   const renderHotelDataItem = ({ item }) => {
     return (
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate("HotelDetails", {
+            item: item,
+            name: item.location,
+          })
+        }
+      >
         <View style={styles.itemContainer}>
           <View
             style={{
@@ -42,13 +62,16 @@ const HotelList = (props) => {
               borderTopRightRadius: 10,
             }}
           >
-            <Image source={item.image} style={styles.discorverItem} />
+            <Image
+              source={{uri:item.images[0]}}
+              style={styles.discorverItem}
+            />
           </View>
           <View style={styles.itemText}>
             <Text style={styles.itemName}>
               <FontAwesome name="flash" size={20} color={"#87BB73"} />
               {"  "}
-              {item.title}, {item.location}
+              {item.name}, {item.address}
             </Text>
           </View>
 
@@ -82,8 +105,8 @@ const HotelList = (props) => {
               flexDirection: "row",
               justifyContent: "space-between",
               marginBottom: 10,
-              paddingLeft:10,
-              paddingRight:10,
+              paddingLeft: 10,
+              paddingRight: 10,
             }}
           >
             <View style={styles.roomPrice}>
@@ -94,7 +117,7 @@ const HotelList = (props) => {
               imageSize={20}
               fractions="{1}"
               readonly
-              startingValue={item.rating}
+              startingValue={item.vote}
             />
           </View>
         </View>

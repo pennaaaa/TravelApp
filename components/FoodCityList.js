@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -27,7 +27,20 @@ Entypo.loadFont();
 Ionicons.loadFont();
 
 const FoodCityList = (props) => {
+  const [foodData, setRestaurantData] = useState([]);
+  const [isRestaurantLoading, setRestaurantLoading] = useState(true);
   const item = props.item;
+  console.log("https://pbl6-travelapp.herokuapp.com/restaurant?city=" + item.title);
+  useEffect(() => {
+    setTimeout(() => {
+      fetch("https://pbl6-travelapp.herokuapp.com/restaurant?city=" + item.title)
+        .then((response) => response.json())
+        .then((json) => setRestaurantData(json))
+        .catch((error) => console.error(error))
+        .finally(() => setRestaurantLoading(false));
+    }, 0);
+  }, []);
+
   const navigation = props.navigation;
   const renderFoodDataItem = ({ item }) => {
     return (
@@ -46,7 +59,7 @@ const FoodCityList = (props) => {
               borderTopRightRadius: 10,
             }}
           >
-            <Image source={item.image} style={styles.discorverItem} />
+            <Image source={{uri:item.images[0]}} style={styles.discorverItem} />
           </View>
           <View style={styles.itemText}>
             <Text style={styles.itemTitle}>
@@ -81,7 +94,7 @@ const FoodCityList = (props) => {
           >
             <View style={styles.roomPrice}>
               <Text style={styles.priceText}>
-                {item.pricefrom}-{item.priceto}đ
+                {item.priceFrom}-{item.priceTo}đ
               </Text>
               <Text style={styles.perdayText}>/món</Text>
             </View>
