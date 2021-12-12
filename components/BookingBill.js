@@ -63,18 +63,18 @@ const BookingBill = ({ route, navigation }) => {
           <Text style={styles.bookingTitle}>Thông tin dịch vụ</Text>
           <View style={styles.roomContainer}>
             <Image
-              source={{ uri: item.images[0] }}
+              source={{ uri: item.idHotel.images[0] }}
               style={styles.imageHotel}
             ></Image>
             <View style={styles.roomOverViewWrapper}>
-              <Text style={styles.roomTitle}>{item.name}</Text>
+              <Text style={styles.roomTitle}>{item.idHotel.name}</Text>
               <Text style={styles.roomDetails}>
-                {item.address}, {item.city}
+                {item.idHotel.address}, {item.idHotel.city}
               </Text>
               <Text style={styles.roomDetails}>1 Phòng ngủ, 1 Phòng tắm</Text>
               <View style={styles.ratingWrapper}>
                 <AntDesign name="star" size={16} color={"#87BB73"}></AntDesign>
-                <Text style={styles.roomRating}> {item.vote}</Text>
+                <Text style={styles.roomRating}> {item.idHotel.vote}</Text>
                 <Text style={styles.totalFeedback}> (20)</Text>
               </View>
             </View>
@@ -93,7 +93,7 @@ const BookingBill = ({ route, navigation }) => {
           <Text style={styles.bookingTitle}>Hóa đơn thanh toán</Text>
           <View style={styles.datePrice}>
             <Text style={styles.priceSubTitle1}>
-              500.000đ x {totalDay}
+              {item.price}đ x {totalDay+" "}
               ngày
             </Text>
             <Text style={styles.resultDatePrice}>{dayPrice}đ</Text>
@@ -273,7 +273,6 @@ const styles = StyleSheet.create({
   dateText: {
     flexDirection: "row",
     alignItems: "center",
-    // justifyContent: "space-between",
   },
   changeDate: {
     textDecorationLine: "underline",

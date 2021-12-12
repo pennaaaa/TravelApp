@@ -27,8 +27,10 @@ Entypo.loadFont();
 FontAwesome.loadFont();
 
 const Home = ({ navigation }) => {
+  const [isRoomLoading, setRoomLoading] = useState(true);
+  const [roomData, setRoomData] = useState([]);
   const [isHotelLoading, setHotelLoading] = useState(true);
-  const [hotelData, sethotelData] = useState([]);
+  const [hotelData, setHotelData] = useState([]);
   const [isRestaurantLoading, setRestaurantLoading] = useState(true);
   const [restaurantData, setRestaurantData] = useState([]);
   const [isVehicleLoading, setVehicleLoading] = useState(true);
@@ -42,11 +44,11 @@ const Home = ({ navigation }) => {
 
   useEffect(() => {
     setTimeout(() => {
-      fetch("https://pbl6-travelapp.herokuapp.com/hotel")
+      fetch("https://pbl6-travelapp.herokuapp.com/room")
         .then((response) => response.json())
-        .then((json) => sethotelData(json))
+        .then((json) => setRoomData(json))
         .catch((error) => console.error(error))
-        .finally(() => setHotelLoading(false));
+        .finally(() => setRoomLoading(false));
 
       fetch("https://pbl6-travelapp.herokuapp.com/restaurant")
         .then((response) => response.json())
@@ -59,10 +61,14 @@ const Home = ({ navigation }) => {
         .then((json) => setVehicleData(json))
         .catch((error) => console.error(error))
         .finally(() => setVehicleLoading(false));
+    //   fetch("https://pbl6-travelapp.herokuapp.com/hotel/" + item.idHotel)
+    //     .then((response) => response.json())
+    //     .then((json) => setHotelData(json))
+    //     .catch((error) => console.error(error))
+    //     .finally(() => setHotelLoading(false));
     }, 0);
   }, []);
-
-  const renderHotelDataItem = ({ item }) => {
+  const renderRoomDataItem = ({ item }) => {
     return (
       <TouchableOpacity
         onPress={() =>
@@ -86,7 +92,7 @@ const Home = ({ navigation }) => {
                 fontSize: 18,
               }}
             >
-              {item.name}
+              {item.idHotel.name}
             </Text>
             <Text
               style={{
@@ -97,7 +103,7 @@ const Home = ({ navigation }) => {
                 color: "#7B7B7B",
               }}
             >
-              {item.address}
+              {item.idHotel.address}
             </Text>
           </View>
         </View>
@@ -130,7 +136,7 @@ const Home = ({ navigation }) => {
               }}
             >
               {/* Restaurant Name */}
-              {item.city}
+              {item.name}
             </Text>
             <Text
               style={{
@@ -218,7 +224,7 @@ const Home = ({ navigation }) => {
       </TouchableOpacity>
     );
   };
-  // if (isHotelLoading) return <MyLoader></MyLoader>;
+  // if (isRoomLoading) return <MyLoader></MyLoader>;
 
   if (!isLoaded) {
     return <AppLoading isFirst={true} />;
@@ -258,12 +264,12 @@ const Home = ({ navigation }) => {
             <View style={styles.cityHighContainer}>
               <Text style={styles.highTitle}>Khách sạn nổi bật</Text>
               <View style={styles.highItemWrapper}>
-                {isHotelLoading ? (
+                {isRoomLoading ? (
                   <Text>Loading...</Text>
                 ) : (
                   <FlatList
-                    data={hotelData}
-                    renderItem={renderHotelDataItem}
+                    data={roomData}
+                    renderItem={renderRoomDataItem}
                     keyExtractor={(item) => item.id}
                     horizontal
                     showsHorizontalScrollIndicator={false}

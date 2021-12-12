@@ -7,18 +7,13 @@ import {
   Platform,
   Dimensions,
   Image,
-  Alert,
-  ActivityIndicator,
-  Modal,
 } from "react-native";
 import colors from "../assets/color/colors";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { LinearGradient } from "expo-linear-gradient";
 import AntDesign from "react-native-vector-icons/AntDesign";
-import Feather from "react-native-vector-icons/Feather";
 import { ScrollView } from "react-native-gesture-handler";
 import AuthContext from "../store/context";
-import { WebView } from "react-native-webview";
 import { useRoute } from "@react-navigation/native";
 
 const height = Dimensions.get("window").height;
@@ -31,33 +26,38 @@ const HotelBooking = ({ route, navigation }) => {
   const [dateIn, setDateIn] = useState(new Date());
   const [dateOut, setDateOut] = useState(new Date());
   const [mode, setMode] = useState("date");
+  const pricePerDay = item.price;
   const [price, setPrice] = useState(0);
   const [dayPrice, setDayPrice] = useState(0);
   const [vat, setVat] = useState(0);
   const [totalDay, setTotalDay] = useState(0);
   const [showIn, setShowIn] = useState(false);
   const [showOut, setShowOut] = useState(false);
+  const authContext = React.useContext(AuthContext);
 
   const onChangeIn = (event, selectedDate) => {
     const currentDate = selectedDate || dateIn;
     setShowIn(Platform.OS === "ios");
     setDateIn(currentDate);
 
-    setTotalDay((dateOut.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24));
+    setTotalDay(
+      (dateOut.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24)
+    );
 
     setDayPrice(
-      500000 * ((dateOut.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24))
+      pricePerDay *
+        ((dateOut.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24))
     );
 
     setVat(
-      500000 *
+      pricePerDay *
         ((dateOut.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24)) *
         0.1
     );
 
     setPrice(
       (
-        500000 *
+        pricePerDay *
         ((dateOut.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24)) *
         1.1
       ).toFixed()
@@ -69,21 +69,24 @@ const HotelBooking = ({ route, navigation }) => {
     setShowOut(Platform.OS === "ios");
     setDateOut(currentDate);
 
-    setTotalDay((currentDate.getTime() - dateIn.getTime()) / (1000 * 60 * 60 * 24));
+    setTotalDay(
+      (currentDate.getTime() - dateIn.getTime()) / (1000 * 60 * 60 * 24)
+    );
 
     setDayPrice(
-      500000 * ((currentDate.getTime() - dateIn.getTime()) / (1000 * 60 * 60 * 24))
+      pricePerDay *
+        ((currentDate.getTime() - dateIn.getTime()) / (1000 * 60 * 60 * 24))
     );
 
     setVat(
-      500000 *
+      pricePerDay *
         ((currentDate.getTime() - dateIn.getTime()) / (1000 * 60 * 60 * 24)) *
         0.1
     );
 
     setPrice(
       (
-        500000 *
+        pricePerDay *
         ((currentDate.getTime() - dateIn.getTime()) / (1000 * 60 * 60 * 24)) *
         1.1
       ).toFixed()
@@ -108,32 +111,59 @@ const HotelBooking = ({ route, navigation }) => {
   const showDatepickerOut = () => {
     showModeOut("dateOut");
   };
-  const calPrice = () => {
-    console.log("out:" + dateOut);
 
-    console.log("in:" + dateIn);
-    // console.log(dateOut.getTime()-dateIn.getTime());
-    setPrice(
-      (
-        500000 *
-        ((dateOut.getTime() - dateIn.getTime()) / (1000 * 60 * 60 * 24)) *
-        1.1
-      ).toFixed()
-    );
-    console.log(price);
+  const createBill = () => {
+    try {
+      const data = {
+        hotel: item.idHotel.id,
+        service: "hotel",
+        additionalFee: vat,
+        total: price,
+        checkIn: dateIn,
+        checkOut: dateOut,
+        room: item._id,
+        guest: authContext.userId,
+        status: false
+      };
+      console.log(authContext.userToken)
+      // console.log(data)
+      Promise.all(
+        fetch(
+          "https://pbl6-travelapp.herokuapp.com/bill/" + authContext.userId,
+          {
+            method: "POST",
+            headers: {
+              'Accept': "application/json",
+              "Content-Type": "application/json",
+              'Authorization': `Bearer ${authContext.userToken}`,
+            },
+            body: JSON.stringify(data),
+          }
+        )
+          .then((response) => response.json())
+          .then((responseJson) => {
+            console.log(responseJson);
+          })
+          .catch((error) => {
+            console.error(error);
+          })
+      );
+    } catch (e) {
+      console.log(e);
+    }
   };
   return (
     <ScrollView>
       <View style={styles.container}>
         <View style={styles.roomContainer}>
           <Image
-            source={{uri:item.images[0]}}
+            source={{ uri: item.idHotel.images[0] }}
             style={styles.imageHotel}
           ></Image>
           <View style={styles.roomOverViewWrapper}>
-            <Text style={styles.roomTitle}>{item.name}</Text>
+            <Text style={styles.roomTitle}>{item.idHotel.name}</Text>
             <Text style={styles.roomDetails}>
-              {item.address}, {item.city}
+              {item.idHotel.address}, {item.idHotel.city}
             </Text>
             <Text style={styles.roomDetails}>1 Phòng ngủ, 1 Phòng tắm</Text>
             <View style={styles.ratingWrapper}>
@@ -203,7 +233,7 @@ const HotelBooking = ({ route, navigation }) => {
           <Text style={styles.bookingTitle}>Chi tiết thanh toán</Text>
           <View style={styles.datePrice}>
             <Text style={styles.priceSubTitle1}>
-              500.000đ x {totalDay} ngày
+              {item.price}đ x {totalDay} ngày
             </Text>
             <Text style={styles.resultDatePrice}>{dayPrice}đ</Text>
           </View>
@@ -215,20 +245,23 @@ const HotelBooking = ({ route, navigation }) => {
             <Text style={styles.dateTitle}>Tổng tiền(VND)</Text>
             <Text style={styles.resultDatePrice}>{price}đ</Text>
           </View>
-          {/* <View style={styles.datePrice}> */}
           <TouchableOpacity
             style={styles.signIn}
-            onPress={() =>
-              navigation.navigate("BookingBill", {
-                item: item,
-                name: item.location,
-                dateIn,
-                dateOut,
-                totalDay,
-                dayPrice,
-                vat,
-                price,
-              })
+            onPress={
+              (() => 
+              
+              createBill()
+              // navigation.navigate("BookingBill", {
+              //   item: item,
+              //   name: item.location,
+              //   dateIn,
+              //   dateOut,
+              //   totalDay,
+              //   dayPrice,
+              //   vat,
+              //   price,
+              // })
+              )
             }
           >
             <LinearGradient
@@ -270,14 +303,6 @@ const styles = StyleSheet.create({
     zIndex: 25,
     elevation: 2,
   },
-
-  line: {
-    width: width,
-    marginTop: 10,
-    backgroundColor: "red",
-    borderWidth: 3,
-  },
-
   roomContainer: {
     width: "100%",
     flexDirection: "row",

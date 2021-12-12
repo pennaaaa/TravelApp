@@ -33,10 +33,9 @@ const HotelList = (props) => {
     "SourceSans-Bold": require("../assets/fonts/LexendDeca-ExtraBold/SourceSansPro-Bold.ttf"),
   });
   const item = props.item;
-  // console.log("https://pbl6-travelapp.herokuapp.com/hotel?city=" + item.title);
   useEffect(() => {
     setTimeout(() => {
-      fetch("https://pbl6-travelapp.herokuapp.com/hotel?city=" + item.title)
+      fetch("https://pbl6-travelapp.herokuapp.com/room?city=" + item.title)
         .then((response) => response.json())
         .then((json) => sethotelData(json))
         .catch((error) => console.error(error))
@@ -63,7 +62,7 @@ const HotelList = (props) => {
             }}
           >
             <Image
-              source={{uri:item.images[0]}}
+              source={{ uri: item.images[0] }}
               style={styles.discorverItem}
             />
           </View>
@@ -71,15 +70,14 @@ const HotelList = (props) => {
             <Text style={styles.itemName}>
               <FontAwesome name="flash" size={20} color={"#87BB73"} />
               {"  "}
-              {item.name}, {item.address}
+              {item.idHotel.name}, {item.idHotel.address}
             </Text>
           </View>
 
           <View style={styles.infoWrapper}>
             <View style={styles.infoRoom}>
               <Text style={styles.addressText}>
-                <Entypo name="home" size={16} color={"#87BB73"} />{" "}
-                {"   Phòng đôi"}
+                <Entypo name="home" size={16} color={"#87BB73"} /> {"   "+item.type}
               </Text>
 
               <Text style={styles.addressText}>

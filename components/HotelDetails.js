@@ -44,26 +44,25 @@ const HotelDetails = ({ route, navigation }) => {
           <View style={styles.descriptionWrapper}>
             <View>
               <View style={styles.hotelTitle}>
-                <Text style={styles.itemTitle}>{item.name}</Text>
+                <Text style={styles.itemTitle}>{item.idHotel.name}</Text>
 
                 <Rating
                   imageSize={20}
                   fractions="{1}"
                   readonly
-                  startingValue={item.vote}
+                  startingValue={item.idHotel.vote}
                 />
               </View>
               <Text style={styles.itemName}>
                 <Entypo name="location-pin" size={20} color={"#87BB73"} />{" "}
-                {item.address}, {item.city}
+                {item.idHotel.address}, {item.idHotel.city}
               </Text>
             </View>
 
             <View style={styles.infoWrapper}>
               <View style={styles.infoRoom}>
                 <Text style={styles.addressText}>
-                  <Entypo name="home" size={16} color={"#87BB73"} />{" "}
-                  {"   Phòng đôi"}
+                  <Entypo name="home" size={16} color={"#87BB73"} /> {" "}{item.type}
                 </Text>
 
                 <Text style={styles.addressText}>
@@ -198,7 +197,7 @@ const HotelDetails = ({ route, navigation }) => {
       </ScrollView>
       <View style={styles.footer}>
         <View style={styles.roomPrice}>
-          <Text style={styles.priceText}>500.000đ</Text>
+          <Text style={styles.priceText}>{item.price}đ</Text>
           <Text style={styles.perdayText}>/ngày</Text>
         </View>
         <TouchableOpacity
