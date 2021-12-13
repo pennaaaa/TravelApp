@@ -10,8 +10,8 @@ import {
 } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import colors from "../assets/color/colors";
-
-
+import { LinearGradient } from "expo-linear-gradient";
+import { SliderBox } from "react-native-image-slider-box";
 const height = Dimensions.get("window").height;
 const width = Dimensions.get("window").width;
 
@@ -21,13 +21,15 @@ const FoodDetails = ({ route, navigation }) => {
   return (
     <ScrollView>
       <View style={styles.container}>
-        <ImageBackground
-          source={item.imageBig}
-          style={styles.backgroundImage}
-        ></ImageBackground>
         <View style={styles.descriptionWrapper}>
+          <SliderBox
+            images={item.images}
+            sliderBoxHeight={height * 0.4}
+            dotColor="#87BB73"
+            inactiveDotColor="white"
+          ></SliderBox>
           <View style={styles.descriptionTextWrapper}>
-            <Text style={styles.titleText}>{item.title}</Text>
+            <Text style={styles.titleText}>{item.name}</Text>
             <Text style={styles.address}>{item.address}</Text>
             <View
               style={{
@@ -54,7 +56,7 @@ const FoodDetails = ({ route, navigation }) => {
             <View style={styles.typePriceWrapper}>
               <View style={styles.typeWrapper}>
                 <Text style={styles.typeTitle}>Loại hình</Text>
-                <Text style={styles.typeText}>Chuyên món Việt</Text>
+                <Text style={styles.typeText}>{item.type}</Text>
               </View>
 
               <View
@@ -64,11 +66,11 @@ const FoodDetails = ({ route, navigation }) => {
               <View style={styles.priceWrapper}>
                 <Text style={styles.priceTitle}>Khoảng giá</Text>
                 <Text style={styles.priceText}>
-                  {item.pricefrom}-{item.priceto}đ/món
+                  {item.priceFrom}-{item.priceTo}đ/món
                 </Text>
               </View>
             </View>
-            <View
+            {/* <View
               style={{
                 marginLeft: -20,
                 width: width,
@@ -76,80 +78,31 @@ const FoodDetails = ({ route, navigation }) => {
                 borderBottomColor: "#909090",
                 borderBottomWidth: 3,
               }}
-            />
+            /> */}
           </View>
-          <View>
+          {/* <View>
             <Text style={styles.descriptionTitle}>Giới thiệu</Text>
             <Text style={styles.descriptionText}>{item.description}</Text>
-          </View>
-
-          <View
-            style={{
-              marginLeft: 0,
-              width: width,
-              marginTop: 10,
-              borderBottomColor: "#909090",
-              borderBottomWidth: 3,
-            }}
-          />
-          <View>
-            <Text style={styles.descriptionTitle}>Menu</Text>
-            <Image
-              style={styles.imageMenu}
-              source={require("../assets/image/menuFood.jpg")}
-            ></Image>
-          </View>
-          <View
-            style={{
-              marginLeft: 0,
-              width: width,
-              marginTop: 10,
-              borderBottomColor: "#909090",
-              borderBottomWidth: 3,
-            }}
-          />
-          <View>
-            <Text style={styles.descriptionTitle}>Món ăn</Text>
-            <View style={{ marginTop: 10 }}>
-              <FlatList
-                data={data}
-                keyExtractor={(_, index) => index.toString()}
-                horizontal
-                pagingEnabled
-                renderItem={({ item }) => {
-                  return (
-                    <View
-                      style={{
-                        width,
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      <Image
-                        source={{ uri: item }}
-                        style={{
-                          width: width * 0.9,
-                          height: 200,
-                          resizeMode: "cover",
-                          borderRadius: 15,
-                        }}
-                      ></Image>
-                    </View>
-                  );
-                }}
-              ></FlatList>
-              <TouchableOpacity
-                style={styles.buttonWrapper}
-                onPress={() =>
-                  navigation.navigate("FoodBooking", {
-                    item: item,
-                    name: item.location
-                  })
-                }
+          </View> */}
+          <View style={{ marginTop: 10 }}>
+            <TouchableOpacity
+              style={styles.signIn}
+              onPress={() =>
+                navigation.navigate("FoodBooking", {
+                  item: item,
+                  name: item.location,
+                })
+              }
+            >
+              <LinearGradient
+                colors={["#3FA344", "#8DCA70"]}
+                start={{ x: 0, y: 1 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.signIn}
               >
                 <Text style={styles.buttonText}>Đặt chỗ ngay</Text>
-              </TouchableOpacity>
-            </View>
+              </LinearGradient>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -169,16 +122,12 @@ const styles = StyleSheet.create({
   descriptionWrapper: {
     flex: 1,
     backgroundColor: colors.white,
-    marginTop: -20,
-    // marginBottom:20,
     borderRadius: 25,
-    // height: height,
   },
 
   descriptionTextWrapper: {
     marginTop: 10,
     marginHorizontal: 20,
-    // height: height * 0.2,
   },
   titleText: {
     // fontFamily: 'Lato-Bold',
@@ -202,7 +151,8 @@ const styles = StyleSheet.create({
   },
   titleTimeAvailable: {
     fontSize: 16,
-    color: colors.orange,
+    color: "#87BB73",
+    fontFamily: "SourceSans-SemiBold",
   },
   itemTimeAvailable: {
     fontSize: 16,
@@ -221,7 +171,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   typeText: {
-    color: colors.orange,
+    color: "#87BB73",
+    fontFamily: "SourceSans-SemiBold",
     textAlign: "center",
   },
   priceTitle: {
@@ -229,7 +180,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   priceText: {
-    color: colors.orange,
+    color: "#87BB73",
+    fontFamily: "SourceSans-SemiBold",
     textAlign: "center",
   },
   descriptionTitle: {
@@ -261,6 +213,16 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 18,
     color: colors.white,
+  },
+  signIn: {
+    marginTop: 30,
+    marginBottom: 30,
+    width: width * 0.6,
+    height: height * 0.07,
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
+    borderRadius: 10,
   },
 });
 

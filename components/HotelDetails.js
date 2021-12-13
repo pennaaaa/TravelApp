@@ -30,17 +30,12 @@ const HotelDetails = ({ route, navigation }) => {
   const { item } = route.params;
 
   const [selectedValue, setSelectedValue] = useState(1);
-
-  state = {
-    images: [item.images[1], item.images[1], item.images[1], item.images[1]],
-  };
-
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <View>
           <SliderBox
-            images={state.images}
+            images={item.images}
             sliderBoxHeight={height * 0.4}
             dotColor="#87BB73"
             inactiveDotColor="white"
@@ -49,26 +44,25 @@ const HotelDetails = ({ route, navigation }) => {
           <View style={styles.descriptionWrapper}>
             <View>
               <View style={styles.hotelTitle}>
-                <Text style={styles.itemTitle}>{item.name}</Text>
+                <Text style={styles.itemTitle}>{item.idHotel.name}</Text>
 
                 <Rating
                   imageSize={20}
                   fractions="{1}"
                   readonly
-                  startingValue={item.vote}
+                  startingValue={item.idHotel.vote}
                 />
               </View>
               <Text style={styles.itemName}>
                 <Entypo name="location-pin" size={20} color={"#87BB73"} />{" "}
-                {item.address}, {item.city}
+                {item.idHotel.address}, {item.idHotel.city}
               </Text>
             </View>
 
             <View style={styles.infoWrapper}>
               <View style={styles.infoRoom}>
                 <Text style={styles.addressText}>
-                  <Entypo name="home" size={16} color={"#87BB73"} />{" "}
-                  {"   Phòng đôi"}
+                  <Entypo name="home" size={16} color={"#87BB73"} /> {" "}{item.type}
                 </Text>
 
                 <Text style={styles.addressText}>
@@ -203,7 +197,7 @@ const HotelDetails = ({ route, navigation }) => {
       </ScrollView>
       <View style={styles.footer}>
         <View style={styles.roomPrice}>
-          <Text style={styles.priceText}>500.000đ</Text>
+          <Text style={styles.priceText}>{item.price}đ</Text>
           <Text style={styles.perdayText}>/ngày</Text>
         </View>
         <TouchableOpacity
@@ -221,9 +215,7 @@ const HotelDetails = ({ route, navigation }) => {
             end={{ x: 1, y: 1 }}
             style={styles.signIn}
           >
-            <Text style={[styles.buttonText, { color: "#fff" }]}>
-              Tiếp tục
-            </Text>
+            <Text style={[styles.buttonText, { color: "#fff" }]}>Tiếp tục</Text>
           </LinearGradient>
         </TouchableOpacity>
       </View>

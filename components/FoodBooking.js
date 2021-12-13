@@ -4,15 +4,18 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Button,
   Platform,
   Dimensions,
-  TextInput,
+  Image,
 } from "react-native";
 import colors from "../assets/color/colors";
+import { ScrollView } from "react-native-gesture-handler";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import RNPPickerSelect from "react-native-picker-select";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import { LinearGradient } from "expo-linear-gradient";
 
+AntDesign.loadFont();
 const Listpeople = Array.from({ length: 10 }, (_, i) => i + 1);
 const height = Dimensions.get("window").height;
 const width = Dimensions.get("window").width;
@@ -48,131 +51,134 @@ const FoodBooking = ({ route, navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.titleText}>Thông tin đặt chỗ</Text>
+    <ScrollView>
+      <View style={styles.container}>
+        <View style={styles.tableContainer}>
+          <Image
+            source={{ uri: item.imageCover }}
+            style={styles.imageRestaurant}
+          ></Image>
+          <View style={styles.restaurantOverViewWrapper}>
+            <Text style={styles.restaurantTitle}>{item.title}</Text>
+            <Text style={styles.restaurantDetails}>{item.address}</Text>
 
-      <View style={styles.dateWrapper}>
-        <Text style={styles.dateTitle}>Ngày đến</Text>
-        <View
-          style={{ height: "100%", width: 1, backgroundColor: "#909090" }}
-        ></View>
-        <View style={styles.dateText}>
-          <TouchableOpacity onPress={showDatepicker}>
+            {/* <View style={styles.ratingWrapper}>
+              <AntDesign name="star" size={16} color={"#87BB73"}></AntDesign>
+              <Text style={styles.roomRating}> {item.vote}</Text>
+              <Text style={styles.totalFeedback}> (20)</Text>
+            </View> */}
+          </View>
+        </View>
+
+        <View style={styles.bookingContainer}>
+          <Text style={styles.bookingTitle}>Thông tin đặt bàn</Text>
+
+          <Text style={styles.dateTitle}>Ngày đến</Text>
+          <View style={styles.dateText}>
             <Text>{date.toLocaleDateString()}</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+            <TouchableOpacity onPress={showDatepicker}>
+              <AntDesign
+                name="calendar"
+                size={24}
+                color={"#87BB73"}
+              ></AntDesign>
+            </TouchableOpacity>
+          </View>
 
-      <View style={styles.line}></View>
-
-      <View style={styles.hourWrapper}>
-        <Text style={styles.hourTitle}>Giờ đến</Text>
-        <View
-          style={{ height: "100%", width: 1, backgroundColor: "#909090" }}
-        ></View>
-        <View style={styles.hourText}>
-          <TouchableOpacity onPress={showTimepicker}>
+          <Text style={styles.dateTitle}>Giờ đến</Text>
+          <View style={styles.dateText}>
             <Text>{hour}</Text>
+            <TouchableOpacity onPress={showTimepicker}>
+              <AntDesign
+                name="clockcircleo"
+                size={24}
+                color={"#87BB73"}
+              ></AntDesign>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.peopleSelect}>
+            <Text style={styles.dateTitle}>Số người</Text>
+            <View style={styles.picker}>
+              <RNPPickerSelect
+                style={{
+                  inputIOS: {
+                    fontSize: 16,
+                    paddingTop: 13,
+                    paddingHorizontal: 10,
+                    paddingBottom: 12,
+                    borderWidth: 1,
+                    borderColor: "gray",
+                    borderRadius: 4,
+                    backgroundColor: "white",
+                    color: "black",
+                  },
+                  inputAndroid: {
+                    backgroundColor: colors.yelow,
+                    borderRadius: 5,
+                    width: width,
+                  },
+                }}
+                value={selectedValue}
+                onValueChange={(value) => setSelectedValue(value)}
+                style={{
+                  inputAndroid: {
+                    // backgroundColor:"#87BB73",
+                    marginTop: 10,
+                    width: 100,
+                    color: "#87BB73",
+                  },
+                }}
+                items={Listpeople.map((element) => ({
+                  label: element.toString(),
+                  value: element,
+                  fontSize: 12,
+                }))}
+              />
+            </View>
+          </View>
+          <TouchableOpacity
+            style={styles.signIn}
+            onPress={() =>
+              navigation.navigate("FoodBooking", {
+                item: item,
+                name: item.location,
+              })
+            }
+          >
+            <LinearGradient
+              colors={["#3FA344", "#8DCA70"]}
+              start={{ x: 0, y: 1 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.signIn}
+            >
+              <Text style={styles.buttonText}>Đặt chỗ ngay</Text>
+            </LinearGradient>
           </TouchableOpacity>
         </View>
-      </View>
 
-      <View style={styles.line}></View>
-
-      <View style={styles.peopleWrapper}>
-        <Text style={styles.peopleTitle}>Số người</Text>
-        <View
-          style={{ height: "100%", width: 1, backgroundColor: "#909090" }}
-        ></View>
-        <View style={styles.peopleText}>
-          {/* {Listpeople.map((element) => (
-                <Picker.Item label={element} value={element} />
-              ))} */}
-          <RNPPickerSelect
-            onClose={() => console.log("close select")}
-            style={{
-              inputIOS: {
-                fontSize: 16,
-                paddingTop: 13,
-                paddingHorizontal: 10,
-                paddingBottom: 12,
-                borderWidth: 1,
-                borderColor: "gray",
-                borderRadius: 4,
-                backgroundColor: "white",
-                color: "black",
-              },
-              // placeholder: {
-              //   colors: colors.yelow,
-              // },
-              inputAndroid: {
-                color: colors.yelow,
-                paddingHorizontal: 10,
-                backgroundColor: colors.yelow,
-                borderRadius: 5,
-                width: width,
-              },
-            }}
-            value={selectedValue}
-            label={selectedValue.toString()}
-            onValueChange={(value) => setSelectedValue(value)}
-            style={{
-              inputAndroid: {
-                backgroundColor: "transparent",
-                width: 100,
-                color: colors.black,
-              },
-              iconContainer: {
-                top: 5,
-                right: 15,
-              },
-            }}
-            items={Listpeople.map((element) => ({
-              label: element.toString(),
-              value: element,
-              fontSize: 12,
-            }))}
+        {show && (
+          <DateTimePicker
+            locale
+            style={styles.dateTimeStyle}
+            testID="dateTimePicker"
+            value={date}
+            mode={mode}
+            is24Hour={true}
+            display="default"
+            onChange={onChange}
+            minimumDate={new Date()}
           />
-        </View>
+        )}
       </View>
-
-      <View style={styles.note}>
-        <TextInput
-          style={{ margin: 5 }}
-          multiline={true}
-          numberOfLines={3}
-          placeholder={"Điền ghi chú tại đây"}
-          onChangeText={(text) => setNote({ text })}
-          // value={this.state.text}
-        ></TextInput>
-      </View>
-
-      <TouchableOpacity
-        style={styles.buttonWrapper}
-        onPress={() => console.log(note)}
-      >
-        <Text style={styles.buttonText}>Xác nhận</Text>
-      </TouchableOpacity>
-      {show && (
-        <DateTimePicker
-          locale
-          style={styles.dateTimeStyle}
-          testID="dateTimePicker"
-          value={date}
-          mode={mode}
-          is24Hour={true}
-          display="default"
-          onChange={onChange}
-        />
-      )}
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F8F8FF",
+    backgroundColor: "#DDDDDD",
   },
   titleText: {
     fontSize: 26,
@@ -190,52 +196,16 @@ const styles = StyleSheet.create({
     marginLeft: 50,
   },
   dateTitle: {
-    width: width * 0.3,
+    marginTop: 12,
+    // width: width * 0.4,
     fontSize: 20,
-    color: colors.orange,
-    // textAlign: "center",
-    marginLeft: 20,
+    fontFamily: "SourceSans-SemiBold",
+    color: "black",
   },
   dateText: {
-    width: width * 0.3,
-    fontSize: 20,
-    marginLeft: 30,
-  },
-  hourWrapper: {
     flexDirection: "row",
-    marginTop: 10,
-    justifyContent: "flex-start",
     alignItems: "center",
-  },
-  hourTitle: {
-    width: width * 0.3,
-    fontSize: 20,
-    color: colors.orange,
-    // textAlign: "center",
-    marginLeft: 20,
-  },
-  hourText: {
-    fontSize: 20,
-    alignItems: "flex-end",
-    marginLeft: 30,
-  },
-  peopleWrapper: {
-    flexDirection: "row",
-    marginTop: 10,
-    justifyContent: "flex-start",
-    alignItems: "center",
-  },
-  peopleTitle: {
-    width: width * 0.3,
-    fontSize: 20,
-    color: colors.orange,
-    // textAlign: "center",
-    marginLeft: 20,
-  },
-  peopleText: {
-    fontSize: 20,
-    alignItems: "flex-end",
-    marginLeft: 30,
+    justifyContent: "space-between",
   },
   dateTimeStyle: {
     fontSize: 30,
@@ -258,16 +228,71 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     borderRadius: 10,
   },
-  buttonText: {
-    // fontFamily: 'Lato-Bold',
-    fontSize: 18,
-    color: colors.white,
-  },
   line: {
     width: width,
     marginTop: 10,
     borderBottomColor: colors.shade,
     borderWidth: 0.5,
+  },
+
+  tableContainer: {
+    width: "100%",
+    flexDirection: "row",
+    padding: width * 0.072,
+    backgroundColor: "white",
+  },
+  imageRestaurant: {
+    width: width * 0.36,
+    height: 130,
+    resizeMode: "stretch",
+    borderRadius: 10,
+  },
+  restaurantOverViewWrapper: {
+    width: width * 0.496,
+  },
+  restaurantTitle: {
+    marginLeft: 12,
+    fontSize: 24,
+    fontFamily: "SourceSans-SemiBold",
+    color: "black",
+  },
+  restaurantDetails: {
+    marginLeft: 12,
+    fontSize: 16,
+    fontFamily: "SourceSans-Regular",
+    color: "#767676",
+  },
+  bookingContainer: {
+    marginTop: 10,
+    flexDirection: "column",
+    padding: width * 0.072,
+    backgroundColor: "white",
+  },
+  bookingTitle: {
+    fontSize: 24,
+    fontFamily: "SourceSans-SemiBold",
+    color: "black",
+  },
+  peopleSelect: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  picker: {
+    marginLeft: 16,
+  },
+  buttonText: {
+    fontSize: 18,
+    color: colors.white,
+  },
+  signIn: {
+    marginTop: 20,
+    marginBottom: 10,
+    width: width * 0.6,
+    height: height * 0.07,
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
+    borderRadius: 10,
   },
 });
 

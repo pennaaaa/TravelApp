@@ -4,75 +4,95 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Button,
   Platform,
   Dimensions,
-  TextInput,
   Image,
-  ActivityIndicator,
   Modal,
 } from "react-native";
 import colors from "../assets/color/colors";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { LinearGradient } from "expo-linear-gradient";
 import AntDesign from "react-native-vector-icons/AntDesign";
-import Feather from "react-native-vector-icons/Feather";
 import { ScrollView } from "react-native-gesture-handler";
-import { WebView } from "react-native-webview";
+import AuthContext from "../store/context";
 import { useRoute } from "@react-navigation/native";
 
-const Listpeople = Array.from({ length: 10 }, (_, i) => i + 1);
 const height = Dimensions.get("window").height;
 const width = Dimensions.get("window").width;
 
 AntDesign.loadFont();
-Feather.loadFont();
-
 const HotelBooking = ({ route, navigation }) => {
-  function onMessage(e) {
-    let data = e.nativeEvent.data;
-    setShowGateway(false);
-    console.log(data);
-    let payment = JSON.parse(data);
-    if (payment.status === "COMPLETED") {
-      alert("PAYMENT MADE SUCCESSFULLY!");
-    } else {
-      alert("PAYMENT FAILED. PLEASE TRY AGAIN.");
-    }
-  }
   const { item } = route.params;
   const router = useRoute();
   const [dateIn, setDateIn] = useState(new Date());
   const [dateOut, setDateOut] = useState(new Date());
   const [mode, setMode] = useState("date");
+  const pricePerDay = item.price;
+  const [price, setPrice] = useState(0);
+  const [dayPrice, setDayPrice] = useState(0);
+  const [vat, setVat] = useState(0);
+  const [totalDay, setTotalDay] = useState(0);
   const [showIn, setShowIn] = useState(false);
   const [showOut, setShowOut] = useState(false);
-  const [showGateway, setShowGateway] = useState(false);
-  const [prog, setProg] = useState(false);
-  const [progClr, setProgClr] = useState("#000");
-  const [selectedValue, setSelectedValue] = useState(1);
-  function onMessage(e) {
-    let data = e.nativeEvent.data;
-    setShowGateway(false);
-    console.log(data);
-    let payment = JSON.parse(data);
-    if (payment.status === "COMPLETED") {
-      alert("PAYMENT MADE SUCCESSFULLY!");
-    } else {
-      alert("PAYMENT FAILED. PLEASE TRY AGAIN.");
-    }
-  }
-  const [price, setprice] = useState("3");
+  const authContext = React.useContext(AuthContext);
+
   const onChangeIn = (event, selectedDate) => {
     const currentDate = selectedDate || dateIn;
     setShowIn(Platform.OS === "ios");
     setDateIn(currentDate);
+
+    setTotalDay(
+      (dateOut.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24)
+    );
+
+    setDayPrice(
+      pricePerDay *
+        ((dateOut.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24))
+    );
+
+    setVat(
+      pricePerDay *
+        ((dateOut.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24)) *
+        0.1
+    );
+
+    setPrice(
+      (
+        pricePerDay *
+        ((dateOut.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24)) *
+        1.1
+      ).toFixed()
+    );
   };
 
   const onChangeOut = (event, selectedDate) => {
     const currentDate = selectedDate || dateOut;
     setShowOut(Platform.OS === "ios");
     setDateOut(currentDate);
+
+    setTotalDay(
+      (currentDate.getTime() - dateIn.getTime()) / (1000 * 60 * 60 * 24)
+    );
+
+    setDayPrice(
+      pricePerDay *
+        ((currentDate.getTime() - dateIn.getTime()) / (1000 * 60 * 60 * 24))
+    );
+
+    setVat(
+      pricePerDay *
+        ((currentDate.getTime() - dateIn.getTime()) / (1000 * 60 * 60 * 24)) *
+        0.1
+    );
+
+    setPrice(
+      (
+        pricePerDay *
+        ((currentDate.getTime() - dateIn.getTime()) / (1000 * 60 * 60 * 24)) *
+        1.1
+      ).toFixed()
+    );
+    console.log(price);
   };
 
   const showModeIn = (currentMode) => {
@@ -93,18 +113,79 @@ const HotelBooking = ({ route, navigation }) => {
     showModeOut("dateOut");
   };
 
+  const createBill = async () => {
+    let returnn = null;
+    try {
+      const data = {
+        hotel: item.idHotel.id,
+        service: "hotel",
+        additionalFee: vat,
+        total: price,
+        checkIn: dateIn,
+        checkOut: dateOut,
+        room: item._id,
+        guest: authContext.userId,
+        status: false,
+      };
+      Promise.all(
+        await fetch(
+          "https://pbl6-travelapp.herokuapp.com/bill/" + authContext.userId,
+          {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${authContext.userToken}`,
+            },
+            body: JSON.stringify(data),
+          }
+        )
+          .then((response) => response.json())
+          .then((responseJson) => {
+            console.log(responseJson);
+            if (responseJson.code) {
+              returnn = false;
+            } else returnn = responseJson.id;
+          })
+          .catch((error) => {
+            console.error(error);
+          })
+      );
+    } catch (e) {
+      console.log(e);
+    }
+    return returnn;
+  };
+
+  const onPressBookButton = async () => {
+    billid = await createBill();
+    console.log(billid);
+    if (billid) {
+      navigation.navigate("BookingBill", {
+        item: item,
+        name: item.location,
+        dateIn,
+        dateOut,
+        totalDay,
+        dayPrice,
+        vat,
+        price,
+        billid,
+      });
+    } else alert("Đăng nhập lại để đặt phòng");
+  };
   return (
     <ScrollView>
       <View style={styles.container}>
         <View style={styles.roomContainer}>
           <Image
-            source={{ uri: item.imageCover }}
+            source={{ uri: item.idHotel.images[0] }}
             style={styles.imageHotel}
           ></Image>
           <View style={styles.roomOverViewWrapper}>
-            <Text style={styles.roomTitle}>{item.name}</Text>
+            <Text style={styles.roomTitle}>{item.idHotel.name}</Text>
             <Text style={styles.roomDetails}>
-              {item.address}, {item.city}
+              {item.idHotel.address}, {item.idHotel.city}
             </Text>
             <Text style={styles.roomDetails}>1 Phòng ngủ, 1 Phòng tắm</Text>
             <View style={styles.ratingWrapper}>
@@ -169,46 +250,26 @@ const HotelBooking = ({ route, navigation }) => {
             )}
           </View>
         </View>
+
         <View style={styles.priceDetailContainer}>
           <Text style={styles.bookingTitle}>Chi tiết thanh toán</Text>
           <View style={styles.datePrice}>
             <Text style={styles.priceSubTitle1}>
-              500.000đ x{" "}
-              {(dateOut.getTime() - dateIn.getTime()) / (1000 * 60 * 60 * 24)}{" "}
-              ngày
+              {item.price}đ x {totalDay} ngày
             </Text>
-            <Text style={styles.resultDatePrice}>
-              {500000 *
-                ((dateOut.getTime() - dateIn.getTime()) /
-                  (1000 * 60 * 60 * 24))}
-              đ
-            </Text>
+            <Text style={styles.resultDatePrice}>{dayPrice}đ</Text>
           </View>
           <View style={styles.datePrice}>
             <Text style={styles.priceSubTitle}>VAT(10%)</Text>
-            <Text style={styles.resultDatePrice}>
-              {500000 *
-                ((dateOut.getTime() - dateIn.getTime()) /
-                  (1000 * 60 * 60 * 24)) *
-                0.1}
-              đ
-            </Text>
+            <Text style={styles.resultDatePrice}>{vat}đ</Text>
           </View>
           <View style={styles.datePrice}>
             <Text style={styles.dateTitle}>Tổng tiền(VND)</Text>
-            <Text style={styles.resultDatePrice}>
-              {(
-                500000 *
-                ((dateOut.getTime() - dateIn.getTime()) /
-                  (1000 * 60 * 60 * 24)) *
-                1.1
-              ).toFixed()}
-              đ
-            </Text>
+            <Text style={styles.resultDatePrice}>{price}đ</Text>
           </View>
           <TouchableOpacity
             style={styles.signIn}
-            onPress={() => setShowGateway(true)}
+            onPress={() => onPressBookButton(item)}
           >
             <LinearGradient
               colors={["#3FA344", "#8DCA70"]}
@@ -223,59 +284,6 @@ const HotelBooking = ({ route, navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
-      {showGateway ? (
-        <Modal
-          visible={showGateway}
-          onDismiss={() => setShowGateway(false)}
-          onRequestClose={() => setShowGateway(false)}
-          animationType={"fade"}
-          transparent
-        >
-          <View style={styles.webViewCon}>
-            <View style={styles.wbHead}>
-              <TouchableOpacity
-                style={{ padding: 13 }}
-                onPress={() => setShowGateway(false)}
-              >
-                <Feather name={"x"} size={24} />
-              </TouchableOpacity>
-              <Text
-                style={{
-                  flex: 1,
-                  textAlign: "center",
-                  fontSize: 16,
-                  fontWeight: "bold",
-                  color: "#00457C",
-                }}
-              >
-                PayPal GateWay
-              </Text>
-              <View style={{ padding: 13, opacity: prog ? 1 : 0 }}>
-                <ActivityIndicator size={24} color={progClr} />
-              </View>
-            </View>
-            <WebView
-              source={{ uri: "http://localhost:3000/" + "30" }}
-              style={{ flex: 1 }}
-              onLoadStart={() => {
-                setProg(true);
-                setProgClr("#000");
-              }}
-              onLoadProgress={() => {
-                setProg(true);
-                setProgClr("#00457C");
-              }}
-              onLoadEnd={() => {
-                setProg(false);
-              }}
-              onLoad={() => {
-                setProg(false);
-              }}
-              onMessage={onMessage}
-            />
-          </View>
-        </Modal>
-      ) : null}
     </ScrollView>
   );
 };
@@ -285,7 +293,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#DDDDDD",
   },
-
   dateTimeStyle: {
     fontSize: 30,
   },
@@ -303,14 +310,6 @@ const styles = StyleSheet.create({
     zIndex: 25,
     elevation: 2,
   },
-
-  line: {
-    width: width,
-    marginTop: 10,
-    backgroundColor: "red",
-    borderWidth: 3,
-  },
-
   roomContainer: {
     width: "100%",
     flexDirection: "row",
@@ -326,14 +325,12 @@ const styles = StyleSheet.create({
   roomOverViewWrapper: {
     width: width * 0.496,
   },
-
   roomTitle: {
     marginLeft: 12,
     fontSize: 24,
     fontFamily: "SourceSans-SemiBold",
     color: "black",
   },
-
   ratingWrapper: {
     marginLeft: 12,
     flexDirection: "row",
@@ -351,13 +348,11 @@ const styles = StyleSheet.create({
     fontFamily: "SourceSans-Bold",
     color: "#437014",
   },
-
   totalFeedback: {
     fontSize: 18,
     fontFamily: "SourceSans-SemiBold",
     color: "#767676",
   },
-
   bookingContainer: {
     marginTop: 10,
     flexDirection: "column",
@@ -376,16 +371,11 @@ const styles = StyleSheet.create({
     fontFamily: "SourceSans-SemiBold",
     color: "black",
   },
-
   dateText: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
   },
-  changeDate: {
-    textDecorationLine: "underline",
-  },
-
   priceDetailContainer: {
     marginTop: 10,
     flexDirection: "column",

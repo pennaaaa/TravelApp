@@ -20,7 +20,7 @@ MaterialIcons.loadFont();
 const height = Dimensions.get("window").height;
 const width = Dimensions.get("window").width;
 
-const Profile = () => {
+const Profile = ({ route, navigation }) => {
   const authContext = React.useContext(AuthContext);
 
   return (
@@ -63,7 +63,11 @@ const Profile = () => {
               <Text style={styles.phone}>{authContext.phone}</Text>
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => alert("xem xem cai l")}
+                onPress={() =>
+                  navigation.navigate("UserInfo", {
+                    item: authContext,
+                  })
+                }
               >
                 <LinearGradient
                   colors={["#3FA344", "#8DCA70"]}
@@ -96,10 +100,16 @@ const Profile = () => {
             <Text style={styles.supportText1}>Hỗ trợ</Text>
             <Text style={styles.supportText2}>0792755198</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.support}>
-            <MaterialIcons name="library-books" size={40} color="green" />
-            <Text style={styles.supportText1}>Chính sách</Text>
-            <Text style={styles.supportText2}>Chính sách bảo mật</Text>
+          <TouchableOpacity
+            style={styles.support}
+            onPress={() =>
+              navigation.navigate("cart", {
+              })
+            }
+          >
+            <MaterialIcons name="payment" size={40} color="green" />
+            <Text style={styles.supportText1}>Hàng chờ</Text>
+            <Text style={styles.supportText2}>Chưa thanh toán</Text>
           </TouchableOpacity>
         </View>
         {authContext.userToken !== "NoToken" && (
