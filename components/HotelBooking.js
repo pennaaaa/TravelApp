@@ -255,7 +255,7 @@ const HotelBooking = ({ route, navigation }) => {
               </View>
             </View>
             <WebView
-              source={{ uri: "http://localhost:3000/" + router.params.price }}
+              source={{ uri: "http://localhost:3000/" + "30" }}
               style={{ flex: 1 }}
               onLoadStart={() => {
                 setProg(true);
