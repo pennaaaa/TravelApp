@@ -96,7 +96,7 @@ const VehicleRentalList = ({ navigation }) => {
         <FlatList
           data={vehicleRentalData}
           renderItem={renderVehicleRentalDataItem}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item._id}
           showsHorizontalScrollIndicator={false}
         />
       </View>

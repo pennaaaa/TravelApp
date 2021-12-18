@@ -77,7 +77,8 @@ const HotelList = (props) => {
           <View style={styles.infoWrapper}>
             <View style={styles.infoRoom}>
               <Text style={styles.addressText}>
-                <Entypo name="home" size={16} color={"#87BB73"} /> {"   "+item.type}
+                <Entypo name="home" size={16} color={"#87BB73"} />{" "}
+                {"   " + item.type}
               </Text>
 
               <Text style={styles.addressText}>
@@ -128,7 +129,7 @@ const HotelList = (props) => {
         <FlatList
           data={hotelData}
           renderItem={renderHotelDataItem}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item._id}
           showsHorizontalScrollIndicator={false}
         />
       </View>

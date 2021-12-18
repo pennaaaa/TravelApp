@@ -30,10 +30,11 @@ const FoodCityList = (props) => {
   const [foodData, setRestaurantData] = useState([]);
   const [isRestaurantLoading, setRestaurantLoading] = useState(true);
   const item = props.item;
-  console.log("https://pbl6-travelapp.herokuapp.com/restaurant?city=" + item.title);
   useEffect(() => {
     setTimeout(() => {
-      fetch("https://pbl6-travelapp.herokuapp.com/restaurant?city=" + item.title)
+      fetch(
+        "https://pbl6-travelapp.herokuapp.com/restaurant?city=" + item.title
+      )
         .then((response) => response.json())
         .then((json) => setRestaurantData(json))
         .catch((error) => console.error(error))
@@ -43,6 +44,7 @@ const FoodCityList = (props) => {
 
   const navigation = props.navigation;
   const renderFoodDataItem = ({ item }) => {
+    console.log(item);
     return (
       <TouchableOpacity
         onPress={() =>
@@ -59,12 +61,15 @@ const FoodCityList = (props) => {
               borderTopRightRadius: 10,
             }}
           >
-            <Image source={{uri:item.images[0]}} style={styles.discorverItem} />
+            <Image
+              source={{ uri: item.images[0] }}
+              style={styles.discorverItem}
+            />
           </View>
           <View style={styles.itemText}>
             <Text style={styles.itemTitle}>
               <FontAwesome name="flash" size={20} color={"#87BB73"} />{" "}
-              {item.title}
+              {item.name}
             </Text>
             <Text style={styles.itemName}> {item.address}</Text>
           </View>
@@ -107,41 +112,6 @@ const FoodCityList = (props) => {
           </View>
         </View>
       </TouchableOpacity>
-      // <View style={[styles.card, styles.shadowProp]}>
-      //   <ImageBackground
-      //     source={item.image}
-      //     style={styles.restaurantItem}
-      //     imageStyle={styles.restaurantItemImage}
-      //   >
-      //   </ImageBackground>
-      //   <View style={styles.descriptionFood}>
-      //     <View>
-      //       <Text style={styles.itemTitleText} numberOfLines={1}>
-      //         {item.title}
-      //       </Text>
-      //       <Text style={styles.itemAddress} numberOfLines={1}>
-      //         Địa chỉ: {item.address}
-      //       </Text>
-      //       <Text style={styles.itemFastReview} numberOfLines={1}>
-      //         Chuyên món Việt (Cơm niêu)
-      //       </Text>
-      //       <Text style={styles.rangePrice} numberOfLines={1}>
-      //         Giá từ: {item.pricefrom}- {item.priceto} đ/ Món
-      //       </Text>
-      //       <Text style={styles.itemAlivableTime} numberOfLines={1}>
-      //         Đặt chỗ: 19h-22h các ngày trong tuần
-      //       </Text>
-      //     </View>
-
-      //     <TouchableOpacity
-      //       style={styles.bookButton}
-      //
-      //       <Text style={styles.buttonText}>Xem chi tiết</Text>
-      //     </TouchableOpacity>
-      //   </View>
-      // </View>
-
-      // </TouchableOpacity>
     );
   };
   return (
@@ -150,7 +120,7 @@ const FoodCityList = (props) => {
         <FlatList
           data={foodData}
           renderItem={renderFoodDataItem}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item._id}
           showsHorizontalScrollIndicator={false}
         />
       </View>

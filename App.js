@@ -86,7 +86,7 @@ const App = () => {
     gender: "",
     phone: "",
     birth: "",
-    iNum:"",
+    iNum: "",
     userRefreshToken: "",
   };
 
@@ -146,8 +146,6 @@ const App = () => {
     loginReducer,
     initialLoginState
   );
-  // const data = { email: "hoangnguyenvubk@gmail.com", password: "nguyenvu124" };
-
   const authContext = React.useMemo(() => ({
     signIn: async (email, password) => {
       let userToken, user;
@@ -189,18 +187,16 @@ const App = () => {
               console.error(error);
             })
         );
-        // console.log("day roi", user);
       } catch (e) {
         console.log(e);
       }
-      // console.log(userToken.refresh.token);x
       dispatch({
         type: "LOGIN",
         mail: user.email,
         token: userToken.access.token,
         id: user.id,
         name: user.name,
-        phone: user.phone,     
+        phone: user.phone,
         birth: user.birth,
         iNum: user.identityNumber,
         gender: user.gender,
@@ -246,17 +242,56 @@ const App = () => {
         email: email,
         name: name,
         password: password,
-        role: "partner",
+        role: "guest",
+        birth: "01/01/2000",
+        phone: "0",
+        gender: "male",
+        identityNumber: "0",
       };
-      await fetch("https://pbl6-travelapp.herokuapp.com/auth/register", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      }).then((response) => {
-        console.log(response.status);
+      let userToken, user;
+      try {
+        await fetch("http://odanang.net:5000/auth/register", {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        })
+          .then((response) => response.json())
+          .then((responseJson) => {
+            console.log(responseJson);
+            if (responseJson.code)
+              if (responseJson.code != 201) {
+                alert(responseJson.message);
+              }
+            userToken = responseJson.tokens;
+            user = responseJson.user;
+            console.log(responseJson);
+            AsyncStorage.setItem("userToken", userToken.access.token);
+            AsyncStorage.setItem("userId", user.id);
+            AsyncStorage.setItem("userEmail", user.email);
+            AsyncStorage.setItem("userName", user.name);
+            AsyncStorage.setItem("userPhone", user.phone);
+            AsyncStorage.setItem("userBirth", user.birth);
+            AsyncStorage.setItem("userINum", user.identityNumber);
+            AsyncStorage.setItem("Gender", user.gender);
+            AsyncStorage.setItem("userRefreshToken", userToken.refresh.token);
+          });
+      } catch (e) {
+        console.log(e);
+      }
+      dispatch({
+        type: "REGISTER",
+        mail: user.email,
+        token: userToken.access.token,
+        id: user.id,
+        name: user.name,
+        phone: user.phone,
+        birth: user.birth,
+        iNum: user.identityNumber,
+        gender: user.gender,
+        refreshToken: userToken.refresh.token,
       });
     },
     userName: loginState.userName,
