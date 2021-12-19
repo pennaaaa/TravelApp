@@ -1,9 +1,5 @@
 const activityDetails = [
   {
-    id: "activities-1",
-    title: "Điểm đến",
-  },
-  {
     id: "activities-2",
     title: "Khách sạn",
   },
@@ -13,7 +9,7 @@ const activityDetails = [
   },
   {
     id: "activities-4",
-    title: "Giải trí",
+    title: "Thuê xe",
   },
 ];
 export default activityDetails;

@@ -36,9 +36,10 @@ const HotelBooking = ({ route, navigation }) => {
   const authContext = React.useContext(AuthContext);
 
   const onChangeIn = (event, selectedDate) => {
-    const currentDate = selectedDate || dateIn;
+    let currentDate = selectedDate || dateIn;
     setShowIn(Platform.OS === "ios");
     setDateIn(currentDate);
+    setDateOut(currentDate);
 
     setTotalDay(
       (dateOut.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24)
@@ -91,7 +92,6 @@ const HotelBooking = ({ route, navigation }) => {
         1.1
       ).toFixed()
     );
-    console.log(price);
   };
 
   const showModeIn = (currentMode) => {
@@ -214,7 +214,7 @@ const HotelBooking = ({ route, navigation }) => {
                 locale
                 style={styles.dateTimeStyle}
                 testID="dateTimePickerIn"
-                value={dateIn}
+                value={(dateIn, dateOut)}
                 mode={mode}
                 is24Hour={true}
                 display="default"
