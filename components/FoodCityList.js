@@ -41,7 +41,6 @@ const FoodCityList = (props) => {
         .finally(() => setRestaurantLoading(false));
     }, 0);
   }, []);
-
   const navigation = props.navigation;
   const renderFoodDataItem = ({ item }) => {
     console.log(item);

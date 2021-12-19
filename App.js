@@ -54,7 +54,7 @@ const TabNavigation = () => {
       />
       <Tab.Screen
         name="Tìm Kiếm"
-        component={Find}
+        component={SearchView}
         options={{
           tabBarIcon: ({ color }) => (
             <Entypo name="magnifying-glass" size={28} color={color} />

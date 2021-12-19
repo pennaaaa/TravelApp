@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {
   View,
   Text,
+  Dimensions,
   StyleSheet,
   SafeAreaView,
   TouchableOpacity,
@@ -14,14 +15,17 @@ import hotelData from "../assets/data/hotelData";
 import kindSearch from "../assets/data/kindSearch";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Entypo from "react-native-vector-icons/Entypo";
+import Ionicons from "react-native-vector-icons/Ionicons";
 import { Rating } from "react-native-elements";
 
 FontAwesome.loadFont();
 Entypo.loadFont();
+Ionicons.loadFont();
+const height = Dimensions.get("window").height;
+const width = Dimensions.get("window").width;
 
 const SearchView = ({ navigation }) => {
-  const [data, setData] = useState(hotelData);
-
+  const [data, setData] = useState();
   const renderHotelDataItem = ({ item }) => {
     return (
       <TouchableOpacity
@@ -39,45 +43,63 @@ const SearchView = ({ navigation }) => {
               borderTopRightRadius: 10,
             }}
           >
-            <Image source={item.image} style={styles.discorverItem} />
+            <Image
+              source={{ uri: item.images[0] }}
+              style={styles.discorverItem}
+            />
           </View>
           <View style={styles.itemText}>
             <Text style={styles.itemName}>
               <FontAwesome name="flash" size={20} color={"#87BB73"} />
               {"  "}
-              {item.title}, {item.location}
+              {item.idHotel.name}, {item.idHotel.address}
             </Text>
-            <View
-              style={{
-                margin: 10,
-                backgroundColor: "#F7F8FB",
-                padding: 5,
-              }}
-            >
+          </View>
+
+          <View style={styles.infoWrapper}>
+            <View style={styles.infoRoom}>
               <Text style={styles.addressText}>
-                <Entypo name="location-pin" size={16} color={"#87BB73"} />{" "}
-                {"   "} Đây là chỗ của địa chỉ nè!
+                <Entypo name="home" size={16} color={"#87BB73"} />{" "}
+                {"   " + item.type}
               </Text>
+
               <Text style={styles.addressText}>
-                <FontAwesome name="bed" size={16} color={"#87BB73"} /> {"   "} 1
-                giường đôi lớn, 1 phòng tắm
+                <Ionicons name="person" size={16} color={"#87BB73"} />{" "}
+                {"   1 người"}
               </Text>
             </View>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                marginBottom: 10,
-              }}
-            >
-              <Text style={styles.itemPrice}>{item.price}đ/ngày</Text>
-              <Rating
-                imageSize={20}
-                fractions="{1}"
-                readonly
-                startingValue={item.rating}
-              />
+
+            <View style={styles.infoRoom}>
+              <Text style={styles.addressText}>
+                <FontAwesome name="bath" size={16} color={"#87BB73"} /> {"  "} 1
+                Phòng tắm
+              </Text>
+              <Text style={styles.addressText}>
+                <Ionicons name="bed" size={16} color={"#87BB73"} /> {"   "} 1
+                Giường
+              </Text>
             </View>
+          </View>
+
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              marginBottom: 10,
+              paddingLeft: 10,
+              paddingRight: 10,
+            }}
+          >
+            <View style={styles.roomPrice}>
+              <Text style={styles.priceText}>{item.price}đ</Text>
+              <Text style={styles.perdayText}>/ngày</Text>
+            </View>
+            <Rating
+              imageSize={20}
+              fractions="{1}"
+              readonly
+              startingValue={item.vote}
+            />
           </View>
         </View>
       </TouchableOpacity>
@@ -85,20 +107,25 @@ const SearchView = ({ navigation }) => {
   };
   const renderKindSearch = ({ item }) => {
     return (
-      <TouchableOpacity onPress={() => alert("bam roi nha!")}>
+      <TouchableOpacity onPress={() => onKindSearchClicked(item)}>
         <View style={styles.kindSearchView}>
           <Text style={styles.kindSearchText}>{item.title}</Text>
         </View>
       </TouchableOpacity>
     );
   };
+  const onKindSearchClicked = (item) => {
+    fetch("https://pbl6-travelapp.herokuapp.com/room?city=" + item.title)
+      .then((response) => response.json())
+      .then((json) => setData(json))
+      .catch((error) => console.error(error))
+      .finally(() => setHotelLoading(false));
+  };
   const onChangeText = (text) => {
     const newData = hotelData.filter((item) => {
       const itemData = `${item.title.toUpperCase()}   
       ${item.location.toUpperCase()}`;
-
       const textData = text.toUpperCase();
-
       return itemData.indexOf(textData) > -1;
     });
     setData(newData);
@@ -136,7 +163,7 @@ const SearchView = ({ navigation }) => {
         <FlatList
           data={data}
           renderItem={renderHotelDataItem}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item._id}
           showsHorizontalScrollIndicator={false}
         />
       </View>
@@ -221,6 +248,20 @@ const styles = StyleSheet.create({
     fontFamily: "SourceSans-Regular",
     marginLeft: 15,
     marginBottom: 5,
+  },
+  infoWrapper: {
+    width: width * 0.8,
+    marginVertical: 10,
+    backgroundColor: "#F7F8FB",
+    padding: 5,
+    alignSelf: "center",
+    flexDirection: "row",
+  },
+  infoRoom: {
+    width: "50%",
+    flexDirection: "column",
+    // marginHorizontal: width * 0.07,
+    textAlign: "center",
   },
 });
 export default SearchView;
