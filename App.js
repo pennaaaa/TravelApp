@@ -25,8 +25,13 @@ import SignUp from "./components/SignUp";
 import AuthContext from "./store/context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import UserInfo from "./components/UserInfo";
-import cart from "./components/cart";
+import cart from "./components/CartHotel";
+import historyBooking from "./components/HistoryMenu";
 import BookingBill from "./components/BookingBill";
+import RestaurantBill from "./components/RestaurantBill";
+import cartMenu from "./components/cartMenu";
+import HistoryMenu from "./components/HistoryMenu";
+import VehicleBill from "./components/VehicleBill";
 
 Entypo.loadFont();
 AntDesign.loadFont();
@@ -86,7 +91,7 @@ const App = () => {
     gender: "",
     phone: "",
     birth: "",
-    iNum:"",
+    iNum: "",
     userRefreshToken: "",
   };
 
@@ -200,7 +205,7 @@ const App = () => {
         token: userToken.access.token,
         id: user.id,
         name: user.name,
-        phone: user.phone,     
+        phone: user.phone,
         birth: user.birth,
         iNum: user.identityNumber,
         gender: user.gender,
@@ -348,7 +353,15 @@ const App = () => {
               component={Details}
               options={({ route }) => ({
                 headerBackTitle: "",
-                headerTitle: route.params.name,
+                headerTitle: "Go Go",
+              })}
+            />
+            <Stack.Screen
+              name="cartMenu"
+              component={cartMenu}
+              options={({ route }) => ({
+                headerBackTitle: "",
+                headerTitle: "Hàng chờ",
               })}
             />
             <Stack.Screen
@@ -356,7 +369,7 @@ const App = () => {
               component={HotelDetails}
               options={({ route }) => ({
                 headerBackTitle: "",
-                headerTitle: route.params.name,
+                headerTitle: "Thông tin phòng",
               })}
             />
             <Stack.Screen
@@ -364,7 +377,7 @@ const App = () => {
               component={FoodDetails}
               options={({ route }) => ({
                 headerBackTitle: "",
-                headerTitle: route.params.name,
+                headerTitle: "Thông tin nhà hàng",
               })}
             />
             <Stack.Screen
@@ -372,15 +385,30 @@ const App = () => {
               component={FoodBooking}
               options={({ route }) => ({
                 headerBackTitle: "",
-                headerTitle: route.params.name,
+                headerTitle: "Đặt bàn",
               })}
             />
+            <Stack.Screen
+              name="RestaurantBill"
+              component={RestaurantBill}
+              options={({ route }) => ({
+                headerBackTitle: "",
+                headerTitle: "Hóa đơn thanh toán",
+              })}
+            /><Stack.Screen
+            name="VehicleBill"
+            component={VehicleBill}
+            options={({ route }) => ({
+              headerBackTitle: "",
+              headerTitle: "Hóa đơn thanh toán",
+            })}
+          />
             <Stack.Screen
               name="VehicleDetails"
               component={VehicleDetails}
               options={({ route }) => ({
                 headerBackTitle: "",
-                headerTitle: route.params.name,
+                headerTitle: "Thông tin xe",
               })}
             />
             <Stack.Screen
@@ -394,7 +422,7 @@ const App = () => {
               component={HotelBooking}
               options={({ route }) => ({
                 headerBackTitle: "",
-                headerTitle: route.params.name,
+                headerTitle: "Đặt phòng",
               })}
             />
             <Stack.Screen
@@ -402,7 +430,7 @@ const App = () => {
               component={BookingBill}
               options={({ route }) => ({
                 headerBackTitle: "",
-                headerTitle: route.params.name,
+                headerTitle: "Hóa đơn thanh toán",
               })}
             />
 
@@ -411,15 +439,23 @@ const App = () => {
               component={UserInfo}
               options={({ route }) => ({
                 headerBackTitle: "",
-                headerTitle: route.params.name,
+                headerTitle: "Thông tin cá nhân",
               })}
             />
-            <Stack.Screen
+            {/* <Stack.Screen
               name="cart"
               component={cart}
               options={({ route }) => ({
                 headerBackTitle: "",
-                headerTitle: route.params.name,
+                headerTitle: "Hàng chờ",
+              })}
+            /> */}
+            <Stack.Screen
+              name="HistoryMenu"
+              component={HistoryMenu}
+              options={({ route }) => ({
+                headerBackTitle: "",
+                headerTitle: "Lịch sử",
               })}
             />
           </Stack.Navigator>

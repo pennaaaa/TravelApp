@@ -14,6 +14,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import RNPPickerSelect from "react-native-picker-select";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { LinearGradient } from "expo-linear-gradient";
+import AuthContext from "../store/context";
 
 AntDesign.loadFont();
 const Listpeople = Array.from({ length: 10 }, (_, i) => i + 1);
@@ -26,9 +27,12 @@ const FoodBooking = ({ route, navigation }) => {
   const [hour, setHour] = useState(new Date().toLocaleTimeString().slice(0, 5));
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
+  const authContext = React.useContext(AuthContext);
 
   const [selectedValue, setSelectedValue] = useState(1);
-  const [note, setNote] = useState("");
+
+  //Phí đặt bàn
+  const fee = 100000;
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -50,6 +54,62 @@ const FoodBooking = ({ route, navigation }) => {
     showMode("time");
   };
 
+  const createBill = async () => {
+    let returnn = null;
+    try {
+      const data = {
+        service: "restaurant",
+        restaurant: item._id,
+        total: fee,
+        chairs: selectedValue,
+        checkIn: date,
+        guest: authContext.userId,
+        status: false,
+      };
+      Promise.all(
+        await fetch(
+          "https://pbl6-travelapp.herokuapp.com/bill/" + authContext.userId,
+          {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${authContext.userToken}`,
+            },
+            body: JSON.stringify(data),
+          }
+        )
+          .then((response) => response.json())
+          .then((responseJson) => {
+            console.log(responseJson);
+            if (responseJson.code) {
+              returnn = false;
+            } else returnn = responseJson.id;
+          })
+          .catch((error) => {
+            console.error(error);
+          })
+      );
+    } catch (e) {
+      console.log(e);
+    }
+    return returnn;
+  };
+
+  const onPressBookButton = async () => {
+    billid = await createBill();
+    console.log(billid);
+    if (billid) {
+      navigation.navigate("RestaurantBill", {
+        item: item,
+        name: item.location,
+        date,
+        fee,
+        selectedValue,
+      });
+    } else alert("Đăng nhập lại để đặt bàn");
+  };
+
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -59,14 +119,11 @@ const FoodBooking = ({ route, navigation }) => {
             style={styles.imageRestaurant}
           ></Image>
           <View style={styles.restaurantOverViewWrapper}>
-            <Text style={styles.restaurantTitle}>{item.title}</Text>
+            <Text style={styles.restaurantTitle}>{item.name}</Text>
             <Text style={styles.restaurantDetails}>{item.address}</Text>
-
-            {/* <View style={styles.ratingWrapper}>
-              <AntDesign name="star" size={16} color={"#87BB73"}></AntDesign>
-              <Text style={styles.roomRating}> {item.vote}</Text>
-              <Text style={styles.totalFeedback}> (20)</Text>
-            </View> */}
+            <Text style={styles.restaurantDetails}>
+              Chuyên món: {item.type}
+            </Text>
           </View>
         </View>
 
@@ -85,7 +142,7 @@ const FoodBooking = ({ route, navigation }) => {
             </TouchableOpacity>
           </View>
 
-          <Text style={styles.dateTitle}>Giờ đến</Text>
+          {/* <Text style={styles.dateTitle}>Giờ đến</Text>
           <View style={styles.dateText}>
             <Text>{hour}</Text>
             <TouchableOpacity onPress={showTimepicker}>
@@ -95,17 +152,19 @@ const FoodBooking = ({ route, navigation }) => {
                 color={"#87BB73"}
               ></AntDesign>
             </TouchableOpacity>
-          </View>
+          </View> */}
 
           <View style={styles.peopleSelect}>
             <Text style={styles.dateTitle}>Số người</Text>
+          </View>
+          <View style={styles.peopleSelect}>
             <View style={styles.picker}>
               <RNPPickerSelect
                 style={{
                   inputIOS: {
                     fontSize: 16,
                     paddingTop: 13,
-                    paddingHorizontal: 10,
+                    // paddingHorizontal: 10,
                     paddingBottom: 12,
                     borderWidth: 1,
                     borderColor: "gray",
@@ -123,7 +182,7 @@ const FoodBooking = ({ route, navigation }) => {
                 onValueChange={(value) => setSelectedValue(value)}
                 style={{
                   inputAndroid: {
-                    // backgroundColor:"#87BB73",
+                    marginLeft: 20,
                     marginTop: 10,
                     width: 100,
                     color: "#87BB73",
@@ -139,12 +198,7 @@ const FoodBooking = ({ route, navigation }) => {
           </View>
           <TouchableOpacity
             style={styles.signIn}
-            onPress={() =>
-              navigation.navigate("FoodBooking", {
-                item: item,
-                name: item.location,
-              })
-            }
+            onPress={() => onPressBookButton()}
           >
             <LinearGradient
               colors={["#3FA344", "#8DCA70"]}
@@ -152,7 +206,7 @@ const FoodBooking = ({ route, navigation }) => {
               end={{ x: 1, y: 1 }}
               style={styles.signIn}
             >
-              <Text style={styles.buttonText}>Đặt chỗ ngay</Text>
+              <Text style={styles.buttonText}>Đặt bàn</Text>
             </LinearGradient>
           </TouchableOpacity>
         </View>
@@ -228,13 +282,6 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     borderRadius: 10,
   },
-  line: {
-    width: width,
-    marginTop: 10,
-    borderBottomColor: colors.shade,
-    borderWidth: 0.5,
-  },
-
   tableContainer: {
     width: "100%",
     flexDirection: "row",
@@ -249,6 +296,7 @@ const styles = StyleSheet.create({
   },
   restaurantOverViewWrapper: {
     width: width * 0.496,
+    marginVertical: 16,
   },
   restaurantTitle: {
     marginLeft: 12,
@@ -276,6 +324,7 @@ const styles = StyleSheet.create({
   peopleSelect: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
   },
   picker: {
     marginLeft: 16,

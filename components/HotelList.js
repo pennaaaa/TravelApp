@@ -8,7 +8,7 @@ import {
   SafeAreaView,
   Image,
 } from "react-native";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import {TouchableOpacity } from "react-native-gesture-handler";
 // import hotelData from "../assets/data/hotelData";
 import colors from "../assets/color/colors";
 import FontAwesome from "react-native-vector-icons/FontAwesome";

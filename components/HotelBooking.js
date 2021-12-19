@@ -7,7 +7,6 @@ import {
   Platform,
   Dimensions,
   Image,
-  Modal,
 } from "react-native";
 import colors from "../assets/color/colors";
 import DateTimePicker from "@react-native-community/datetimepicker";

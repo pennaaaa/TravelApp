@@ -5,9 +5,13 @@ import colors from "../assets/color/colors";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { LinearGradient } from "expo-linear-gradient";
+import { SliderBox } from "react-native-image-slider-box";
+import Entypo from "react-native-vector-icons/Entypo";
+import AuthContext from "../store/context";
 
 const height = Dimensions.get("window").height;
 const width = Dimensions.get("window").width;
+Entypo.loadFont();
 
 AntDesign.loadFont();
 
@@ -20,12 +24,7 @@ const VehicleDetails = ({ route, navigation }) => {
   const [mode, setMode] = useState("date");
   const [showIn, setShowIn] = useState(false);
   const [showOut, setShowOut] = useState(false);
-  const [hourIn, setHourIn] = useState(
-    new Date().toLocaleTimeString().slice(0, 5)
-  );
-  const [hourOut, setHourOut] = useState(
-    new Date().toLocaleTimeString().slice(0, 5)
-  );
+  const authContext = React.useContext(AuthContext);
 
   const [selectedValue, setSelectedValue] = useState(1);
 
@@ -33,24 +32,15 @@ const VehicleDetails = ({ route, navigation }) => {
     const currentDate = selectedDate || dateIn;
     setShowIn(Platform.OS === "ios");
     setDateIn(currentDate);
-    setHourIn(currentDate.toLocaleTimeString().slice(0, 5));
+    setPrice(item.price * (dateOut.getDate() - currentDate.getDate()));
   };
 
   const onChangeOut = (event, selectedDate) => {
     const currentDate = selectedDate || dateOut;
     setShowOut(Platform.OS === "ios");
     setDateOut(currentDate);
-    setHourOut(currentDate.toLocaleTimeString().slice(0, 5));
-    calPrice();
-  };
-
-  const calPrice = () => {
-    // console.log(dateIn.getDate())
-    console.log(dateOut.getDate())
-    setPrice(
-      50000 *
-        ((dateOut.getDate() - dateIn.getDate()) * 24)
-    );
+    setPrice(item.price * (currentDate.getDate() - dateIn.getDate()));
+    console.log("Gia ne:" + item.price);
   };
 
   const showModeIn = (currentMode) => {
@@ -67,42 +57,97 @@ const VehicleDetails = ({ route, navigation }) => {
     showModeIn("date");
   };
 
-  const showTimepickerIn = () => {
-    showModeIn("time");
-  };
-
   const showDatepickerOut = () => {
     showModeOut("date");
   };
 
-  const showTimepickerOut = () => {
-    showModeOut("time");
+  const createBill = async () => {
+    let returnn = null;
+    try {
+      const data = {
+        selfVehicle: item.idSelfVehicle._id,
+        service: "selfVehicle",
+        total: price,
+        checkIn: dateIn,
+        checkOut: dateOut,
+        detailVehicle: item._id,
+        guest: authContext.userId,
+        status: false,
+      };
+      Promise.all(
+        await fetch(
+          "https://pbl6-travelapp.herokuapp.com/bill/" + authContext.userId,
+          {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${authContext.userToken}`,
+            },
+            body: JSON.stringify(data),
+          }
+        )
+          .then((response) => response.json())
+          .then((responseJson) => {
+            console.log(responseJson);
+            if (responseJson.code) {
+              returnn = false;
+            } else returnn = responseJson.id;
+          })
+          .catch((error) => {
+            console.error(error);
+          })
+      );
+    } catch (e) {
+      console.log(e);
+    }
+    return returnn;
+  };
+
+  const onPressBookButton = async () => {
+    billid = await createBill();
+    console.log(billid);
+    if (billid) {
+      navigation.navigate("VehicleBill", {
+        item: item,
+        name: item.location,
+        dateIn,
+        dateOut,
+        price,
+        billid,
+      });
+    } else alert("Đăng nhập lại để đặt xe");
   };
 
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.infoWrapper}>
-        <Image source={item.imageBig} style={styles.backgroundImage}></Image>
-        <Text style={styles.vehicleTitle}>{item.title}</Text>
-        <Text style={styles.vehicleAddress}>{item.address}</Text>
+      <SliderBox
+        images={item.images}
+        sliderBoxHeight={height * 0.4}
+        dotColor="#87BB73"
+        inactiveDotColor="white"
+      ></SliderBox>
+      <View style={styles.descriptionTextWrapper}>
+        <View style={styles.vehicleTitle}>
+          <Text style={styles.titleText}>{item.idSelfVehicle.name}</Text>
+        </View>
+        <Text style={styles.rentAddress}>
+          <Entypo name="location-pin" size={20} color={"#87BB73"} />{" "}
+          {item.idSelfVehicle.address}
+        </Text>
       </View>
       <View style={styles.detailWrapper}>
         <Text style={styles.bookingTitle}>Thông tin đặt xe</Text>
-        <Text style={styles.dateTitle}>Nhận xe</Text>
+
+        <View style={styles.infoVehicle}>
+          <Text style={styles.typeTitle}>Loại xe:</Text>
+          <Text style={styles.typeVehicle}>{item.type}</Text>
+        </View>
+        <Text style={styles.dateTitle}>Nhận xe:</Text>
         <View style={styles.dateText}>
           <Text>{dateIn.toLocaleDateString()}</Text>
           <TouchableOpacity onPress={showDatepickerIn}>
             <AntDesign name="calendar" size={20} color={"#87BB73"}></AntDesign>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.dateText}>
-          <Text>{hourIn}</Text>
-          <TouchableOpacity onPress={showTimepickerIn}>
-            <AntDesign
-              name="clockcircleo"
-              size={20}
-              color={"#87BB73"}
-            ></AntDesign>
           </TouchableOpacity>
         </View>
         {showIn && (
@@ -118,23 +163,14 @@ const VehicleDetails = ({ route, navigation }) => {
             minimumDate={new Date()}
           />
         )}
-        <Text style={styles.dateTitle}>Trả xe</Text>
+        <Text style={styles.dateTitle}>Trả xe:</Text>
         <View style={styles.dateText}>
           <Text>{dateOut.toLocaleDateString()}</Text>
           <TouchableOpacity onPress={showDatepickerOut}>
             <AntDesign name="calendar" size={24} color={"#87BB73"}></AntDesign>
           </TouchableOpacity>
         </View>
-        <View style={styles.dateText}>
-          <Text>{hourOut}</Text>
-          <TouchableOpacity onPress={showTimepickerOut}>
-            <AntDesign
-              name="clockcircleo"
-              size={20}
-              color={"#87BB73"}
-            ></AntDesign>
-          </TouchableOpacity>
-        </View>
+
         {showOut && (
           <DateTimePicker
             locale
@@ -153,19 +189,12 @@ const VehicleDetails = ({ route, navigation }) => {
         <Text style={styles.bookingTitle}>Chi tiết thanh toán</Text>
         <View style={styles.datePrice}>
           <Text style={styles.dateTitle}>Tổng tiền(VND)</Text>
-          <Text style={styles.resultDatePrice}>
-            {/* {item.price *
-              ((dateOut.getDate() - dateIn.getDate()) * 24 +
-                (dateOut.getHours() - dateIn.getHours()))} */}
-            {price} đ
-          </Text>
+          <Text style={styles.resultDatePrice}>{price} đ</Text>
         </View>
 
         <TouchableOpacity
           style={styles.signIn}
-          onPress={() => {
-            alert("Đặt xe thành công!");
-          }}
+          onPress={() => onPressBookButton()}
         >
           <LinearGradient
             colors={["#3FA344", "#8DCA70"]}
@@ -200,7 +229,6 @@ const styles = StyleSheet.create({
     width: width * 0.4,
     fontSize: 20,
     color: colors.black,
-    marginTop: 12,
     fontFamily: "SourceSans-SemiBold",
     color: "black",
   },
@@ -211,11 +239,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingRight: width * 0.08,
     paddingLeft: width * 0.08,
-  },
-  infoWrapper: {
-    width: "100%",
-    backgroundColor: colors.white,
-    padding: width * 0.05,
   },
   detailWrapper: {
     marginTop: 10,
@@ -230,10 +253,11 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   vehicleTitle: {
-    marginTop: 12,
-    fontSize: 28,
-    fontFamily: "SourceSans-SemiBold",
-    color: "black",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: width * 0.05,
+    paddingVertical: 10,
   },
   vehicleAddress: {
     fontSize: 15,
@@ -265,6 +289,41 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
     borderRadius: 10,
+  },
+  descriptionTextWrapper: {
+    flex: 1,
+    backgroundColor: colors.white,
+  },
+  rentAddress: {
+    width: width * 0.7,
+    marginLeft: 8,
+    fontSize: 15,
+    fontFamily: "SourceSans-Regular",
+    color: "#767676",
+    paddingBottom: width * 0.05,
+  },
+  titleText: {
+    width: width * 0.7,
+    fontSize: 24,
+    fontFamily: "SourceSans-SemiBold",
+    color: "black",
+  },
+  infoVehicle: {
+    marginTop: 8,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  typeTitle: {
+    fontSize: 20,
+    color: colors.black,
+    fontFamily: "SourceSans-SemiBold",
+    color: "black",
+  },
+  typeVehicle: {
+    marginLeft: 20,
+    fontSize: 20,
+    fontFamily: "SourceSans-Regular",
+    color: "#2E833E",
   },
 });
 

@@ -8,20 +8,28 @@ import {
   FlatList,
   Image,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import colors from "../assets/color/colors";
 import { LinearGradient } from "expo-linear-gradient";
 import { SliderBox } from "react-native-image-slider-box";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import Entypo from "react-native-vector-icons/Entypo";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 const height = Dimensions.get("window").height;
 const width = Dimensions.get("window").width;
+
+Entypo.loadFont();
+Ionicons.loadFont();
+FontAwesome.loadFont();
 
 const FoodDetails = ({ route, navigation }) => {
   const { item } = route.params;
   const data = item.imageFood;
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        <View style={styles.descriptionWrapper}>
+    <SafeAreaView style={styles.container}>
+      <ScrollView>
+        <View>
           <SliderBox
             images={item.images}
             sliderBoxHeight={height * 0.4}
@@ -29,84 +37,67 @@ const FoodDetails = ({ route, navigation }) => {
             inactiveDotColor="white"
           ></SliderBox>
           <View style={styles.descriptionTextWrapper}>
-            <Text style={styles.titleText}>{item.name}</Text>
-            <Text style={styles.address}>{item.address}</Text>
-            <View
-              style={{
-                marginLeft: width * 0.2,
-                width: width * 0.6,
-                marginTop: 10,
-                borderBottomColor: "#909090",
-                borderBottomWidth: 1,
-              }}
-            />
-            <View style={styles.timeAvailableWrapper}>
-              <Text style={styles.titleTimeAvailable}>Giờ đón khách: </Text>
-              <Text style={styles.itemTimeAvailable}>07h-14h00; 16h-23h00</Text>
+            <View style={styles.resTitle}>
+              <Text style={styles.titleText}>{item.name}</Text>
             </View>
-            <View
-              style={{
-                marginLeft: width * 0.2,
-                width: width * 0.6,
-                marginTop: 10,
-                borderBottomColor: "#909090",
-                borderBottomWidth: 1,
-              }}
-            />
-            <View style={styles.typePriceWrapper}>
-              <View style={styles.typeWrapper}>
-                <Text style={styles.typeTitle}>Loại hình</Text>
-                <Text style={styles.typeText}>{item.type}</Text>
-              </View>
 
+            <Text style={styles.resAddress}>
+              <Entypo name="location-pin" size={20} color={"#87BB73"} />{" "}
+              {item.address}
+            </Text>
+
+            <View style={styles.infoWrapper}>
+              <View style={styles.infoRes}>
+                <Text style={styles.addressText}>
+                  <Ionicons name="restaurant" size={16} color={"#87BB73"} />{" "}
+                  {"   "}
+                  {item.type}
+                </Text>
+              </View>
               <View
-                style={{ height: "100%", width: 1, backgroundColor: "#909090" }}
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  marginBottom: 10,
+                }}
               ></View>
 
-              <View style={styles.priceWrapper}>
-                <Text style={styles.priceTitle}>Khoảng giá</Text>
-                <Text style={styles.priceText}>
-                  {item.priceFrom}-{item.priceTo}đ/món
+              <View style={styles.infoRoom}>
+                <Text style={styles.addressText}>
+                  <Ionicons name="fast-food" size={16} color={"#87BB73"} />{" "}
+                  {"  "}
+                  {(item.priceFrom + item.priceTo) / 2}đ/món
                 </Text>
               </View>
             </View>
-            {/* <View
-              style={{
-                marginLeft: -20,
-                width: width,
-                marginTop: 10,
-                borderBottomColor: "#909090",
-                borderBottomWidth: 3,
-              }}
-            /> */}
-          </View>
-          {/* <View>
-            <Text style={styles.descriptionTitle}>Giới thiệu</Text>
-            <Text style={styles.descriptionText}>{item.description}</Text>
-          </View> */}
-          <View style={{ marginTop: 10 }}>
-            <TouchableOpacity
-              style={styles.signIn}
-              onPress={() =>
-                navigation.navigate("FoodBooking", {
-                  item: item,
-                  name: item.location,
-                })
-              }
-            >
-              <LinearGradient
-                colors={["#3FA344", "#8DCA70"]}
-                start={{ x: 0, y: 1 }}
-                end={{ x: 1, y: 1 }}
-                style={styles.signIn}
-              >
-                <Text style={styles.buttonText}>Đặt chỗ ngay</Text>
-              </LinearGradient>
-            </TouchableOpacity>
           </View>
         </View>
+      </ScrollView>
+      <View style={styles.footer}>
+        <View style={styles.resPrice}>
+          <Text style={styles.resText}>XXX đ</Text>
+          <Text style={styles.perdayText}> (Phí đặt bàn)</Text>
+        </View>
+        <TouchableOpacity
+          style={styles.signIn}
+          onPress={() =>
+            navigation.navigate("FoodBooking", {
+              item: item,
+              name: item.location,
+            })
+          }
+        >
+          <LinearGradient
+            colors={["#3FA344", "#8DCA70"]}
+            start={{ x: 0, y: 1 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.signIn}
+          >
+            <Text style={styles.buttonText}>Tiếp tục</Text>
+          </LinearGradient>
+        </TouchableOpacity>
       </View>
-    </ScrollView>
+    </SafeAreaView>
   );
 };
 
@@ -114,9 +105,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.white,
+    height: height,
   },
   backgroundImage: {
-    height: height * 0.6,
+    height: height * 0.4,
     justifyContent: "space-between",
   },
   descriptionWrapper: {
@@ -126,17 +118,14 @@ const styles = StyleSheet.create({
   },
 
   descriptionTextWrapper: {
-    marginTop: 10,
-    marginHorizontal: 20,
+    flex: 1,
+    backgroundColor: colors.white,
   },
   titleText: {
-    // fontFamily: 'Lato-Bold',
-    // width:width,
-    fontSize: 26,
-    color: colors.black,
-    // justifyContent: "center",
-    // alignItems: "center",
-    textAlign: "center",
+    width: width * 0.7,
+    fontSize: 24,
+    fontFamily: "SourceSans-SemiBold",
+    color: "black",
   },
   address: {
     marginTop: 10,
@@ -215,14 +204,64 @@ const styles = StyleSheet.create({
     color: colors.white,
   },
   signIn: {
-    marginTop: 30,
-    marginBottom: 30,
-    width: width * 0.6,
+    width: width * 0.36,
     height: height * 0.07,
     justifyContent: "center",
     alignItems: "center",
-    alignSelf: "center",
     borderRadius: 10,
+  },
+  resTitle: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: 10,
+  },
+  resAddress: {
+    width: width * 0.7,
+    marginLeft: 10,
+    fontSize: 15,
+    fontFamily: "SourceSans-Regular",
+    color: "#767676",
+  },
+  infoWrapper: {
+    marginVertical: 10,
+    backgroundColor: "#F7F8FB",
+    padding: 5,
+    flexDirection: "row",
+  },
+  infoRes: {
+    flexDirection: "column",
+    marginHorizontal: width * 0.07,
+  },
+  addressText: {
+    fontSize: 16,
+    fontFamily: "SourceSans-Regular",
+    marginTop: 8,
+    marginBottom: 8,
+    marginLeft: 15,
+  },
+  footer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    shadowColor: "#000000",
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 1,
+    padding: 10,
+  },
+  resPrice: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  perdayText: {
+    fontSize: 16,
+    fontFamily: "SourceSans-Regular",
+    color: "#767676",
+  },
+  resText: {
+    fontSize: 20,
+    fontFamily: "SourceSans-SemiBold",
+    color: "#2EC974",
   },
 });
 

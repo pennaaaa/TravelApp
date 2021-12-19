@@ -102,10 +102,7 @@ const Profile = ({ route, navigation }) => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.support}
-            onPress={() =>
-              navigation.navigate("cart", {
-              })
-            }
+            onPress={() => navigation.navigate("cartMenu", {})}
           >
             <MaterialIcons name="payment" size={40} color="green" />
             <Text style={styles.supportText1}>Hàng chờ</Text>
@@ -120,7 +117,11 @@ const Profile = ({ route, navigation }) => {
               justifyContent: "space-around",
             }}
           >
-            <TouchableOpacity style={styles.support}>
+            <TouchableOpacity
+              style={styles.support}
+              onPress={() => navigation.navigate("HistoryMenu", {})
+            }
+            >
               <MaterialIcons name="history" size={40} color="green" />
               <Text style={styles.supportText1}>Lịch sử</Text>
               <Text style={styles.supportText2}>Hóa đơn của bạn</Text>

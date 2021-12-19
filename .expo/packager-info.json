@@ -1,10 +1,10 @@
 {
   "devToolsPort": 19002,
-  "expoServerPort": null,
-  "packagerPort": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null,
+  "expoServerPort": 19000,
+  "packagerPort": 19000,
+  "expoServerNgrokUrl": "https://bx-5vj.vnd2k.travelapp.exp.direct",
+  "packagerNgrokUrl": "https://packager.bx-5vj.vnd2k.travelapp.exp.direct",
+  "ngrokPid": 282684,
   "webpackServerPort": null,
   "packagerPid": null
 }

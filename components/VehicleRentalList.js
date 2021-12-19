@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -24,7 +24,22 @@ FontAwesome.loadFont();
 Entypo.loadFont();
 Ionicons.loadFont();
 
-const VehicleRentalList = ({ navigation }) => {
+const VehicleRentalList = ({ props }) => {
+  const item = props.item;
+  const [vehicleData, setVehicleData] = useState([]);
+  const [isVehicleLoading, setVehicleLoading] = useState(true);
+
+  console.log("https://pbl6-travelapp.herokuapp.com/restaurant?city=" + item.title);
+  useEffect(() => {
+    setTimeout(() => {
+      fetch("https://pbl6-travelapp.herokuapp.com/restaurant?city=" + item.title)
+        .then((response) => response.json())
+        .then((json) => setRestaurantData(json))
+        .catch((error) => console.error(error))
+        .finally(() => setRestaurantLoading(false));
+    }, 0);
+  }, []);
+
   const renderVehicleRentalDataItem = ({ item }) => {
     return (
       <TouchableOpacity

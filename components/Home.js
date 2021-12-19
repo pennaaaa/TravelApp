@@ -56,7 +56,7 @@ const Home = ({ navigation }) => {
         .catch((error) => console.error(error))
         .finally(() => setRestaurantLoading(false));
 
-      fetch("https://pbl6-travelapp.herokuapp.com/selfvehicle")
+      fetch("https://pbl6-travelapp.herokuapp.com/detailVehicle")
         .then((response) => response.json())
         .then((json) => setVehicleData(json))
         .catch((error) => console.error(error))
@@ -123,7 +123,7 @@ const Home = ({ navigation }) => {
       >
         <View style={styles.itemContainer} shadowOffset={{ height: 10 }}>
           <Image
-            source={{ uri: item.images[0] }}
+            source={{ uri: item.imageCover }}
             style={styles.discorverItem}
           />
           <View style={styles.itemViewText}>
@@ -167,7 +167,7 @@ const Home = ({ navigation }) => {
       >
         <View style={styles.itemContainer} shadowOffset={{ height: 10 }}>
           <Image
-            source={{ uri: item.images[0] }}
+            source={{ uri: item.imageCover }}
             style={styles.discorverItem}
           />
           <View style={styles.itemViewText}>
@@ -179,7 +179,7 @@ const Home = ({ navigation }) => {
                 fontSize: 18,
               }}
             >
-              {item.name}
+              {item.idSelfVehicle.name}
             </Text>
             <Text
               style={{
@@ -190,7 +190,7 @@ const Home = ({ navigation }) => {
                 color: "#7B7B7B",
               }}
             >
-              {item.address}
+              {item.idSelfVehicle.address}
             </Text>
           </View>
         </View>

@@ -21,6 +21,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { WebView } from "react-native-webview";
 import { useRoute } from "@react-navigation/native";
 import AuthContext from "../store/context";
+import { color } from "react-native-elements/dist/helpers";
 
 const height = Dimensions.get("window").height;
 const width = Dimensions.get("window").width;
@@ -28,10 +29,9 @@ const width = Dimensions.get("window").width;
 AntDesign.loadFont();
 Feather.loadFont();
 
-const BookingBill = ({ route, navigation }) => {
+const RestaurantBill = ({ route, navigation }) => {
   const authContext = React.useContext(AuthContext);
-  const { item, dateIn, dateOut, totalDay, dayPrice, vat, price, billid } =
-    route.params;
+  const { item, date, fee, selectedValue } = route.params;
   const router = useRoute();
   const [showGateway, setShowGateway] = useState(false);
   const [prog, setProg] = useState(false);
@@ -88,51 +88,43 @@ const BookingBill = ({ route, navigation }) => {
     <ScrollView>
       <View style={styles.container}>
         <View style={styles.bookingContainer}>
-          <Text style={styles.bookingTitle}>Thông tin dịch vụ</Text>
+          <Text style={styles.bookingTitle}>Thông tin đặt bàn</Text>
           <View style={styles.roomContainer}>
             <Image
-              source={{ uri: item.idHotel.images[0] }}
+              source={{ uri: item.imageCover }}
               style={styles.imageHotel}
             ></Image>
             <View style={styles.roomOverViewWrapper}>
-              <Text style={styles.roomTitle}>{item.idHotel.name}</Text>
-              <Text style={styles.roomDetails}>
-                {item.idHotel.address}, {item.idHotel.city}
-              </Text>
-              <Text style={styles.roomDetails}>1 Phòng ngủ, 1 Phòng tắm</Text>
-              <View style={styles.ratingWrapper}>
-                <AntDesign name="star" size={16} color={"#87BB73"}></AntDesign>
-                <Text style={styles.roomRating}> {item.idHotel.vote}</Text>
-                <Text style={styles.totalFeedback}> (20)</Text>
-              </View>
+              <Text style={styles.roomTitle}>{item.name}</Text>
+              <Text style={styles.roomDetails}>{item.address}</Text>
+              <Text style={styles.roomDetails}>Chuyên món: {item.type}</Text>
             </View>
           </View>
           <View style={styles.dateText}>
             <Text style={styles.dateTitle}>Ngày đến</Text>
-            <Text>{dateIn.toLocaleDateString()}</Text>
+            <Text>{date.toLocaleDateString()}</Text>
           </View>
 
+          {/* <View style={styles.dateText}>
+            <Text style={styles.dateTitle}>Giờ đến</Text>
+            <Text>{hour}</Text>
+          </View> */}
+
           <View style={styles.dateText}>
-            <Text style={styles.dateTitle}>Ngày đi</Text>
-            <Text>{dateOut.toLocaleDateString()}</Text>
+            <Text style={styles.dateTitle}>Số người</Text>
+            <Text>{selectedValue}</Text>
           </View>
         </View>
         <View style={styles.priceDetailContainer}>
           <Text style={styles.bookingTitle}>Hóa đơn thanh toán</Text>
+
           <View style={styles.datePrice}>
-            <Text style={styles.priceSubTitle1}>
-              {item.price}đ x {totalDay + " "}
-              ngày
-            </Text>
-            <Text style={styles.resultDatePrice}>{dayPrice}đ</Text>
-          </View>
-          <View style={styles.datePrice}>
-            <Text style={styles.priceSubTitle}>VAT(10%)</Text>
-            <Text style={styles.resultDatePrice}>{vat}đ</Text>
+            <Text style={styles.priceSubTitle}>Phí đặt bàn</Text>
+            <Text style={styles.subPrice}>{fee} đ</Text>
           </View>
           <View style={styles.datePrice}>
             <Text style={styles.dateTitle}>Tổng tiền(VND)</Text>
-            <Text style={styles.resultDatePrice}>{price}đ</Text>
+            <Text style={styles.resultDatePrice}>{fee} đ</Text>
           </View>
           <TouchableOpacity
             style={styles.signIn}
@@ -186,7 +178,7 @@ const BookingBill = ({ route, navigation }) => {
               source={{
                 uri:
                   "192.168.1.4:3000/payment/" +
-                  (price / 23000).toFixed(2).toString(),
+                  (fee / 23000).toFixed(2).toString(),
               }}
               style={{ flex: 1 }}
               onLoadStart={() => {
@@ -318,7 +310,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
-  resultDatePrice: {},
+  subPrice: {
+    color: "#767676",
+    fontSize:18,
+    fontFamily: "SourceSans-Regular",
+  },
+  resultDatePrice: {
+    color: colors.black,
+    fontSize:20,
+    fontFamily: "SourceSans-SemiBold",
+  },
   signIn: {
     marginTop: 24,
     marginBottom: 12,
@@ -334,9 +335,10 @@ const styles = StyleSheet.create({
     color: colors.white,
   },
   priceSubTitle: {
-    fontSize: 16,
+    marginTop: 16,
+    fontSize: 20,
     fontFamily: "SourceSans-Regular",
-    color: "#767676",
+    color: colors.black,
   },
   priceSubTitle1: {
     marginTop: 12,
@@ -346,4 +348,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BookingBill;
+export default RestaurantBill;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -9,13 +9,13 @@ import {
   Image,
 } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
-import cartItemData from "../assets/data/cartItemData";
 import colors from "../assets/color/colors";
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Entypo from "react-native-vector-icons/Entypo";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { LinearGradient } from "expo-linear-gradient";
+import AuthContext from "../store/context";
 
 const height = Dimensions.get("window").height;
 const width = Dimensions.get("window").width;
@@ -23,45 +23,109 @@ FontAwesome.loadFont();
 Entypo.loadFont();
 Ionicons.loadFont();
 
-const cart = (props) => {
+const CartVehicle = (props) => {
   const item = props.item;
   const navigation = props.navigation;
-  const renderCartItem = ({ item }) => {
+  const authContext = React.useContext(AuthContext);
+  const [isBillLoading, setBillLoading] = useState(true);
+  const [billData, setBillData] = useState([]);
+
+  const getAPI = async () => {
+    const response = await fetch(
+      "https://pbl6-travelapp.herokuapp.com/bill/" + authContext.userId,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authContext.userToken}`,
+        },
+      }
+    );
+    const data = await response.json();
+
+    const data2 = [];
+    const data3 = [];
+    data.forEach(async (element) => {
+      const responseRoom = await fetch(
+        "https://pbl6-travelapp.herokuapp.com/detailVehicle/" + element._id
+      );
+      const dataVehicle = await responseRoom.json();
+
+      data2.push(dataVehicle);
+      const billVehicle = data.map((element, index) => {
+        return {
+          ...element,
+          vehicleBillData: data2[index],
+        };
+      });
+      setBillData(billVehicle);
+    });
+    setBillLoading(false);
+  };
+
+  useEffect(() => {
+    getAPI();
+  }, []);
+
+  const onPressBookButton = async () => {
+    billid = await createBill();
+    console.log(billid);
+    if (billid) {
+      navigation.navigate("BookingBill", {
+        item: item,
+        name: item.location,
+        dateIn,
+        dateOut,
+        totalDay,
+        dayPrice,
+        vat,
+        price,
+        billid,
+      });
+    } else alert("Đăng nhập lại để đặt phòng");
+  };
+
+  const renderHotelItem = ({ item }) => {
+    // console.log(item)
     return (
-      <TouchableOpacity
-      // onPress={() =>
-      //   //   navigation.navigate("FoodDetails", {
-      //   //     item: item,
-      //   //     name: item.location,
-      //   //   })
-      // //   alert("Tra tien de!!")
-      // }
-      >
+      <TouchableOpacity>
         <View style={styles.itemContainer}>
           <View style={styles.infoBill}>
-            <Text style={styles.idService}>Mã đặt dịch vụ: {item.idBill} </Text>
-            <Text style={styles.priceText}>{item.total}đ</Text>
-          </View>
-
-          <View style={styles.infoBill}>
-            <Image source={item.image} style={styles.imageStyle}></Image>
+            {item?.vehicleBillData?.idSelfVehicle?.name && (
+              <Image
+                source={{ uri: item?.vehicleBillData?.imageCover }}
+                style={styles.imageStyle}
+              ></Image>
+            )}
             <View style={styles.infoRoom}>
-              <Text style={styles.serviceText}>Dịch vụ: {item.service}</Text>
-              <Text style={styles.itemTitle}>{item.title}</Text>
-              <Text style={styles.itemName}>{item.address}</Text>
-            </View>
-          </View>
+              {item?.vehicleBillData?.idSelfVehicle?.name && (
+                <Text style={styles.itemTitle}>
+                  {item?.vehicleBillData?.idSelfVehicle?.name}
+                </Text>
+              )}
 
-          <View style={styles.infoBill}>
-            <Text style={styles.idService}>Ngày đên: {item.checkIn}</Text>
-            <Text style={styles.status}>Chưa thanh toán</Text>
+              {item?.vehicleBillData?.type && (
+                <Text style={styles.idService}>
+                  Loại hình: {item?.vehicleBillData?.type}
+                </Text>
+              )}
+              <Text style={styles.idService}>
+                Ngày đến: {item.checkIn.substring(0, 10)}
+              </Text>
+              <View style={styles.rowView}>
+                <Text style={styles.idService}>Tổng tiền: </Text>
+                <Text style={styles.priceText}>{item.total}đ</Text>
+              </View>
+              <Text style={styles.status}>Chưa thanh toán</Text>
+            </View>
           </View>
 
           <View style={styles.datePrice}>
             <TouchableOpacity
               style={styles.signIn}
               onPress={() => {
-                alert("Thanh toán");
+                onPressBookButton();
               }}
             >
               <LinearGradient
@@ -88,9 +152,7 @@ const cart = (props) => {
                 end={{ x: 1, y: 1 }}
                 style={styles.signIn}
               >
-                <Text style={[styles.buttonText, { color: "#fff" }]}>
-                  Hủy đặt trước
-                </Text>
+                <Text style={[styles.buttonText, { color: "#fff" }]}>Hủy</Text>
               </LinearGradient>
             </TouchableOpacity>
           </View>
@@ -99,35 +161,24 @@ const cart = (props) => {
     );
   };
   return (
-    <ScrollView>
-      <SafeAreaView style={styles.container}>
-        <View style={styles.highItemWrapper}>
-          <FlatList
-            data={cartItemData}
-            renderItem={renderCartItem}
-            keyExtractor={(item) => item.idBill}
-            showsHorizontalScrollIndicator={false}
-          />
-        </View>
-        <TouchableOpacity
-          style={styles.payment}
-          onPress={() => {
-            alert("Thanh toán");
-          }}
-        >
-          <LinearGradient
-            colors={["#3FA344", "#8DCA70"]}
-            start={{ x: 0, y: 1 }}
-            end={{ x: 1, y: 1 }}
-            style={styles.payment}
-          >
-            <Text style={[styles.buttonText, { color: "#fff" }]}>
-              Thanh toán tất cả
-            </Text>
-          </LinearGradient>
-        </TouchableOpacity>
-      </SafeAreaView>
-    </ScrollView>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.highItemWrapper}>
+        {isBillLoading ? (
+          <Text>Loading...</Text>
+        ) : (
+          <>
+            <FlatList
+              data={billData.filter(
+                (item) => !item.status && item.service == "selfVehicle"
+              )}
+              renderItem={renderHotelItem}
+              keyExtractor={(item) => item.id}
+              showsHorizontalScrollIndicator={false}
+            />
+          </>
+        )}
+      </View>
+    </SafeAreaView>
   );
 };
 
@@ -159,14 +210,14 @@ const styles = StyleSheet.create({
     padding: 12,
   },
   imageStyle: {
-    width: 100,
-    height: 100,
+    width: "50%",
+    height: "100%",
     borderRadius: 8,
   },
   infoRoom: {
     flexDirection: "column",
     justifyContent: "space-between",
-    padding: 8,
+    paddingHorizontal: 8,
   },
 
   serviceText: {
@@ -175,7 +226,8 @@ const styles = StyleSheet.create({
     color: "black",
   },
   priceText: {
-    fontSize: 18,
+    marginTop: 4,
+    fontSize: 16,
     fontFamily: "SourceSans-SemiBold",
     color: "#87BB73",
   },
@@ -190,17 +242,19 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
   },
   itemTitle: {
-    fontSize: 24,
+    fontSize: 18,
     fontFamily: "SourceSans-SemiBold",
     color: "black",
   },
   idService: {
-    fontSize: 18,
+    marginTop: 4,
+    fontSize: 14,
     fontFamily: "SourceSans-Regular",
     color: "black",
   },
   status: {
-    fontSize: 18,
+    marginTop: 4,
+    fontSize: 14,
     fontFamily: "SourceSans-Regular",
     color: "#FFA660",
   },
@@ -229,12 +283,16 @@ const styles = StyleSheet.create({
   payment: {
     width: width * 0.5,
     paddingTop: 8,
-    paddingBottom:8,
+    paddingBottom: 8,
     justifyContent: "center",
     alignItems: "center",
     alignSelf: "center",
     borderRadius: 8,
   },
+  rowView: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
 });
 
-export default cart;
+export default CartVehicle;
