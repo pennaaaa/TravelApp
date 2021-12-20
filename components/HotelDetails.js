@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -9,7 +9,11 @@ import {
   Image,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import {
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+} from "react-native-gesture-handler";
 import colors from "../assets/color/colors";
 import Entypo from "react-native-vector-icons/Entypo";
 import ReadMore from "react-native-read-more-text";
@@ -18,6 +22,7 @@ import { Rating, AirbnbRating } from "react-native-ratings";
 import { LinearGradient } from "expo-linear-gradient";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { SliderBox } from "react-native-image-slider-box";
+import AuthContext from "../store/context";
 
 FontAwesome.loadFont();
 Entypo.loadFont();
@@ -28,10 +33,94 @@ const width = Dimensions.get("window").width;
 
 const HotelDetails = ({ route, navigation }) => {
   const { item } = route.params;
-
-  const [selectedValue, setSelectedValue] = useState(1);
+  const [vote, setVote] = useState(null);
+  const [comment, setComment] = useState(null);
+  const [rating, setRating] = useState(4);
+  const authContext = React.useContext(AuthContext);
+  useEffect(() => {
+    fetch(
+      "https://pbl6-travelapp.herokuapp.com/feedback/hotel/" + item.idHotel.id
+    )
+      .then((response) => response.json())
+      .then((responseJson) => setVote(responseJson))
+      .catch((error) => console.error(error));
+  }, []);
+  const ratingCompleted = (rating) => {
+    setRating(rating);
+  };
+  const onCommentButton = async () => {
+    try {
+      const data = {
+        service: "hotel",
+        comment: comment,
+        vote: rating,
+        idUser: authContext.userId,
+        idHotel: item.idHotel.id,
+      };
+      Promise.all(
+        await fetch(
+          "https://pbl6-travelapp.herokuapp.com/feedback/hotel/" +
+            item.idHotel.id,
+          {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${authContext.userToken}`,
+            },
+            body: JSON.stringify(data),
+          }
+        )
+          .then((response) => response.json())
+          .then((responseJson) => {
+            console.log(responseJson);
+          })
+          .catch((error) => {
+            console.error(error);
+          })
+      );
+    } catch (e) {
+      console.log(e);
+    }
+    setComment("");
+    setRating(4);
+    fetch(
+      "https://pbl6-travelapp.herokuapp.com/feedback/hotel/" + item.idHotel.id
+    )
+      .then((response) => response.json())
+      .then((responseJson) => setVote(responseJson))
+      .catch((error) => console.error(error));
+  };
+  const renderVoteDataItem = ({ item }) => {
+    return (
+      <View style={styles.feedbackWrapper}>
+        <View style={styles.userContainer}>
+          <Image
+            source={require("../assets/image/avata.png")}
+            style={styles.avata}
+          />
+          <View style={styles.userInfo}>
+            <View style={styles.userRating}>
+              <Text style={styles.userName}>{item.idUser.name}</Text>
+              <Rating
+                type="star"
+                imageSize={20}
+                fractions="{1}"
+                readonly
+                startingValue={item.vote}
+                style={{ marginLeft: 12 }}
+              />
+            </View>
+          </View>
+        </View>
+        <View>
+          <Text style={styles.textDescription}>{item.comment}</Text>
+        </View>
+      </View>
+    );
+  };
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <ScrollView>
         <View>
           <SliderBox
@@ -45,7 +134,6 @@ const HotelDetails = ({ route, navigation }) => {
             <View>
               <View style={styles.hotelTitle}>
                 <Text style={styles.itemTitle}>{item.idHotel.name}</Text>
-
                 <Rating
                   imageSize={20}
                   fractions="{1}"
@@ -128,76 +216,68 @@ const HotelDetails = ({ route, navigation }) => {
                 </Text>
               </ReadMore>
             </View>
-
             <View style={styles.subInfoWarpper}>
-              <Text style={styles.subTitle}>Đánh giá</Text>
-
-              <View style={styles.feedbackWrapper}>
-                <View style={styles.userContainer}>
-                  <Image
-                    source={require("../assets/image/avata1.png")}
-                    style={styles.avata}
-                  />
-                  <View style={styles.userInfo}>
-                    <View style={styles.userRating}>
-                      <Text style={styles.userName}>Văn Ngọc Đạt</Text>
-                      <Rating
-                        type="star"
-                        imageSize={20}
-                        fractions="{1}"
-                        readonly
-                        startingValue={item.vote}
-                        style={{ marginLeft: 12 }}
-                      />
-                    </View>
-                    <Text style={styles.dateFeedback}>17 Otc 2021</Text>
-                  </View>
-                </View>
-
-                <View>
-                  <Text style={styles.textDescription}>
-                    Phòng rất đẹp, tiện nghi. View nhìn ra biển mang lại cảm
-                    giác tươi mát. Một nơi tuyệt vời để nghỉ ngơi!
-                  </Text>
-                </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <Text style={styles.subTitle}>Đánh giá</Text>
+                <TouchableOpacity
+                  style={[styles.signIn, { height: 40, width: 100 }]}
+                  onPress={() => onCommentButton()}
+                >
+                  <LinearGradient
+                    colors={["#3FA344", "#8DCA70"]}
+                    start={{ x: 0, y: 1 }}
+                    end={{ x: 1, y: 1 }}
+                    style={[styles.signIn, { height: 40, width: 100 }]}
+                  >
+                    <Text
+                      style={[
+                        styles.buttonText,
+                        { fontSize: 16, color: "#fff" },
+                      ]}
+                    >
+                      Bình luận
+                    </Text>
+                  </LinearGradient>
+                </TouchableOpacity>
               </View>
-
-              <View style={styles.feedbackWrapper}>
-                <View style={styles.userContainer}>
-                  <Image
-                    source={require("../assets/image/avata2.png")}
-                    style={styles.avata}
-                  />
-                  <View style={styles.userInfo}>
-                    <View style={styles.userRating}>
-                      <Text style={styles.userName}>Trần Duy Anh Tú</Text>
-                      <Rating
-                        type="star"
-                        imageSize={20}
-                        fractions="{1}"
-                        readonly
-                        startingValue={item.vote}
-                        style={{ marginLeft: 12 }}
-                      />
-                    </View>
-                    <Text style={styles.dateFeedback}>17 Otc 2021</Text>
-                  </View>
-                </View>
-
-                <View>
-                  <Text style={styles.textDescription}>
-                    Phòng rất đẹp, tiện nghi. View nhìn ra biển mang lại cảm
-                    giác tươi mát. Một nơi tuyệt vời để nghỉ ngơi!
-                  </Text>
-                </View>
+              <View style={styles.action}>
+                <FontAwesome name="commenting-o" color={"green"} size={20} />
+                <TextInput
+                  multiline={true}
+                  numberOfLines={4}
+                  value={comment}
+                  placeholder="Nhập đánh giá của bạn"
+                  onChangeText={(val) => setComment(val)}
+                  style={styles.textInput}
+                />
+                <Rating
+                  imageSize={20}
+                  fractions={0}
+                  startingValue={rating}
+                  onFinishRating={ratingCompleted}
+                />
               </View>
+            </View>
+            <View style={styles.subInfoWarpper}>
+              <Text style={styles.subTitle}>Xem đánh giá</Text>
+              <FlatList
+                data={vote}
+                renderItem={renderVoteDataItem}
+                keyExtractor={(item) => item.id}
+              />
             </View>
           </View>
         </View>
       </ScrollView>
       <View style={styles.footer}>
         <View style={styles.roomPrice}>
-          <Text style={styles.priceText}>{item.price} $</Text>
+          <Text style={styles.priceText}>{item.price}$</Text>
           <Text style={styles.perdayText}>/ngày</Text>
         </View>
         <TouchableOpacity
@@ -219,7 +299,7 @@ const HotelDetails = ({ route, navigation }) => {
           </LinearGradient>
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -325,8 +405,8 @@ const styles = StyleSheet.create({
   },
   avata: {
     // resizeMode: "contain",
-    height: 60,
-    width: 60,
+    height: 40,
+    width: 40,
     borderRadius: 60,
   },
   userName: {
@@ -338,7 +418,6 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
   },
   userInfo: {
-    height: 60,
     flexDirection: "column",
     padding: 5,
   },
@@ -353,6 +432,20 @@ const styles = StyleSheet.create({
   feedbackWrapper: {
     paddingBottom: 10,
     paddingTop: 10,
+  },
+  textInput: {
+    flex: 1,
+    paddingLeft: 10,
+    color: "#05375a",
+    fontSize: 16,
+  },
+  action: {
+    flexDirection: "row",
+    marginTop: 10,
+    paddingBottom: 5,
+    borderBottomWidth: 0.2,
+    borderBottomColor: "gray",
+    justifyContent: "center",
   },
 });
 
