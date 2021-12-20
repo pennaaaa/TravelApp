@@ -61,11 +61,6 @@ const Home = ({ navigation }) => {
         .then((json) => setVehicleData(json))
         .catch((error) => console.error(error))
         .finally(() => setVehicleLoading(false));
-      //   fetch("https://pbl6-travelapp.herokuapp.com/hotel/" + item.idHotel)
-      //     .then((response) => response.json())
-      //     .then((json) => setHotelData(json))
-      //     .catch((error) => console.error(error))
-      //     .finally(() => setHotelLoading(false));
     }, 0);
   }, []);
   const renderRoomDataItem = ({ item }) => {

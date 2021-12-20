@@ -117,22 +117,6 @@ const SignIn = ({ navigation }) => {
               Continue without sign in
             </Text>
           </TouchableOpacity>
-          <Text style={{ marginTop: 15 }}> Login with </Text>
-          <View style={styles.anotherButton}>
-            <Image
-              source={require("../assets/image/fbLogo.png")}
-              style={styles.anotherLogin}
-            />
-            <Image
-              source={require("../assets/image/ggLogo.png")}
-              style={{
-                resizeMode: "contain",
-                width: 34,
-                height: 34,
-                borderRadius: 19,
-              }}
-            />
-          </View>
         </View>
       </View>
     </SafeAreaView>

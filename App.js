@@ -167,11 +167,9 @@ const App = () => {
           })
             .then((response) => response.json())
             .then((responseJson) => {
-              console.log(responseJson);
               if (responseJson.tokens != null) {
                 userToken = responseJson.tokens;
                 user = responseJson.user;
-                console.log(responseJson);
                 AsyncStorage.setItem("userToken", userToken.access.token);
                 AsyncStorage.setItem("userId", user.id);
                 AsyncStorage.setItem("userEmail", user.email);
@@ -236,7 +234,6 @@ const App = () => {
         await AsyncStorage.removeItem("userINum");
         await AsyncStorage.removeItem("Gender");
         await AsyncStorage.removeItem("userRefreshToken");
-        // console.log(loginState.userRefreshToken);
       } catch (e) {
         console.log(e);
       }
@@ -265,14 +262,12 @@ const App = () => {
         })
           .then((response) => response.json())
           .then((responseJson) => {
-            console.log(responseJson);
             if (responseJson.code)
               if (responseJson.code != 201) {
                 alert(responseJson.message);
               }
             userToken = responseJson.tokens;
             user = responseJson.user;
-            console.log(responseJson);
             AsyncStorage.setItem("userToken", userToken.access.token);
             AsyncStorage.setItem("userId", user.id);
             AsyncStorage.setItem("userEmail", user.email);
@@ -430,14 +425,15 @@ const App = () => {
                 headerBackTitle: "",
                 headerTitle: "Hóa đơn thanh toán",
               })}
-            /><Stack.Screen
-            name="VehicleBill"
-            component={VehicleBill}
-            options={({ route }) => ({
-              headerBackTitle: "",
-              headerTitle: "Hóa đơn thanh toán",
-            })}
-          />
+            />
+            <Stack.Screen
+              name="VehicleBill"
+              component={VehicleBill}
+              options={({ route }) => ({
+                headerBackTitle: "",
+                headerTitle: "Hóa đơn thanh toán",
+              })}
+            />
             <Stack.Screen
               name="VehicleDetails"
               component={VehicleDetails}

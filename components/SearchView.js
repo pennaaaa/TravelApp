@@ -11,12 +11,11 @@ import {
 import SearchBar from "react-native-dynamic-search-bar";
 import { FlatList } from "react-native-gesture-handler";
 import colors from "../assets/color/colors";
-import hotelData from "../assets/data/hotelData";
-import kindSearch from "../assets/data/kindSearch";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Entypo from "react-native-vector-icons/Entypo";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Rating } from "react-native-elements";
+import { Menu, MenuItem, MenuDivider } from "react-native-material-menu";
 
 FontAwesome.loadFont();
 Entypo.loadFont();
@@ -25,7 +24,9 @@ const height = Dimensions.get("window").height;
 const width = Dimensions.get("window").width;
 
 const SearchView = ({ navigation }) => {
-  const [data, setData] = useState();
+  const [dataRaw, setDataRaw] = useState(null);
+  const [data, setData] = useState(null);
+  const [visible, setVisible] = useState(false);
   const renderHotelDataItem = ({ item }) => {
     return (
       <TouchableOpacity
@@ -105,59 +106,81 @@ const SearchView = ({ navigation }) => {
       </TouchableOpacity>
     );
   };
-  const renderKindSearch = ({ item }) => {
-    return (
-      <TouchableOpacity onPress={() => onKindSearchClicked(item)}>
-        <View style={styles.kindSearchView}>
-          <Text style={styles.kindSearchText}>{item.title}</Text>
-        </View>
-      </TouchableOpacity>
-    );
-  };
-  const onKindSearchClicked = (item) => {
-    fetch("https://pbl6-travelapp.herokuapp.com/room?city=" + item.title)
+  if (dataRaw == null) {
+    fetch("https://pbl6-travelapp.herokuapp.com/room?")
       .then((response) => response.json())
-      .then((json) => setData(json))
-      .catch((error) => console.error(error))
-      .finally(() => setHotelLoading(false));
-  };
+      .then((json) => {
+        setDataRaw(json);
+        setData(json);
+        console.log(json);
+      })
+      .catch((error) => console.error(error));
+  }
   const onChangeText = (text) => {
-    const newData = hotelData.filter((item) => {
-      const itemData = `${item.title.toUpperCase()}   
-      ${item.location.toUpperCase()}`;
+    const newData = dataRaw.filter((item) => {
+      const itemData = `${item.idHotel.address.toUpperCase()}   
+      ${item.idHotel.name.toUpperCase()}`;
       const textData = text.toUpperCase();
       return itemData.indexOf(textData) > -1;
     });
     setData(newData);
   };
+  const onSelectMenuItem = (kind) => {
+    fetch("https://pbl6-travelapp.herokuapp.com/room?sort=" + kind)
+      .then((response) => response.json())
+      .then((json) => {
+        setDataRaw(json), setData(json);
+      })
+      .catch((error) => console.error(error));
+    setVisible(false);
+  };
   return (
     <SafeAreaView style={{ backgroundColor: colors.white }}>
-      <SearchBar
+      <View
         style={{
-          height: 68,
-          width: 344,
-          borderRadius: 10,
-          marginTop: 10,
+          marginTop: 5,
+          marginLeft: 20,
+          flexDirection: "row",
+          alignItems: "center",
         }}
-        fontSize={20}
-        searchIconImageStyle={{ height: 25, width: 18 }}
-        clearIconImageStyle={{ paddingRight: 40 }}
-        placeholder="Bạn sắp đến đâu?"
-        placeholderTextColor="#919191"
-        onChangeText={(text) => onChangeText(text)}
-        autoFocus
-      />
+      >
+        <SearchBar
+          style={{
+            height: 50,
+            borderRadius: 10,
+            width: 310,
+            marginRight: 15,
+          }}
+          fontSize={20}
+          searchIconImageStyle={{ height: 25, width: 18 }}
+          clearIconImageStyle={{ paddingRight: 40 }}
+          placeholder="Bạn sắp đến đâu?"
+          placeholderTextColor="#919191"
+          onChangeText={(text) => onChangeText(text)}
+          autoFocus
+        />
+        <Menu
+          visible={visible}
+          anchor={
+            <FontAwesome
+              name="filter"
+              size={30}
+              color={"#87BB73"}
+              onPress={() => setVisible(true)}
+            />
+          }
+          onRequestClose={() => setVisible(false)}
+        >
+          <MenuItem onPress={() => onSelectMenuItem("price-asc")}>
+            Giá tăng dần
+          </MenuItem>
+          <MenuItem onPress={() => onSelectMenuItem("price-desc")}>
+            Giá giảm dần
+          </MenuItem>
+        </Menu>
+      </View>
       <View style={styles.resultView}>
         <Text style={styles.resultText}>Kết quả tìm kiếm</Text>
-        <View style={styles.kindSearch}>
-          <FlatList
-            data={kindSearch}
-            renderItem={renderKindSearch}
-            keyExtractor={(item) => item.id}
-            showsHorizontalScrollIndicator={false}
-            horizontal
-          />
-        </View>
       </View>
       <View style={styles.highItemWrapper}>
         <FlatList
