@@ -30,8 +30,7 @@ Feather.loadFont();
 
 const BookingBill = ({ route, navigation }) => {
   const authContext = React.useContext(AuthContext);
-  const { item, dateIn, dateOut, totalDay, dayPrice, vat, price, billid } =
-    route.params;
+  const { item, checkIn, checkOut, price, billid } = route.params;
   const router = useRoute();
   const [showGateway, setShowGateway] = useState(false);
   const [prog, setProg] = useState(false);
@@ -92,12 +91,13 @@ const BookingBill = ({ route, navigation }) => {
           <View style={styles.roomContainer}>
             <Image
               source={{ uri: item.idHotel.images[0] }}
+              // source={{ uri: item.images[0] }}
               style={styles.imageHotel}
             ></Image>
             <View style={styles.roomOverViewWrapper}>
               <Text style={styles.roomTitle}>{item.idHotel.name}</Text>
               <Text style={styles.roomDetails}>
-                {item.idHotel.address}, {item.idHotel.city}
+                {item.idHotel.address},{item.idHotel.city}
               </Text>
               <Text style={styles.roomDetails}>1 Phòng ngủ, 1 Phòng tắm</Text>
               <View style={styles.ratingWrapper}>
@@ -109,30 +109,36 @@ const BookingBill = ({ route, navigation }) => {
           </View>
           <View style={styles.dateText}>
             <Text style={styles.dateTitle}>Ngày đến</Text>
-            <Text>{dateIn.toLocaleDateString()}</Text>
+            <Text>
+              {/* {dateIn.toLocaleDateString()} */}
+              {checkIn}
+            </Text>
           </View>
 
           <View style={styles.dateText}>
             <Text style={styles.dateTitle}>Ngày đi</Text>
-            <Text>{dateOut.toLocaleDateString()}</Text>
+            <Text>
+              {/* {dateOut.toLocaleDateString()} */}
+              {checkOut}
+            </Text>
           </View>
         </View>
         <View style={styles.priceDetailContainer}>
           <Text style={styles.bookingTitle}>Hóa đơn thanh toán</Text>
-          <View style={styles.datePrice}>
+          {/* <View style={styles.datePrice}>
             <Text style={styles.priceSubTitle1}>
               {item.price}đ x {totalDay + " "}
               ngày
             </Text>
-            <Text style={styles.resultDatePrice}>{dayPrice}đ</Text>
-          </View>
-          <View style={styles.datePrice}>
+            <Text style={styles.resultDatePrice}>{dayPrice} $</Text>
+          </View> */}
+          {/* <View style={styles.datePrice}>
             <Text style={styles.priceSubTitle}>VAT(10%)</Text>
-            <Text style={styles.resultDatePrice}>{vat}đ</Text>
-          </View>
+            <Text style={styles.resultDatePrice}>{vat} $</Text>
+          </View> */}
           <View style={styles.datePrice}>
             <Text style={styles.dateTitle}>Tổng tiền(VND)</Text>
-            <Text style={styles.resultDatePrice}>{price}đ</Text>
+            <Text style={styles.resultDatePrice}>{price} $</Text>
           </View>
           <TouchableOpacity
             style={styles.signIn}

@@ -15,6 +15,7 @@ import RNPPickerSelect from "react-native-picker-select";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { LinearGradient } from "expo-linear-gradient";
 import AuthContext from "../store/context";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 AntDesign.loadFont();
 const Listpeople = Array.from({ length: 10 }, (_, i) => i + 1);
@@ -24,43 +25,37 @@ const width = Dimensions.get("window").width;
 const FoodBooking = ({ route, navigation }) => {
   const { item } = route.params;
   const [date, setDate] = useState(new Date());
-  const [hour, setHour] = useState(new Date().toLocaleTimeString().slice(0, 5));
-  const [mode, setMode] = useState("date");
-  const [show, setShow] = useState(false);
   const authContext = React.useContext(AuthContext);
 
   const [selectedValue, setSelectedValue] = useState(1);
 
   //Phí đặt bàn
-  const fee = 100000;
+  const fee = item.fee;
 
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setShow(Platform.OS === "ios");
-    setDate(currentDate);
-    setHour(currentDate.toLocaleTimeString().slice(0, 5));
-  };
-
-  const showMode = (currentMode) => {
-    setShow(true);
-    setMode(currentMode);
-  };
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
   const showDatepicker = () => {
-    showMode("date");
+    setDatePickerVisibility(true);
   };
 
-  const showTimepicker = () => {
-    showMode("time");
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirm = (date) => {
+    setDate(date);
+    hideDatePicker();
   };
 
   const createBill = async () => {
+    console.log(date+"----")
     let returnn = null;
     try {
       const data = {
         service: "restaurant",
         restaurant: item._id,
         total: fee,
+        name: item.name,
         chairs: selectedValue,
         checkIn: date,
         guest: authContext.userId,
@@ -141,18 +136,12 @@ const FoodBooking = ({ route, navigation }) => {
               ></AntDesign>
             </TouchableOpacity>
           </View>
-
-          {/* <Text style={styles.dateTitle}>Giờ đến</Text>
-          <View style={styles.dateText}>
-            <Text>{hour}</Text>
-            <TouchableOpacity onPress={showTimepicker}>
-              <AntDesign
-                name="clockcircleo"
-                size={24}
-                color={"#87BB73"}
-              ></AntDesign>
-            </TouchableOpacity>
-          </View> */}
+          <DateTimePickerModal
+            isVisible={isDatePickerVisible}
+            mode="date"
+            onConfirm={handleConfirm}
+            onCancel={hideDatePicker}
+          />
 
           <View style={styles.peopleSelect}>
             <Text style={styles.dateTitle}>Số người</Text>
@@ -211,7 +200,7 @@ const FoodBooking = ({ route, navigation }) => {
           </TouchableOpacity>
         </View>
 
-        {show && (
+        {/* {show && (
           <DateTimePicker
             locale
             style={styles.dateTimeStyle}
@@ -223,7 +212,7 @@ const FoodBooking = ({ route, navigation }) => {
             onChange={onChange}
             minimumDate={new Date()}
           />
-        )}
+        )} */}
       </View>
     </ScrollView>
   );

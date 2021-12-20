@@ -27,11 +27,17 @@ const CartHotel = (props) => {
   const item = props.item;
   const navigation = props.navigation;
   const authContext = React.useContext(AuthContext);
-  const [isBillLoading, setBillLoading] = useState(true);
+  const [isBillLoading, setBillLoading] = useState(false);
+  const [isRoomLoading, setRoomLoading] = useState(false);
   const [billData, setBillData] = useState([]);
-  const [roomData, setRoomData] = useState([]);
-
+  const [checkIn, setCheckIn] = useState("");
+  const [checkOut, setCheckOut] = useState("");
+  const [vat, setVat] = useState(0);
+  const [price, setPrice] = useState(0);
+  const [billid, setBillId] = useState("");
+  const [obj, setObj] = useState({});
   const getAPI = async () => {
+    setBillLoading(true);
     const response = await fetch(
       "https://pbl6-travelapp.herokuapp.com/bill/" + authContext.userId,
       {
@@ -44,10 +50,11 @@ const CartHotel = (props) => {
       }
     );
     const data = await response.json();
+    console.log(data);
 
     const data2 = [];
-    const data3 = [];
     data.forEach(async (element) => {
+      setRoomLoading(true);
       const responseRoom = await fetch(
         "https://pbl6-travelapp.herokuapp.com/room/" + element.room
       );
@@ -61,47 +68,57 @@ const CartHotel = (props) => {
         };
       });
       setBillData(billRoom);
+      setRoomLoading(false);
     });
-
-    // data.forEach(async (element) => {
-    //   const responseRestaurant = await fetch(
-    //     "https://pbl6-travelapp.herokuapp.com/restaurant/" + element.restaurant
-    //   );
-    //   const dataRestaurant = await responseRestaurant.json();
-
-    //   data3.push(dataRestaurant);
-    //   const billRestaurant = data.map((element, index) => {
-    //     return {
-    //       ...element,
-    //       resBillData: data3[index],
-    //     };
-    //   });
-    //   setBillData(billRestaurant);
-    // });
 
     setBillLoading(false);
   };
+  const deleteAPI = async (item) => {
+    console.log("-------------------------");
+    console.log(
+      "https://pbl6-travelapp.herokuapp.com/bill/" +
+        authContext.userId +
+        "/" +
+        item.id
+    );
+    console.log("-------------------------");
 
+    fetch(
+      "https://pbl6-travelapp.herokuapp.com/bill/" +
+        authContext.userId +
+        "/" +
+        item.id,
+      {
+        method: "DELETE",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authContext.userToken}`,
+        },
+      }
+    )
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log(responseJson);
+      });
+
+    console.log("HUY 2");
+    getAPI();
+  };
   useEffect(() => {
     getAPI();
   }, []);
 
-  const onPressBookButton = async () => {
-    billid = await createBill();
-    console.log(billid);
-    if (billid) {
-      navigation.navigate("BookingBill", {
-        item: item,
-        name: item.location,
-        dateIn,
-        dateOut,
-        totalDay,
-        dayPrice,
-        vat,
-        price,
-        billid,
-      });
-    } else alert("Đăng nhập lại để đặt phòng");
+  const onPressBookButton = (item) => {
+    console.log("-------------");
+    console.log(item);
+    navigation.navigate("BookingBill", {
+      item: item.roomBillData,
+      checkIn: item.checkIn.substring(0, 10),
+      checkOut: item.checkOut.substring(0, 10),
+      price: item.total,
+      billid: item.id,
+    });
   };
 
   const renderHotelItem = ({ item }) => {
@@ -133,7 +150,7 @@ const CartHotel = (props) => {
               </Text>
               <View style={styles.rowView}>
                 <Text style={styles.idService}>Tổng tiền: </Text>
-                <Text style={styles.priceText}>{item.total}đ</Text>
+                <Text style={styles.priceText}>{item.total} $</Text>
               </View>
               <Text style={styles.status}>Chưa thanh toán</Text>
             </View>
@@ -143,7 +160,13 @@ const CartHotel = (props) => {
             <TouchableOpacity
               style={styles.signIn}
               onPress={() => {
-                onPressBookButton();
+                // setCheckIn(item.checkIn.substring(0, 10));
+                // setCheckOut(item.checkOut.substring(0, 10));
+                // setVat(item.additionalFee);
+                // setPrice(item.total);
+                // setBillId(item.id);
+                // setObj(item.roomBillData);
+                onPressBookButton(item);
               }}
             >
               <LinearGradient
@@ -160,9 +183,7 @@ const CartHotel = (props) => {
 
             <TouchableOpacity
               style={styles.signIn}
-              onPress={() => {
-                alert("Hủy");
-              }}
+              onPress={() => deleteAPI(item)}
             >
               <LinearGradient
                 colors={["#3FA344", "#8DCA70"]}
@@ -181,7 +202,7 @@ const CartHotel = (props) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.highItemWrapper}>
-        {isBillLoading ? (
+        {isBillLoading || isRoomLoading ? (
           <Text>Loading...</Text>
         ) : (
           <>

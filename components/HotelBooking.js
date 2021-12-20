@@ -9,12 +9,12 @@ import {
   Image,
 } from "react-native";
 import colors from "../assets/color/colors";
-import DateTimePicker from "@react-native-community/datetimepicker";
 import { LinearGradient } from "expo-linear-gradient";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { ScrollView } from "react-native-gesture-handler";
 import AuthContext from "../store/context";
 import { useRoute } from "@react-navigation/native";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 const height = Dimensions.get("window").height;
 const width = Dimensions.get("window").width;
@@ -23,94 +23,150 @@ AntDesign.loadFont();
 const HotelBooking = ({ route, navigation }) => {
   const { item } = route.params;
   const router = useRoute();
+
+  const authContext = React.useContext(AuthContext);
+  const [checkIn, setCheckIn] = useState("");
+  const [checkOut, setCheckOut] = useState("");
+
   const [dateIn, setDateIn] = useState(new Date());
   const [dateOut, setDateOut] = useState(new Date());
-  const [mode, setMode] = useState("date");
   const pricePerDay = item.price;
   const [price, setPrice] = useState(0);
   const [dayPrice, setDayPrice] = useState(0);
   const [vat, setVat] = useState(0);
   const [totalDay, setTotalDay] = useState(0);
-  const [showIn, setShowIn] = useState(false);
-  const [showOut, setShowOut] = useState(false);
-  const authContext = React.useContext(AuthContext);
+  const [mode, setMode] = useState("date");
 
-  const onChangeIn = (event, selectedDate) => {
-    let currentDate = selectedDate || dateIn;
-    setShowIn(Platform.OS === "ios");
-    setDateIn(currentDate);
-    setDateOut(currentDate);
+  const [chosenMode, setChosenMode] = useState(null);
 
-    setTotalDay(
-      (dateOut.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24)
-    );
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
-    setDayPrice(
-      pricePerDay *
-        ((dateOut.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24))
-    );
-
-    setVat(
-      pricePerDay *
-        ((dateOut.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24)) *
-        0.1
-    );
-
-    setPrice(
-      (
-        pricePerDay *
-        ((dateOut.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24)) *
-        1.1
-      ).toFixed()
-    );
-  };
-
-  const onChangeOut = (event, selectedDate) => {
-    const currentDate = selectedDate || dateOut;
-    setShowOut(Platform.OS === "ios");
-    setDateOut(currentDate);
-
-    setTotalDay(
-      (currentDate.getTime() - dateIn.getTime()) / (1000 * 60 * 60 * 24)
-    );
-
-    setDayPrice(
-      pricePerDay *
-        ((currentDate.getTime() - dateIn.getTime()) / (1000 * 60 * 60 * 24))
-    );
-
-    setVat(
-      pricePerDay *
-        ((currentDate.getTime() - dateIn.getTime()) / (1000 * 60 * 60 * 24)) *
-        0.1
-    );
-
-    setPrice(
-      (
-        pricePerDay *
-        ((currentDate.getTime() - dateIn.getTime()) / (1000 * 60 * 60 * 24)) *
-        1.1
-      ).toFixed()
-    );
-  };
-
-  const showModeIn = (currentMode) => {
-    setShowIn(true);
+  const showMode = (currentMode) => {
+    setDatePickerVisibility(true);
     setMode(currentMode);
   };
 
-  const showModeOut = (currentMode) => {
-    setShowOut(true);
-    setMode(currentMode);
+  const showDatePicker = () => {
+    showMode("date");
   };
 
-  const showDatepickerIn = () => {
-    showModeIn("dateIn");
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
   };
 
-  const showDatepickerOut = () => {
-    showModeOut("dateOut");
+  const handleConfirm = (date) => {
+    hideDatePicker();
+    if (chosenMode) {
+      setDateIn(date);
+      setTotalDay((dateOut.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
+
+      setDayPrice(
+        pricePerDay *
+          ((dateOut.getTime() - date.getTime()) / (1000 * 60 * 60 * 24))
+      );
+
+      setVat(
+        pricePerDay *
+          ((dateOut.getTime() - date.getTime()) / (1000 * 60 * 60 * 24)) *
+          0.1
+      );
+
+      setPrice(
+        (
+          pricePerDay *
+          ((dateOut.getTime() - date.getTime()) / (1000 * 60 * 60 * 24)) *
+          1.1
+        ).toFixed()
+      );
+
+      setCheckIn(date.toLocaleDateString());
+    } else {
+      setDateOut(date);
+      setTotalDay((date.getTime() - dateIn.getTime()) / (1000 * 60 * 60 * 24));
+
+      setDayPrice(
+        pricePerDay *
+          ((date.getTime() - dateIn.getTime()) / (1000 * 60 * 60 * 24))
+      );
+
+      setVat(
+        pricePerDay *
+          ((date.getTime() - dateIn.getTime()) / (1000 * 60 * 60 * 24)) *
+          0.1
+      );
+
+      setPrice(
+        (
+          pricePerDay *
+          ((date.getTime() - dateIn.getTime()) / (1000 * 60 * 60 * 24)) *
+          1.1
+        ).toFixed()
+      );
+      setCheckOut(date.toLocaleDateString());
+    }
   };
+
+  // const onChangeIn = (event, selectedDate) => {
+  //   let currentDate = selectedDate || dateIn;
+  //   setShowIn(Platform.OS === "ios");
+  //   setDateIn(currentDate);
+  //   setDateOut(currentDate);
+
+  //   setTotalDay(
+  //     (dateOut.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24)
+  //   );
+
+  //   setDayPrice(
+  //     pricePerDay *
+  //       ((dateOut.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24))
+  //   );
+
+  //   setVat(
+  //     pricePerDay *
+  //       ((dateOut.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24)) *
+  //       0.1
+  //   );
+
+  //   setPrice(
+  //     (
+  //       pricePerDay *
+  //       ((dateOut.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24)) *
+  //       1.1
+  //     ).toFixed()
+  //   );
+
+  //   setCheckIn(currentDate.toLocaleDateString());
+  // };
+
+  // const onChangeOut = (event, selectedDate) => {
+  //   const currentDate = selectedDate || dateOut;
+  //   setShowOut(Platform.OS === "ios");
+  //   setDateOut(currentDate);
+
+  //   setTotalDay(
+  //     (currentDate.getTime() - dateIn.getTime()) / (1000 * 60 * 60 * 24)
+  //   );
+
+  //   setDayPrice(
+  //     pricePerDay *
+  //       ((currentDate.getTime() - dateIn.getTime()) / (1000 * 60 * 60 * 24))
+  //   );
+
+  //   setVat(
+  //     pricePerDay *
+  //       ((currentDate.getTime() - dateIn.getTime()) / (1000 * 60 * 60 * 24)) *
+  //       0.1
+  //   );
+
+  //   setPrice(
+  //     (
+  //       pricePerDay *
+  //       ((currentDate.getTime() - dateIn.getTime()) / (1000 * 60 * 60 * 24)) *
+  //       1.1
+  //     ).toFixed()
+  //   );
+  //   setCheckOut(currentDate.toLocaleDateString());
+  // };
 
   const createBill = async () => {
     let returnn = null;
@@ -118,6 +174,7 @@ const HotelBooking = ({ route, navigation }) => {
       const data = {
         hotel: item.idHotel.id,
         service: "hotel",
+        name: item.idHotel.name,
         additionalFee: vat,
         total: price,
         checkIn: dateIn,
@@ -157,19 +214,15 @@ const HotelBooking = ({ route, navigation }) => {
   };
 
   const onPressBookButton = async () => {
+    console.log("ngay den: " + checkIn);
     billid = await createBill();
     console.log(billid);
     if (billid) {
       navigation.navigate("BookingBill", {
         item: item,
-        name: item.location,
-        dateIn,
-        dateOut,
-        totalDay,
-        dayPrice,
-        vat,
+        checkIn,
+        checkOut,
         price,
-        billid,
       });
     } else alert("Đăng nhập lại để đặt phòng");
   };
@@ -201,53 +254,41 @@ const HotelBooking = ({ route, navigation }) => {
           <Text style={styles.dateTitle}>Ngày đến</Text>
           <View style={styles.dateText}>
             <Text>{dateIn.toLocaleDateString()}</Text>
-            <TouchableOpacity onPress={showDatepickerIn}>
+            <TouchableOpacity
+              onPress={() => {
+                setChosenMode(true);
+                showDatePicker();
+              }}
+            >
               <AntDesign
                 name="calendar"
                 size={24}
                 color={"#87BB73"}
               ></AntDesign>
             </TouchableOpacity>
-
-            {showIn && (
-              <DateTimePicker
-                locale
-                style={styles.dateTimeStyle}
-                testID="dateTimePickerIn"
-                value={(dateIn, dateOut)}
-                mode={mode}
-                is24Hour={true}
-                display="default"
-                onChange={onChangeIn}
-                minimumDate={new Date()}
-              />
-            )}
           </View>
           <Text style={styles.dateTitle}>Ngày đi</Text>
           <View style={styles.dateText}>
             <Text>{dateOut.toLocaleDateString()}</Text>
-            <TouchableOpacity onPress={showDatepickerOut}>
+            <TouchableOpacity
+              onPress={() => {
+                setChosenMode(false);
+                showDatePicker();
+              }}
+            >
               <AntDesign
                 name="calendar"
                 size={24}
                 color={"#87BB73"}
               ></AntDesign>
             </TouchableOpacity>
-
-            {showOut && (
-              <DateTimePicker
-                locale
-                style={styles.dateTimeStyle}
-                testID="dateTimePickerOut"
-                value={dateOut}
-                mode={mode}
-                is24Hour={true}
-                display="default"
-                onChange={onChangeOut}
-                minimumDate={dateIn}
-              />
-            )}
           </View>
+          <DateTimePickerModal
+            isVisible={isDatePickerVisible}
+            mode="date"
+            onConfirm={handleConfirm}
+            onCancel={hideDatePicker}
+          />
         </View>
 
         <View style={styles.priceDetailContainer}>
@@ -256,19 +297,21 @@ const HotelBooking = ({ route, navigation }) => {
             <Text style={styles.priceSubTitle1}>
               {item.price}đ x {totalDay} ngày
             </Text>
-            <Text style={styles.resultDatePrice}>{dayPrice}đ</Text>
+            <Text style={styles.resultDatePrice}>{dayPrice} $</Text>
           </View>
           <View style={styles.datePrice}>
             <Text style={styles.priceSubTitle}>VAT(10%)</Text>
-            <Text style={styles.resultDatePrice}>{vat}đ</Text>
+            <Text style={styles.resultDatePrice}>{vat} $</Text>
           </View>
           <View style={styles.datePrice}>
             <Text style={styles.dateTitle}>Tổng tiền(VND)</Text>
-            <Text style={styles.resultDatePrice}>{price}đ</Text>
+            <Text style={styles.resultDatePrice}>{price} $</Text>
           </View>
           <TouchableOpacity
             style={styles.signIn}
-            onPress={() => onPressBookButton(item)}
+            onPress={() => {
+              onPressBookButton(item);
+            }}
           >
             <LinearGradient
               colors={["#3FA344", "#8DCA70"]}

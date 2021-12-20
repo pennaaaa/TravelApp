@@ -197,7 +197,7 @@ const HotelDetails = ({ route, navigation }) => {
       </ScrollView>
       <View style={styles.footer}>
         <View style={styles.roomPrice}>
-          <Text style={styles.priceText}>{item.price}đ</Text>
+          <Text style={styles.priceText}>{item.price} $</Text>
           <Text style={styles.perdayText}>/ngày</Text>
         </View>
         <TouchableOpacity

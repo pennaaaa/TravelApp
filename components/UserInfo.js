@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -8,25 +8,247 @@ import {
   StyleSheet,
   TouchableOpacity,
   Button,
+  Platform,
   Dimensions,
 } from "react-native";
-import colors from "../assets/color/colors";
-import AuthContext from "../store/context";
+import { TextInput } from "react-native-gesture-handler";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import Feather from "react-native-vector-icons/Feather";
+import { LinearGradient } from "expo-linear-gradient";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import axios from "axios";
 
 MaterialIcons.loadFont();
+Feather.loadFont();
+FontAwesome.loadFont();
+AntDesign.loadFont();
 
-const height = Dimensions.get("window").height;
-const width = Dimensions.get("window").width;
+const UserInfo = ({ route, navigation }) => {
+  const { item } = route.params;
+  const [gender, setGender] = useState(item.gender);
+  const [phone, setPhone] = useState(item.phone);
+  const [name, setName] = useState(item.userName);
 
-const UserInfo = ({ navigation }) => {
-  const authContext = React.useContext(AuthContext);
+  const [birth, setBirth] = useState(new Date(item.birth));
+
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
+  const showDatepicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirm = (date) => {
+    setBirth(date);
+    hideDatePicker();
+  };
+  console.log(item)
+
+  // const [data, setData] = useState({
+  //   userEmail: item.userEmail,
+  //   userName: name,
+  //   birth: birth,
+  //   gender: gender,
+  //   phone: phone,
+  // });
+  const updateInfo = async () => {
+    let returnn = null;
+    const data = {
+      userEmail: item.userEmail,
+      userName: "Đạt",
+      birth: birth,
+      gender: gender,
+      phone: phone,
+    };
+
+    axios
+      .patch(
+        "https://pbl6-travelapp.herokuapp.com/users/" + item.userId,
+        data,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${item.userToken}`,
+          },
+        }
+      )
+      .then(function (response) {
+        console.log("----------------------------------");
+        console.log(response);
+        console.log("----------------------------------");
+      })
+      .catch(function (error) {
+        console.log("error");
+      });
+
+    return returnn;
+  };
+
   return (
-      
-    <View>
-      <Text>{authContext.birth.slice(8, 10)+"-"+authContext.birth.slice(5, 8)+authContext.birth.slice(0, 4)}</Text>
-    </View>
+    <SafeAreaView style={styles.container}>
+      <Image
+        source={require("../assets/image/avata.png")}
+        style={styles.avatar}
+      />
+      <View style={{ width: "80%", marginTop: 10 }}>
+        <View style={styles.action}>
+          <View style={{ width: 20 }}>
+            <FontAwesome name="user-o" color={"green"} size={20} />
+          </View>
+          <TextInput
+            placeholder="Nhập tên của bạn"
+            onChangeText={(val) => setName(val)}
+            style={styles.textInput}
+          >
+            {name}
+          </TextInput>
+        </View>
+
+        <View style={styles.action}>
+          <View style={{ width: 20 }}>
+            <FontAwesome name="transgender" color={"green"} size={20} />
+          </View>
+          <Text placeholder="Chọn giới tính" style={styles.textInput}>
+            {gender}
+          </Text>
+
+          <TouchableOpacity
+            style={gender == 0 ? styles.buttonSelect : styles.buttonNonSelect}
+            onPress={() => setGender("Male")}
+          >
+            <Ionicons
+              name="male"
+              color={"blue"}
+              size={20}
+              style={
+                gender == 0
+                  ? styles.buttonTextSelect
+                  : styles.buttonTextNonSelect
+              }
+            ></Ionicons>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={gender == 1 ? styles.buttonSelect : styles.buttonNonSelect}
+            onPress={() => setGender("Female")}
+          >
+            <Ionicons
+              name="female"
+              color={"#f44c6c"}
+              size={20}
+              style={
+                gender == 1
+                  ? styles.buttonTextSelect
+                  : styles.buttonTextNonSelect
+              }
+            ></Ionicons>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.action}>
+          <View style={{ width: 20 }}>
+            <FontAwesome name="calendar-o" color={"green"} size={20} />
+          </View>
+          <View style={styles.textInput}>
+            <TouchableOpacity onPress={showDatepicker}>
+              <View>
+                <Text>{birth.toLocaleDateString()}</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        </View>
+        <DateTimePickerModal
+          isVisible={isDatePickerVisible}
+          mode="date"
+          onConfirm={handleConfirm}
+          onCancel={hideDatePicker}
+        />
+
+        <View style={styles.action}>
+          <View style={{ width: 20 }}>
+            <AntDesign name="phone" color={"green"} size={20} />
+          </View>
+          <TextInput
+            placeholder="Nhập tên của bạn"
+            onChangeText={(val) => setPhone(val)}
+            style={styles.textInput}
+          >
+            {phone}
+          </TextInput>
+        </View>
+
+        <View style={styles.action}>
+          <View style={{ width: 20 }}>
+            <Feather name="mail" color={"green"} size={20} />
+          </View>
+          <Text style={styles.textInput}>{item.userEmail}</Text>
+        </View>
+
+        <View style={styles.button}>
+          <TouchableOpacity style={styles.signIn} onPress={() => updateInfo()}>
+            <LinearGradient
+              colors={["#3FA344", "#8DCA70"]}
+              start={{ x: 0, y: 1 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.signIn}
+            >
+              <Text style={[styles.textSign, { color: "#fff" }]}>Cập nhật</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </SafeAreaView>
   );
 };
 export default UserInfo;
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    alignItems: "center",
+    justifyContent: "center",
+    flex: 1,
+  },
+  logo: {
+    resizeMode: "contain",
+    width: 250,
+  },
+  action: {
+    flexDirection: "row",
+    marginTop: 20,
+    paddingBottom: 5,
+    borderBottomWidth: 0.2,
+    borderBottomColor: "gray",
+  },
+  textInput: {
+    flex: 1,
+    // marginTop: Platform.OS === "ios" ? 0 : -12,
+    paddingLeft: 10,
+    color: "#05375a",
+  },
+  button: {
+    alignItems: "center",
+    marginTop: 50,
+  },
+  signIn: {
+    width: "100%",
+    height: 50,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+  },
+  textSign: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  avatar: {
+    resizeMode: "contain",
+    height: 100,
+    width: 100,
+    borderRadius: 35,
+  },
+});

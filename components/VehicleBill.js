@@ -115,7 +115,7 @@ const VehicleBill = ({ route, navigation }) => {
           <Text style={styles.bookingTitle}>Hóa đơn thanh toán</Text>
           <View style={styles.datePrice}>
             <Text style={styles.dateTitle}>Tổng tiền(VND)</Text>
-            <Text style={styles.resultDatePrice}>{price}đ</Text>
+            <Text style={styles.resultDatePrice}>{price} $</Text>
           </View>
           <TouchableOpacity
             style={styles.signIn}

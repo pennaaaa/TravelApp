@@ -24,19 +24,19 @@ FontAwesome.loadFont();
 Entypo.loadFont();
 Ionicons.loadFont();
 
-const VehicleRentalList = ({ props }) => {
+const VehicleRentalList = (props) => {
   const item = props.item;
+  const navigation = props.navigation;
   const [vehicleData, setVehicleData] = useState([]);
   const [isVehicleLoading, setVehicleLoading] = useState(true);
 
-  console.log("https://pbl6-travelapp.herokuapp.com/restaurant?city=" + item.title);
   useEffect(() => {
     setTimeout(() => {
-      fetch("https://pbl6-travelapp.herokuapp.com/restaurant?city=" + item.title)
+      fetch("https://pbl6-travelapp.herokuapp.com/detailVehicle?city=" + item.title)
         .then((response) => response.json())
-        .then((json) => setRestaurantData(json))
+        .then((json) => setVehicleData(json))
         .catch((error) => console.error(error))
-        .finally(() => setRestaurantLoading(false));
+        .finally(() => setVehicleLoading(false));
     }, 0);
   }, []);
 
@@ -57,28 +57,28 @@ const VehicleRentalList = ({ props }) => {
               borderTopRightRadius: 10,
             }}
           >
-            <Image source={item.image} style={styles.discorverItem} />
+            <Image source={{ uri: item.imageCover }} style={styles.discorverItem} />
           </View>
           <View style={styles.itemText}>
             <Text style={styles.itemTitle}>
               <FontAwesome name="flash" size={20} color={"#87BB73"} />{" "}
-              {item.title}
+              {item.idSelfVehicle.name}
             </Text>
-            <Text style={styles.itemName}> {item.address}</Text>
+            <Text style={styles.itemName}> {item.idSelfVehicle.address}</Text>
           </View>
 
           <View style={styles.infoWrapper}>
-            <View style={styles.infoRoom}>
+            {/* <View style={styles.infoRoom}> */}
               <Text style={styles.addressText}>
                 <FontAwesome name="car" size={16} color={"#87BB73"} />{" "}
                 {item.type}
               </Text>
 
-              <Text style={styles.addressText}>
+              {/* <Text style={styles.addressText}>
                 <Ionicons name="person" size={16} color={"#87BB73"} />{" "}
                 {item.seat}
-              </Text>
-            </View>
+              </Text> */}
+            {/* </View> */}
           </View>
 
           <View
@@ -91,14 +91,14 @@ const VehicleRentalList = ({ props }) => {
             }}
           >
             <View style={styles.roomPrice}>
-              <Text style={styles.priceText}>{item.price}đ</Text>
+              <Text style={styles.priceText}>{item.price}$</Text>
               <Text style={styles.perdayText}>/ngày</Text>
             </View>
             <Rating
               imageSize={20}
               fractions="{1}"
               readonly
-              startingValue={item.rating}
+              startingValue={item.idSelfVehicle.vote}
             />
           </View>
         </View>
@@ -109,7 +109,7 @@ const VehicleRentalList = ({ props }) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.highItemWrapper}>
         <FlatList
-          data={vehicleRentalData}
+          data={vehicleData}
           renderItem={renderVehicleRentalDataItem}
           keyExtractor={(item) => item._id}
           showsHorizontalScrollIndicator={false}
@@ -141,8 +141,6 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   discorverItem: {
-    width: "100%",
-    // height:height*0.3,
     height: 200,
     resizeMode: "cover",
     borderTopRightRadius: 10,
@@ -153,15 +151,17 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
   },
   addressText: {
-    width: "50%",
+    // width: "100%",
     fontSize: 16,
     fontFamily: "SourceSans-Regular",
     marginTop: 8,
     marginBottom: 8,
-    marginLeft: 15,
+    // marginLeft: 15,
+    alignSelf:'center'
   },
   infoRoom: {
     flexDirection: "row",
+    justifyContent:"center"
   },
   infoWrapper: {
     width: width * 0.6,
@@ -170,6 +170,8 @@ const styles = StyleSheet.create({
     padding: 5,
     alignSelf: "center",
     flexDirection: "row",
+    alignItems:'center',
+    justifyContent:"center"
   },
   roomPrice: {
     flexDirection: "row",

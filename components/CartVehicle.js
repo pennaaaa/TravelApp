@@ -28,9 +28,11 @@ const CartVehicle = (props) => {
   const navigation = props.navigation;
   const authContext = React.useContext(AuthContext);
   const [isBillLoading, setBillLoading] = useState(true);
+  const [isVehicleLoading, setVehicleLoading] = useState(false);
   const [billData, setBillData] = useState([]);
 
   const getAPI = async () => {
+    setBillLoading(true);
     const response = await fetch(
       "https://pbl6-travelapp.herokuapp.com/bill/" + authContext.userId,
       {
@@ -45,12 +47,13 @@ const CartVehicle = (props) => {
     const data = await response.json();
 
     const data2 = [];
-    const data3 = [];
     data.forEach(async (element) => {
-      const responseRoom = await fetch(
-        "https://pbl6-travelapp.herokuapp.com/detailVehicle/" + element._id
+      setVehicleLoading(true);
+      const responseVehicle = await fetch(
+        "https://pbl6-travelapp.herokuapp.com/detailVehicle/" + element.detailVehicle
       );
-      const dataVehicle = await responseRoom.json();
+      const dataVehicle = await responseVehicle.json();
+      console.log("log")
 
       data2.push(dataVehicle);
       const billVehicle = data.map((element, index) => {
@@ -60,6 +63,7 @@ const CartVehicle = (props) => {
         };
       });
       setBillData(billVehicle);
+      setVehicleLoading(false);
     });
     setBillLoading(false);
   };
@@ -86,8 +90,8 @@ const CartVehicle = (props) => {
     } else alert("Đăng nhập lại để đặt phòng");
   };
 
-  const renderHotelItem = ({ item }) => {
-    // console.log(item)
+  const renderVehicleItem = ({ item }) => {
+    console.log(2)
     return (
       <TouchableOpacity>
         <View style={styles.itemContainer}>
@@ -115,7 +119,7 @@ const CartVehicle = (props) => {
               </Text>
               <View style={styles.rowView}>
                 <Text style={styles.idService}>Tổng tiền: </Text>
-                <Text style={styles.priceText}>{item.total}đ</Text>
+                <Text style={styles.priceText}>{item.total} $</Text>
               </View>
               <Text style={styles.status}>Chưa thanh toán</Text>
             </View>
@@ -163,7 +167,7 @@ const CartVehicle = (props) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.highItemWrapper}>
-        {isBillLoading ? (
+        {isBillLoading || isVehicleLoading ? (
           <Text>Loading...</Text>
         ) : (
           <>
@@ -171,7 +175,7 @@ const CartVehicle = (props) => {
               data={billData.filter(
                 (item) => !item.status && item.service == "selfVehicle"
               )}
-              renderItem={renderHotelItem}
+              renderItem={renderVehicleItem}
               keyExtractor={(item) => item.id}
               showsHorizontalScrollIndicator={false}
             />

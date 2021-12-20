@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, Dimensions, Image } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import colors from "../assets/color/colors";
-import DateTimePicker from "@react-native-community/datetimepicker";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { LinearGradient } from "expo-linear-gradient";
 import { SliderBox } from "react-native-image-slider-box";
 import Entypo from "react-native-vector-icons/Entypo";
 import AuthContext from "../store/context";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 const height = Dimensions.get("window").height;
 const width = Dimensions.get("window").width;
@@ -21,51 +21,45 @@ const VehicleDetails = ({ route, navigation }) => {
   const [dateIn, setDateIn] = useState(new Date());
   const [dateOut, setDateOut] = useState(new Date());
   const [price, setPrice] = useState(0);
-  const [mode, setMode] = useState("date");
-  const [showIn, setShowIn] = useState(false);
-  const [showOut, setShowOut] = useState(false);
   const authContext = React.useContext(AuthContext);
-
   const [selectedValue, setSelectedValue] = useState(1);
+  const [mode, setMode] = useState("date");
 
-  const onChangeIn = (event, selectedDate) => {
-    const currentDate = selectedDate || dateIn;
-    setShowIn(Platform.OS === "ios");
-    setDateIn(currentDate);
-    setPrice(item.price * (dateOut.getDate() - currentDate.getDate()));
-  };
+  const [chosenMode, setChosenMode] = useState(null);
 
-  const onChangeOut = (event, selectedDate) => {
-    const currentDate = selectedDate || dateOut;
-    setShowOut(Platform.OS === "ios");
-    setDateOut(currentDate);
-    setPrice(item.price * (currentDate.getDate() - dateIn.getDate()));
-    console.log("Gia ne:" + item.price);
-  };
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
-  const showModeIn = (currentMode) => {
-    setShowIn(true);
+  const showMode = (currentMode) => {
+    setDatePickerVisibility(true);
     setMode(currentMode);
   };
 
-  const showModeOut = (currentMode) => {
-    setShowOut(true);
-    setMode(currentMode);
+  const showDatePicker = () => {
+    showMode("date");
   };
 
-  const showDatepickerIn = () => {
-    showModeIn("date");
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
   };
 
-  const showDatepickerOut = () => {
-    showModeOut("date");
+  const handleConfirm = (date) => {
+    hideDatePicker();
+    if (chosenMode) {
+      setDateIn(date);
+      setPrice(item.price * (dateOut.getDate() - date.getDate()));
+    } else {
+      setDateOut(date);
+      setPrice(item.price * (date.getDate() - dateIn.getDate()));
+    }
   };
 
   const createBill = async () => {
+    console.log(dateIn+"----"+dateOut)
     let returnn = null;
     try {
       const data = {
         selfVehicle: item.idSelfVehicle._id,
+        name: item.idSelfVehicle.name,
         service: "selfVehicle",
         total: price,
         checkIn: dateIn,
@@ -114,7 +108,6 @@ const VehicleDetails = ({ route, navigation }) => {
         dateIn,
         dateOut,
         price,
-        billid,
       });
     } else alert("Đăng nhập lại để đặt xe");
   };
@@ -146,50 +139,40 @@ const VehicleDetails = ({ route, navigation }) => {
         <Text style={styles.dateTitle}>Nhận xe:</Text>
         <View style={styles.dateText}>
           <Text>{dateIn.toLocaleDateString()}</Text>
-          <TouchableOpacity onPress={showDatepickerIn}>
+          <TouchableOpacity
+            onPress={() => {
+              setChosenMode(true);
+              showDatePicker();
+            }}
+          >
             <AntDesign name="calendar" size={20} color={"#87BB73"}></AntDesign>
           </TouchableOpacity>
         </View>
-        {showIn && (
-          <DateTimePicker
-            locale
-            style={styles.dateTimeStyle}
-            testID="dateTimePickerIn"
-            value={dateIn}
-            mode={mode}
-            is24Hour={true}
-            display="default"
-            onChange={onChangeIn}
-            minimumDate={new Date()}
-          />
-        )}
         <Text style={styles.dateTitle}>Trả xe:</Text>
         <View style={styles.dateText}>
           <Text>{dateOut.toLocaleDateString()}</Text>
-          <TouchableOpacity onPress={showDatepickerOut}>
+          <TouchableOpacity
+            onPress={() => {
+              setChosenMode(false);
+              showDatePicker();
+            }}
+          >
             <AntDesign name="calendar" size={24} color={"#87BB73"}></AntDesign>
           </TouchableOpacity>
         </View>
 
-        {showOut && (
-          <DateTimePicker
-            locale
-            style={styles.dateTimeStyle}
-            testID="dateTimePickerOut"
-            value={dateOut}
-            mode={mode}
-            is24Hour={true}
-            display="default"
-            onChange={onChangeOut}
-            minimumDate={dateIn}
-          />
-        )}
+        <DateTimePickerModal
+          isVisible={isDatePickerVisible}
+          mode="date"
+          onConfirm={handleConfirm}
+          onCancel={hideDatePicker}
+        />
       </View>
       <View style={styles.confirmWrapper}>
         <Text style={styles.bookingTitle}>Chi tiết thanh toán</Text>
         <View style={styles.datePrice}>
           <Text style={styles.dateTitle}>Tổng tiền(VND)</Text>
-          <Text style={styles.resultDatePrice}>{price} đ</Text>
+          <Text style={styles.resultDatePrice}>{price} $</Text>
         </View>
 
         <TouchableOpacity

@@ -44,7 +44,7 @@ const CartRestaurant = (props) => {
       }
     );
     const data = await response.json();
-
+// console.log(data)
     const data2 = [];
     const data3 = [];
     // data.forEach(async (element) => {
@@ -137,7 +137,7 @@ const CartRestaurant = (props) => {
 
                 <View style={styles.rowView}>
                   <Text style={styles.idService}>Phí đặt chỗ: </Text>
-                  <Text style={styles.priceText}>{item.total}đ</Text>
+                  <Text style={styles.priceText}>{item.total} $</Text>
                 </View>
                 <Text style={styles.status}>Chưa thanh toán</Text>
               </View>

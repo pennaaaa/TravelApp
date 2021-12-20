@@ -75,7 +75,7 @@ const FoodDetails = ({ route, navigation }) => {
       </ScrollView>
       <View style={styles.footer}>
         <View style={styles.resPrice}>
-          <Text style={styles.resText}>XXX đ</Text>
+          <Text style={styles.resText}>{item.fee} $</Text>
           <Text style={styles.perdayText}> (Phí đặt bàn)</Text>
         </View>
         <TouchableOpacity
