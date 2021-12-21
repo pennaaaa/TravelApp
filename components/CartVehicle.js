@@ -50,10 +50,11 @@ const CartVehicle = (props) => {
     data.forEach(async (element) => {
       setVehicleLoading(true);
       const responseVehicle = await fetch(
-        "https://pbl6-travelapp.herokuapp.com/detailVehicle/" + element.detailVehicle
+        "https://pbl6-travelapp.herokuapp.com/detailVehicle/" +
+          element.detailVehicle
       );
       const dataVehicle = await responseVehicle.json();
-      console.log("log")
+      // console.log("log")
 
       data2.push(dataVehicle);
       const billVehicle = data.map((element, index) => {
@@ -68,30 +69,55 @@ const CartVehicle = (props) => {
     setBillLoading(false);
   };
 
+  const deleteAPI = async (item) => {
+    console.log("-------------------------");
+    console.log(
+      "https://pbl6-travelapp.herokuapp.com/bill/" +
+        authContext.userId +
+        "/" +
+        item.id
+    );
+    console.log("-------------------------");
+
+    fetch(
+      "https://pbl6-travelapp.herokuapp.com/bill/" +
+        authContext.userId +
+        "/" +
+        item.id,
+      {
+        method: "DELETE",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authContext.userToken}`,
+        },
+      }
+    )
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log(responseJson);
+      });
+
+    console.log("HUY 2");
+    getAPI();
+  };
+
   useEffect(() => {
     getAPI();
   }, []);
 
-  const onPressBookButton = async () => {
-    billid = await createBill();
-    console.log(billid);
-    if (billid) {
-      navigation.navigate("BookingBill", {
-        item: item,
-        name: item.location,
-        dateIn,
-        dateOut,
-        totalDay,
-        dayPrice,
-        vat,
-        price,
-        billid,
-      });
-    } else alert("Đăng nhập lại để đặt phòng");
+  const onPressBookButton = (item) => {
+    navigation.navigate("VehicleBill", {
+      item: item.vehicleBillData,
+      dateIn: item.checkIn,
+      dateOut: item.checkOut,
+      price: item.total,
+      billid: item.id,
+    });
   };
 
   const renderVehicleItem = ({ item }) => {
-    console.log(2)
+    // console.log(2)
     return (
       <TouchableOpacity>
         <View style={styles.itemContainer}>
@@ -129,7 +155,7 @@ const CartVehicle = (props) => {
             <TouchableOpacity
               style={styles.signIn}
               onPress={() => {
-                onPressBookButton();
+                onPressBookButton(item);
               }}
             >
               <LinearGradient
@@ -146,9 +172,7 @@ const CartVehicle = (props) => {
 
             <TouchableOpacity
               style={styles.signIn}
-              onPress={() => {
-                alert("Hủy");
-              }}
+              onPress={() => deleteAPI(item)}
             >
               <LinearGradient
                 colors={["#3FA344", "#8DCA70"]}

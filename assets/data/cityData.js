@@ -17,13 +17,23 @@ const cityData = [
     id: "activities-3",
     title: "Đà Nẵng",
     image: require("../image/dn.jpeg"),
-    decription: "Giới thiệu Đà Nẵng Giới thiệu Đà Nẵng Giới thiệu Đà Nẵng Giới thiệu Đà Nẵng Giới thiệu Đà Nẵng Giới thiệu Đà Nẵng Giới thiệu Đà Nẵng Giới thiệu Đà Nẵng Giới thiệu Đà Nẵng Giới thiệu Đà Nẵng Giới thiệu Đà Nẵng",
+    decription:
+      "Giới thiệu Đà Nẵng Giới thiệu Đà Nẵng Giới thiệu Đà Nẵng Giới thiệu Đà Nẵng Giới thiệu Đà Nẵng Giới thiệu Đà Nẵng Giới thiệu Đà Nẵng Giới thiệu Đà Nẵng Giới thiệu Đà Nẵng Giới thiệu Đà Nẵng Giới thiệu Đà Nẵng",
     imageBig: require("../image/dn.jpeg"),
+  },
+  {
+    id: "activities-8",
+    title: "Huế",
+    decription:
+      "Giới thiệu Huế giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu",
+    image: require("../image/hue.jpeg"),
+    imageBig: require("../image/hue.jpeg"),
   },
   {
     id: "activities-4",
     title: "Hồ Chí Minh",
-    description: "Hồ Chí Minh giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu",
+    description:
+      "Hồ Chí Minh giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu",
     image: require("../image/hcm.jpeg"),
     imageBig: require("../image/hcm.jpeg"),
   },
@@ -31,20 +41,23 @@ const cityData = [
     id: "activities-5",
     title: "Hội An",
     image: require("../image/ha.jpeg"),
-    decription: "Giới thiệu Hội An giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu",
+    decription:
+      "Giới thiệu Hội An giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu",
     imageBig: require("../image/ha.jpeg"),
   },
   {
     id: "activities-6",
     title: "Đà Lạt",
     image: require("../image/dl.jpeg"),
-    decription: "Giới thiệu Đà Lạt giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu",
+    decription:
+      "Giới thiệu Đà Lạt giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu",
     imageBig: require("../image/dl.jpeg"),
   },
   {
     id: "activities-7",
     title: "Nha Trang",
-    decription: "Giới thiệu Nha Trang giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu",
+    decription:
+      "Giới thiệu Nha Trang giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu giới thiệu",
     image: require("../image/nt.jpeg"),
     imageBig: require("../image/nt.jpeg"),
   },

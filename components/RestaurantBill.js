@@ -21,7 +21,6 @@ import { ScrollView } from "react-native-gesture-handler";
 import { WebView } from "react-native-webview";
 import { useRoute } from "@react-navigation/native";
 import AuthContext from "../store/context";
-import { color } from "react-native-elements/dist/helpers";
 
 const height = Dimensions.get("window").height;
 const width = Dimensions.get("window").width;
@@ -32,6 +31,7 @@ Feather.loadFont();
 const RestaurantBill = ({ route, navigation }) => {
   const authContext = React.useContext(AuthContext);
   const { item, date, fee, selectedValue } = route.params;
+  const [dateIn, setDayIn] = useState(new Date(date));
   const router = useRoute();
   const [showGateway, setShowGateway] = useState(false);
   const [prog, setProg] = useState(false);
@@ -98,22 +98,12 @@ const RestaurantBill = ({ route, navigation }) => {
               <Text style={styles.roomTitle}>{item.name}</Text>
               <Text style={styles.roomDetails}>{item.address}</Text>
               <Text style={styles.roomDetails}>Chuyên món: {item.type}</Text>
+              <Text style={styles.roomDetails}>Ngày đến: {dateIn.toLocaleDateString()}</Text>
+              <Text style={styles.roomDetails}>Số người: {selectedValue}</Text>
             </View>
           </View>
-          <View style={styles.dateText}>
-            <Text style={styles.dateTitle}>Ngày đến</Text>
-            <Text>{date.toLocaleDateString()}</Text>
-          </View>
 
-          {/* <View style={styles.dateText}>
-            <Text style={styles.dateTitle}>Giờ đến</Text>
-            <Text>{hour}</Text>
-          </View> */}
-
-          <View style={styles.dateText}>
-            <Text style={styles.dateTitle}>Số người</Text>
-            <Text>{selectedValue}</Text>
-          </View>
+          
         </View>
         <View style={styles.priceDetailContainer}>
           <Text style={styles.bookingTitle}>Hóa đơn thanh toán</Text>
@@ -312,12 +302,12 @@ const styles = StyleSheet.create({
   },
   subPrice: {
     color: "#767676",
-    fontSize:18,
+    fontSize: 18,
     fontFamily: "SourceSans-Regular",
   },
   resultDatePrice: {
     color: colors.black,
-    fontSize:20,
+    fontSize: 20,
     fontFamily: "SourceSans-SemiBold",
   },
   signIn: {

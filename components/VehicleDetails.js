@@ -24,6 +24,8 @@ const VehicleDetails = ({ route, navigation }) => {
   const authContext = React.useContext(AuthContext);
   const [selectedValue, setSelectedValue] = useState(1);
   const [mode, setMode] = useState("date");
+  const [checkIn, setCheckIn] = useState("");
+  const [checkOut, setCheckOut] = useState("");
 
   const [chosenMode, setChosenMode] = useState(null);
 
@@ -47,14 +49,16 @@ const VehicleDetails = ({ route, navigation }) => {
     if (chosenMode) {
       setDateIn(date);
       setPrice(item.price * (dateOut.getDate() - date.getDate()));
+      setCheckIn(date.toLocaleDateString());
     } else {
       setDateOut(date);
       setPrice(item.price * (date.getDate() - dateIn.getDate()));
+      setCheckOut(date.toLocaleDateString());
     }
   };
 
   const createBill = async () => {
-    console.log(dateIn+"----"+dateOut)
+    console.log(dateIn + "----" + dateOut);
     let returnn = null;
     try {
       const data = {
@@ -100,14 +104,14 @@ const VehicleDetails = ({ route, navigation }) => {
 
   const onPressBookButton = async () => {
     billid = await createBill();
-    console.log(billid);
+    console.log("bill: "+billid);
     if (billid) {
       navigation.navigate("VehicleBill", {
         item: item,
-        name: item.location,
         dateIn,
         dateOut,
         price,
+        billid
       });
     } else alert("Đăng nhập lại để đặt xe");
   };

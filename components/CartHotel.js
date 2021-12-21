@@ -30,12 +30,6 @@ const CartHotel = (props) => {
   const [isBillLoading, setBillLoading] = useState(false);
   const [isRoomLoading, setRoomLoading] = useState(false);
   const [billData, setBillData] = useState([]);
-  const [checkIn, setCheckIn] = useState("");
-  const [checkOut, setCheckOut] = useState("");
-  const [vat, setVat] = useState(0);
-  const [price, setPrice] = useState(0);
-  const [billid, setBillId] = useState("");
-  const [obj, setObj] = useState({});
   const getAPI = async () => {
     setBillLoading(true);
     const response = await fetch(
@@ -50,7 +44,7 @@ const CartHotel = (props) => {
       }
     );
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
 
     const data2 = [];
     data.forEach(async (element) => {
@@ -122,7 +116,7 @@ const CartHotel = (props) => {
   };
 
   const renderHotelItem = ({ item }) => {
-    // console.log(item)
+    console.log("hotelll");
     return (
       <TouchableOpacity>
         <View style={styles.itemContainer}>
@@ -160,12 +154,6 @@ const CartHotel = (props) => {
             <TouchableOpacity
               style={styles.signIn}
               onPress={() => {
-                // setCheckIn(item.checkIn.substring(0, 10));
-                // setCheckOut(item.checkOut.substring(0, 10));
-                // setVat(item.additionalFee);
-                // setPrice(item.total);
-                // setBillId(item.id);
-                // setObj(item.roomBillData);
                 onPressBookButton(item);
               }}
             >

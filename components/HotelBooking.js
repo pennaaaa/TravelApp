@@ -106,68 +106,6 @@ const HotelBooking = ({ route, navigation }) => {
     }
   };
 
-  // const onChangeIn = (event, selectedDate) => {
-  //   let currentDate = selectedDate || dateIn;
-  //   setShowIn(Platform.OS === "ios");
-  //   setDateIn(currentDate);
-  //   setDateOut(currentDate);
-
-  //   setTotalDay(
-  //     (dateOut.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24)
-  //   );
-
-  //   setDayPrice(
-  //     pricePerDay *
-  //       ((dateOut.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24))
-  //   );
-
-  //   setVat(
-  //     pricePerDay *
-  //       ((dateOut.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24)) *
-  //       0.1
-  //   );
-
-  //   setPrice(
-  //     (
-  //       pricePerDay *
-  //       ((dateOut.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24)) *
-  //       1.1
-  //     ).toFixed()
-  //   );
-
-  //   setCheckIn(currentDate.toLocaleDateString());
-  // };
-
-  // const onChangeOut = (event, selectedDate) => {
-  //   const currentDate = selectedDate || dateOut;
-  //   setShowOut(Platform.OS === "ios");
-  //   setDateOut(currentDate);
-
-  //   setTotalDay(
-  //     (currentDate.getTime() - dateIn.getTime()) / (1000 * 60 * 60 * 24)
-  //   );
-
-  //   setDayPrice(
-  //     pricePerDay *
-  //       ((currentDate.getTime() - dateIn.getTime()) / (1000 * 60 * 60 * 24))
-  //   );
-
-  //   setVat(
-  //     pricePerDay *
-  //       ((currentDate.getTime() - dateIn.getTime()) / (1000 * 60 * 60 * 24)) *
-  //       0.1
-  //   );
-
-  //   setPrice(
-  //     (
-  //       pricePerDay *
-  //       ((currentDate.getTime() - dateIn.getTime()) / (1000 * 60 * 60 * 24)) *
-  //       1.1
-  //     ).toFixed()
-  //   );
-  //   setCheckOut(currentDate.toLocaleDateString());
-  // };
-
   const createBill = async () => {
     let returnn = null;
     try {
@@ -214,7 +152,6 @@ const HotelBooking = ({ route, navigation }) => {
   };
 
   const onPressBookButton = async () => {
-    console.log("ngay den: " + checkIn);
     billid = await createBill();
     console.log(billid);
     if (billid) {

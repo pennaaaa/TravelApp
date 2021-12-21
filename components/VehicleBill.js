@@ -31,6 +31,8 @@ Feather.loadFont();
 const VehicleBill = ({ route, navigation }) => {
   const authContext = React.useContext(AuthContext);
   const { item, dateIn, dateOut, price, billid } = route.params;
+  const [checkIn, setCheckIn] = useState(new Date(dateIn));
+  const [checkOut, setCheckOut] = useState(new Date(dateOut));
   const router = useRoute();
   const [showGateway, setShowGateway] = useState(false);
   const [prog, setProg] = useState(false);
@@ -99,17 +101,19 @@ const VehicleBill = ({ route, navigation }) => {
                 {item.idSelfVehicle.address}
               </Text>
               <Text style={styles.roomDetails}>Loại xe: {item.type}</Text>
+              <Text style={styles.roomDetails}>Ngày đến: {checkIn.toLocaleDateString()}</Text>
+              <Text style={styles.roomDetails}>Ngày đi: {checkOut.toLocaleDateString()}</Text>
             </View>
           </View>
-          <View style={styles.dateText}>
+          {/* <View style={styles.dateText}>
             <Text style={styles.dateTitle}>Ngày đến</Text>
-            <Text>{dateIn.toLocaleDateString()}</Text>
-          </View>
+            <Text>{checkIn}</Text>
+          </View> */}
 
-          <View style={styles.dateText}>
+          {/* <View style={styles.dateText}>
             <Text style={styles.dateTitle}>Ngày đi</Text>
-            <Text>{dateOut.toLocaleDateString()}</Text>
-          </View>
+            <Text>{checkOut}</Text>
+          </View> */}
         </View>
         <View style={styles.priceDetailContainer}>
           <Text style={styles.bookingTitle}>Hóa đơn thanh toán</Text>

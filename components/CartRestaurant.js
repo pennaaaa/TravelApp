@@ -29,7 +29,6 @@ const CartRestaurant = (props) => {
   const authContext = React.useContext(AuthContext);
   const [isBillLoading, setBillLoading] = useState(true);
   const [billData, setBillData] = useState([]);
-  const [roomData, setRoomData] = useState([]);
 
   const getAPI = async () => {
     const response = await fetch(
@@ -44,24 +43,7 @@ const CartRestaurant = (props) => {
       }
     );
     const data = await response.json();
-// console.log(data)
-    const data2 = [];
     const data3 = [];
-    // data.forEach(async (element) => {
-    //   const responseRoom = await fetch(
-    //     "https://pbl6-travelapp.herokuapp.com/room/" + element.room
-    //   );
-    //   const dataRoom = await responseRoom.json();
-
-    //   data2.push(dataRoom);
-    //   const billRoom = data.map((element, index) => {
-    //     return {
-    //       ...element,
-    //       roomBillData: data2[index],
-    //     };
-    //   });
-    //   setBillData(billRoom);
-    // });
 
     data.forEach(async (element) => {
       const responseRestaurant = await fetch(
@@ -82,105 +64,122 @@ const CartRestaurant = (props) => {
     setBillLoading(false);
   };
 
+  const deleteAPI = async (item) => {
+    console.log("-------------------------");
+    console.log(
+      "https://pbl6-travelapp.herokuapp.com/bill/" +
+        authContext.userId +
+        "/" +
+        item.id
+    );
+    console.log("-------------------------");
+
+    fetch(
+      "https://pbl6-travelapp.herokuapp.com/bill/" +
+        authContext.userId +
+        "/" +
+        item.id,
+      {
+        method: "DELETE",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authContext.userToken}`,
+        },
+      }
+    )
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log(responseJson);
+      });
+
+    console.log("HUY 2");
+    getAPI();
+  };
+
   useEffect(() => {
     getAPI();
   }, []);
 
-  const onPressBookButton = async () => {
-    billid = await createBill();
-    console.log(billid);
-    if (billid) {
-      navigation.navigate("BookingBill", {
-        item: item,
-        name: item.location,
-        dateIn,
-        dateOut,
-        totalDay,
-        dayPrice,
-        vat,
-        price,
-        billid,
-      });
-    } else alert("Đăng nhập lại để đặt phòng");
+  const onPressBookButton = (item) => {
+    navigation.navigate("RestaurantBill", {
+      item: item.resBillData,
+      date: item.checkIn,
+      fee: item.total,
+      billid: item.id,
+      selectedValue: item.chairs
+    });
   };
 
   const renderResItem = ({ item }) => {
     // console.log(item)
     return (
       <TouchableOpacity>
-          <View style={styles.itemContainer}>
-            <View style={styles.infoBill}>
-              {item?.resBillData?.imageCover && (
-                <Image
-                  source={{ uri: item?.resBillData?.imageCover }}
-                  style={styles.imageStyle}
-                ></Image>
+        <View style={styles.itemContainer}>
+          <View style={styles.infoBill}>
+            {item?.resBillData?.imageCover && (
+              <Image
+                source={{ uri: item?.resBillData?.imageCover }}
+                style={styles.imageStyle}
+              ></Image>
+            )}
+            <View style={styles.infoRoom}>
+              {item?.resBillData?.name && (
+                <Text style={styles.itemTitle}>{item?.resBillData?.name}</Text>
               )}
-              <View style={styles.infoRoom}>
-                {item?.resBillData?.name && (
-                  <Text style={styles.itemTitle}>
-                    {item?.resBillData?.name}
-                  </Text>
-                )}
-                {item?.resBillData?.type && (
-                  <Text style={styles.idService}>
-                    Loại hình: {item?.resBillData?.type}
-                  </Text>
-                )}
+              {item?.resBillData?.type && (
                 <Text style={styles.idService}>
-                  Ngày đến: {item.checkIn.substring(0, 10)}
+                  Loại hình: {item?.resBillData?.type}
                 </Text>
+              )}
+              <Text style={styles.idService}>
+                Ngày đến: {item.checkIn.substring(0, 10)}
+              </Text>
 
-                <Text style={styles.idService}>
-                  Số người: {item.chairs}
-                </Text>
+              <Text style={styles.idService}>Số người: {item.chairs}</Text>
 
-                <View style={styles.rowView}>
-                  <Text style={styles.idService}>Phí đặt chỗ: </Text>
-                  <Text style={styles.priceText}>{item.total} $</Text>
-                </View>
-                <Text style={styles.status}>Chưa thanh toán</Text>
+              <View style={styles.rowView}>
+                <Text style={styles.idService}>Phí đặt chỗ: </Text>
+                <Text style={styles.priceText}>{item.total} $</Text>
               </View>
-            </View>
-
-            <View style={styles.datePrice}>
-              <TouchableOpacity
-                style={styles.signIn}
-                onPress={() => {
-                  onPressBookButton();
-                }}
-              >
-                <LinearGradient
-                  colors={["#3FA344", "#8DCA70"]}
-                  start={{ x: 0, y: 1 }}
-                  end={{ x: 1, y: 1 }}
-                  style={styles.signIn}
-                >
-                  <Text style={[styles.buttonText, { color: "#fff" }]}>
-                    Thanh toán
-                  </Text>
-                </LinearGradient>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={styles.signIn}
-                onPress={() => {
-                  alert("Hủy");
-                }}
-              >
-                <LinearGradient
-                  colors={["#3FA344", "#8DCA70"]}
-                  start={{ x: 0, y: 1 }}
-                  end={{ x: 1, y: 1 }}
-                  style={styles.signIn}
-                >
-                  <Text style={[styles.buttonText, { color: "#fff" }]}>
-                    Hủy
-                  </Text>
-                </LinearGradient>
-              </TouchableOpacity>
+              <Text style={styles.status}>Chưa thanh toán</Text>
             </View>
           </View>
+
+          <View style={styles.datePrice}>
+            <TouchableOpacity
+              style={styles.signIn}
+              onPress={() => {
+                onPressBookButton(item);
+              }}
+            >
+              <LinearGradient
+                colors={["#3FA344", "#8DCA70"]}
+                start={{ x: 0, y: 1 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.signIn}
+              >
+                <Text style={[styles.buttonText, { color: "#fff" }]}>
+                  Thanh toán
+                </Text>
+              </LinearGradient>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.signIn}
+              onPress={() => deleteAPI(item)}
+            >
+              <LinearGradient
+                colors={["#3FA344", "#8DCA70"]}
+                start={{ x: 0, y: 1 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.signIn}
+              >
+                <Text style={[styles.buttonText, { color: "#fff" }]}>Hủy</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          </View>
+        </View>
       </TouchableOpacity>
     );
   };
@@ -192,7 +191,9 @@ const CartRestaurant = (props) => {
         ) : (
           <>
             <FlatList
-              data={billData.filter((item) => !item.status &&item.service=="restaurant")}
+              data={billData.filter(
+                (item) => !item.status && item.service == "restaurant"
+              )}
               renderItem={renderResItem}
               keyExtractor={(item) => item.id}
               showsHorizontalScrollIndicator={false}
