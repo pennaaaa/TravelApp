@@ -52,7 +52,7 @@ const BookingBill = ({ route, navigation }) => {
               "/" +
               billid,
             {
-              method: "GET",
+              method: "PATCH",
               headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json",
@@ -109,33 +109,16 @@ const BookingBill = ({ route, navigation }) => {
           </View>
           <View style={styles.dateText}>
             <Text style={styles.dateTitle}>Ngày đến</Text>
-            <Text>
-              {/* {dateIn.toLocaleDateString()} */}
-              {checkIn}
-            </Text>
+            <Text>{checkIn}</Text>
           </View>
 
           <View style={styles.dateText}>
             <Text style={styles.dateTitle}>Ngày đi</Text>
-            <Text>
-              {/* {dateOut.toLocaleDateString()} */}
-              {checkOut}
-            </Text>
+            <Text>{checkOut}</Text>
           </View>
         </View>
         <View style={styles.priceDetailContainer}>
           <Text style={styles.bookingTitle}>Hóa đơn thanh toán</Text>
-          {/* <View style={styles.datePrice}>
-            <Text style={styles.priceSubTitle1}>
-              {item.price}đ x {totalDay + " "}
-              ngày
-            </Text>
-            <Text style={styles.resultDatePrice}>{dayPrice} $</Text>
-          </View> */}
-          {/* <View style={styles.datePrice}>
-            <Text style={styles.priceSubTitle}>VAT(10%)</Text>
-            <Text style={styles.resultDatePrice}>{vat} $</Text>
-          </View> */}
           <View style={styles.datePrice}>
             <Text style={styles.dateTitle}>Tổng tiền(VND)</Text>
             <Text style={styles.resultDatePrice}>{price} $</Text>
@@ -191,8 +174,7 @@ const BookingBill = ({ route, navigation }) => {
             <WebView
               source={{
                 uri:
-                  "192.168.1.4:3000/payment/" +
-                  (price / 23000).toFixed(2).toString(),
+                  "https://paypal-tu.herokuapp.com/payment/" + price.toString(),
               }}
               style={{ flex: 1 }}
               onLoadStart={() => {

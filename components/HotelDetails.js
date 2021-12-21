@@ -150,7 +150,8 @@ const HotelDetails = ({ route, navigation }) => {
             <View style={styles.infoWrapper}>
               <View style={styles.infoRoom}>
                 <Text style={styles.addressText}>
-                  <Entypo name="home" size={16} color={"#87BB73"} /> {item.type}
+                  <Entypo name="home" size={16} color={"#87BB73"} /> {"  "}{" "}
+                  {item.type}
                 </Text>
 
                 <Text style={styles.addressText}>
@@ -307,7 +308,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.white,
-    height: height,
+    marginTop: 0,
   },
   backgroundImage: {
     height: height * 0.4,

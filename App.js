@@ -97,6 +97,14 @@ const App = () => {
 
   const loginReducer = (prevState, action) => {
     switch (action.type) {
+      case "UPDATE_USER":
+        return {
+          ...prevState,
+          userName: action.name,
+          gender: action.gender,
+          phone: action.phone,
+          birth: action.birth,
+        };
       case "RETRIEVE_TOKEN":
         return {
           ...prevState,
@@ -209,6 +217,20 @@ const App = () => {
     next_guest: async () => {
       AsyncStorage.setItem("userToken", "NoToken");
       dispatch({ type: "NEXT" });
+    },
+    update_user: (user) => {
+      AsyncStorage.setItem("userName", user.name);
+      AsyncStorage.setItem("userPhone", user.phone);
+      AsyncStorage.setItem("userBirth", user.birth);
+      AsyncStorage.setItem("Gender", user.gender);
+      console.log(user);
+      dispatch({
+        type: "UPDATE_USER",
+        name: user.name,
+        phone: user.phone,
+        birth: user.birth,
+        gender: user.gender,
+      });
     },
     signOut: async () => {
       try {
