@@ -3,13 +3,10 @@ import {
   View,
   Text,
   SafeAreaView,
-  ImageBackground,
   Image,
   StyleSheet,
   TouchableOpacity,
-  Button,
-  Platform,
-  Dimensions,
+  Alert,
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
@@ -19,7 +16,7 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import axios from "axios";
+import AuthContext from "../store/context";
 
 MaterialIcons.loadFont();
 Feather.loadFont();
@@ -28,11 +25,12 @@ AntDesign.loadFont();
 
 const UserInfo = ({ route, navigation }) => {
   const { item } = route.params;
-  const [gender, setGender] = useState(item.gender);
-  const [phone, setPhone] = useState(item.phone);
-  const [name, setName] = useState(item.userName);
+  const authContext = React.useContext(AuthContext);
+  const [gender, setGender] = useState(authContext.gender);
+  const [phone, setPhone] = useState(authContext.phone);
+  const [name, setName] = useState(authContext.userName);
 
-  const [birth, setBirth] = useState(new Date(item.birth));
+  const [birth, setBirth] = useState(new Date(authContext.birth));
 
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
@@ -48,47 +46,52 @@ const UserInfo = ({ route, navigation }) => {
     setBirth(date);
     hideDatePicker();
   };
-  console.log(item)
-
-  // const [data, setData] = useState({
-  //   userEmail: item.userEmail,
-  //   userName: name,
-  //   birth: birth,
-  //   gender: gender,
-  //   phone: phone,
-  // });
+  const { update_user } = React.useContext(AuthContext);
   const updateInfo = async () => {
-    let returnn = null;
     const data = {
-      userEmail: item.userEmail,
-      userName: "Đạt",
+      name: name,
       birth: birth,
       gender: gender,
       phone: phone,
     };
-
-    axios
-      .patch(
-        "https://pbl6-travelapp.herokuapp.com/users/" + item.userId,
-        data,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${item.userToken}`,
-          },
-        }
-      )
-      .then(function (response) {
-        console.log("----------------------------------");
-        console.log(response);
-        console.log("----------------------------------");
-      })
-      .catch(function (error) {
-        console.log("error");
-      });
-
-    return returnn;
+    try {
+      Promise.all(
+        await fetch(
+          "https://pbl6-travelapp.herokuapp.com/users/" + authContext.userId,
+          {
+            method: "PATCH",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${authContext.userToken}`,
+            },
+            body: JSON.stringify(data),
+          }
+        )
+          .then((response) => response.json())
+          .then((responseJson) => {
+            if (responseJson.name != null) {
+              update_user(responseJson);
+              Alert.alert("Thông báo", "Thay đổi thành công", [
+                {
+                  text: "OK",
+                  onPress: () => navigation.navigate("TabNavigation"),
+                },
+              ]);
+            } else
+              Alert.alert("Thông báo", responseJson.message, [
+                {
+                  text: "OK",
+                },
+              ]);
+          })
+          .catch((error) => {
+            console.error(error);
+          })
+      );
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (
@@ -137,7 +140,7 @@ const UserInfo = ({ route, navigation }) => {
 
           <TouchableOpacity
             style={gender == 1 ? styles.buttonSelect : styles.buttonNonSelect}
-            onPress={() => setGender("Female")}
+            onPress={() => setGender("female")}
           >
             <Ionicons
               name="female"

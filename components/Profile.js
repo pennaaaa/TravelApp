@@ -22,7 +22,6 @@ const width = Dimensions.get("window").width;
 
 const Profile = ({ route, navigation }) => {
   const authContext = React.useContext(AuthContext);
-
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ImageBackground
@@ -119,8 +118,7 @@ const Profile = ({ route, navigation }) => {
           >
             <TouchableOpacity
               style={styles.support}
-              onPress={() => navigation.navigate("HistoryMenu", {})
-            }
+              onPress={() => navigation.navigate("HistoryMenu", {})}
             >
               <MaterialIcons name="history" size={40} color="green" />
               <Text style={styles.supportText1}>Lịch sử</Text>

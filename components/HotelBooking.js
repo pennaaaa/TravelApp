@@ -82,17 +82,23 @@ const HotelBooking = ({ route, navigation }) => {
       setCheckIn(date.toLocaleDateString());
     } else {
       setDateOut(date);
-      setTotalDay((date.getTime() - dateIn.getTime()) / (1000 * 60 * 60 * 24));
+      setTotalDay(
+        ((date.getTime() - dateIn.getTime()) / (1000 * 60 * 60 * 24)).toFixed(0)
+      );
 
       setDayPrice(
-        pricePerDay *
+        (
+          pricePerDay *
           ((date.getTime() - dateIn.getTime()) / (1000 * 60 * 60 * 24))
+        ).toFixed(0)
       );
 
       setVat(
-        pricePerDay *
+        (
+          pricePerDay *
           ((date.getTime() - dateIn.getTime()) / (1000 * 60 * 60 * 24)) *
           0.1
+        ).toFixed(0)
       );
 
       setPrice(
@@ -100,7 +106,7 @@ const HotelBooking = ({ route, navigation }) => {
           pricePerDay *
           ((date.getTime() - dateIn.getTime()) / (1000 * 60 * 60 * 24)) *
           1.1
-        ).toFixed()
+        ).toFixed(0)
       );
       setCheckOut(date.toLocaleDateString());
     }
@@ -223,6 +229,7 @@ const HotelBooking = ({ route, navigation }) => {
           <DateTimePickerModal
             isVisible={isDatePickerVisible}
             mode="date"
+            minimumDate={new Date()}
             onConfirm={handleConfirm}
             onCancel={hideDatePicker}
           />
