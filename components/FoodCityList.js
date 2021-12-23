@@ -98,7 +98,7 @@ const FoodCityList = (props) => {
           >
             <View style={styles.roomPrice}>
               <Text style={styles.priceText}>
-                {item.priceFrom}-{item.priceTo}đ
+                {item.priceFrom}-{item.priceTo}$
               </Text>
               <Text style={styles.perdayText}>/món</Text>
             </View>
