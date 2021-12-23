@@ -43,8 +43,9 @@ const CartHotel = (props) => {
         },
       }
     );
-    const data = await response.json();
-    // console.log(data);
+    const data = (await response.json()).filter(
+      (d) => d.service === "hotel" && d.status == false
+    );
 
     const data2 = [];
     data.forEach(async (element) => {
@@ -97,7 +98,6 @@ const CartHotel = (props) => {
       });
 
     console.log("HUY 2");
-    getAPI();
   };
   useEffect(() => {
     getAPI();
@@ -116,7 +116,6 @@ const CartHotel = (props) => {
   };
 
   const renderHotelItem = ({ item }) => {
-    console.log("hotelll");
     return (
       <TouchableOpacity>
         <View style={styles.itemContainer}>
@@ -171,7 +170,10 @@ const CartHotel = (props) => {
 
             <TouchableOpacity
               style={styles.signIn}
-              onPress={() => deleteAPI(item)}
+              onPress={() => {
+                deleteAPI(item);
+                getAPI();
+              }}
             >
               <LinearGradient
                 colors={["#3FA344", "#8DCA70"]}
@@ -195,9 +197,7 @@ const CartHotel = (props) => {
         ) : (
           <>
             <FlatList
-              data={billData.filter(
-                (item) => !item.status && item.service == "hotel"
-              )}
+              data={billData}
               renderItem={renderHotelItem}
               keyExtractor={(item) => item.id}
               showsHorizontalScrollIndicator={false}

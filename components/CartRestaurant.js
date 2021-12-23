@@ -42,7 +42,9 @@ const CartRestaurant = (props) => {
         },
       }
     );
-    const data = await response.json();
+    const data = (await response.json()).filter(
+      (item) => !item.status && item.service == "restaurant"
+    );
     const data3 = [];
 
     data.forEach(async (element) => {
@@ -94,7 +96,6 @@ const CartRestaurant = (props) => {
       });
 
     console.log("HUY 2");
-    getAPI();
   };
 
   useEffect(() => {
@@ -107,7 +108,7 @@ const CartRestaurant = (props) => {
       date: item.checkIn,
       fee: item.total,
       billid: item.id,
-      selectedValue: item.chairs
+      selectedValue: item.chairs,
     });
   };
 
@@ -167,7 +168,10 @@ const CartRestaurant = (props) => {
 
             <TouchableOpacity
               style={styles.signIn}
-              onPress={() => deleteAPI(item)}
+              onPress={() => {
+                deleteAPI(item);
+                getAPI();
+              }}
             >
               <LinearGradient
                 colors={["#3FA344", "#8DCA70"]}
@@ -191,9 +195,7 @@ const CartRestaurant = (props) => {
         ) : (
           <>
             <FlatList
-              data={billData.filter(
-                (item) => !item.status && item.service == "restaurant"
-              )}
+              data={billData}
               renderItem={renderResItem}
               keyExtractor={(item) => item.id}
               showsHorizontalScrollIndicator={false}

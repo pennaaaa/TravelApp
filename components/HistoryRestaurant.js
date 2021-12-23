@@ -43,7 +43,9 @@ const HistoryRestaurant = (props) => {
         },
       }
     );
-    const data = await response.json();
+    const data = (await response.json()).filter(
+      (item) => item.status && item.service == "restaurant"
+    );
 
     const data3 = [];
     data.forEach(async (element) => {
@@ -110,9 +112,7 @@ const HistoryRestaurant = (props) => {
         ) : (
           <>
             <FlatList
-              data={billData.filter(
-                (item) => item.status && item.service == "restaurant"
-              )}
+              data={billData}
               renderItem={renderCartRestaurant}
               keyExtractor={(item) => item.id}
               showsHorizontalScrollIndicator={false}

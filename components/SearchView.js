@@ -112,7 +112,7 @@ const SearchView = ({ navigation }) => {
       .then((json) => {
         setDataRaw(json);
         setData(json);
-        console.log(json);
+        // console.log(json);
       })
       .catch((error) => console.error(error));
   }

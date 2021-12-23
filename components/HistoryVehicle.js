@@ -43,13 +43,15 @@ const HistoryVehicle = (props) => {
         },
       }
     );
-    const data = await response.json();
+    const data = (await response.json()).filter(
+      (item) => item.status && item.service == "selfVehicle"
+    );
 
     const data2 = [];
-    const data3 = [];
     data.forEach(async (element) => {
       const responseRoom = await fetch(
-        "https://pbl6-travelapp.herokuapp.com/detailVehicle/" + element._id
+        "https://pbl6-travelapp.herokuapp.com/detailVehicle/" +
+          element.detailVehicle
       );
       const dataVehicle = await responseRoom.json();
 
@@ -111,9 +113,7 @@ const HistoryVehicle = (props) => {
         ) : (
           <>
             <FlatList
-              data={billData.filter(
-                (item) => item.status && item.service == "selfVehicle"
-              )}
+              data={billData}
               renderItem={renderCartItem}
               keyExtractor={(item) => item.id}
               showsHorizontalScrollIndicator={false}
@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
   },
   itemTitle: {
-    fontSize: 24,
+    fontSize: 20,
     fontFamily: "SourceSans-SemiBold",
     color: "black",
   },

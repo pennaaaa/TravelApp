@@ -43,7 +43,9 @@ const HistoryHotel = (props) => {
         },
       }
     );
-    const data = await response.json();
+    const data = (await response.json()).filter(
+      (d) => d.service === "hotel" && d.status == true
+    );
 
     const data2 = [];
     data.forEach(async (element) => {
@@ -78,6 +80,11 @@ const HistoryHotel = (props) => {
             ></Image>
           )}
           <View style={styles.infoRoom}>
+            {item?.roomBillData?.idHotel?.name && (
+              <Text style={styles.itemTitle}>
+                {item?.roomBillData?.idHotel?.name}
+              </Text>
+            )}
             <Text style={styles.idService}>Dịch vụ: {item.service}</Text>
             {item?.roomBillData?.type && (
               <Text style={styles.idService}>
@@ -105,7 +112,7 @@ const HistoryHotel = (props) => {
         ) : (
           <>
             <FlatList
-              data={billData.filter((item) => item.status && item.service=="hotel")}
+              data={billData}
               renderItem={renderCartItem}
               keyExtractor={(item) => item.id}
               showsHorizontalScrollIndicator={false}
@@ -178,7 +185,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
   },
   itemTitle: {
-    fontSize: 24,
+    fontSize: 22,
     fontFamily: "SourceSans-SemiBold",
     color: "black",
   },
