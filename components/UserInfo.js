@@ -252,6 +252,6 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
     height: 100,
     width: 100,
-    borderRadius: 35,
+    borderRadius: 50,
   },
 });

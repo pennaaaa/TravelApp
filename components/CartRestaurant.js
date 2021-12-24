@@ -45,11 +45,14 @@ const CartRestaurant = (props) => {
     const data = (await response.json()).filter(
       (item) => !item.status && item.service == "restaurant"
     );
+    console.log(data);
     const data3 = [];
 
     data.forEach(async (element) => {
       const responseRestaurant = await fetch(
-        "https://pbl6-travelapp.herokuapp.com/restaurant/" + element.restaurant
+        "https://pbl6-travelapp.herokuapp.com/restaurant/" +
+          element.restaurant +
+          "/detail"
       );
       const dataRestaurant = await responseRestaurant.json();
 
@@ -67,15 +70,6 @@ const CartRestaurant = (props) => {
   };
 
   const deleteAPI = async (item) => {
-    console.log("-------------------------");
-    console.log(
-      "https://pbl6-travelapp.herokuapp.com/bill/" +
-        authContext.userId +
-        "/" +
-        item.id
-    );
-    console.log("-------------------------");
-
     fetch(
       "https://pbl6-travelapp.herokuapp.com/bill/" +
         authContext.userId +
@@ -94,7 +88,7 @@ const CartRestaurant = (props) => {
       .then((responseJson) => {
         console.log(responseJson);
       });
-
+    setBillLoading(true);
     console.log("HUY 2");
   };
 

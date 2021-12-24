@@ -96,7 +96,7 @@ const HistoryHotel = (props) => {
             </Text>
             <View style={styles.rowView}>
               <Text style={styles.idService}>Tổng tiền: </Text>
-              <Text style={styles.priceText}>{item.total}đ</Text>
+              <Text style={styles.priceText}>{item.total}$</Text>
             </View>
             <Text style={styles.status}>Đã thanh toán</Text>
           </View>
