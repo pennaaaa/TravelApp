@@ -48,7 +48,7 @@ const FoodBooking = ({ route, navigation }) => {
   };
 
   const createBill = async () => {
-    console.log(date+"----")
+    console.log(item._id);
     let returnn = null;
     try {
       const data = {

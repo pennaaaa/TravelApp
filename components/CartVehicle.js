@@ -44,7 +44,9 @@ const CartVehicle = (props) => {
         },
       }
     );
-    const data = await response.json();
+    const data = (await response.json()).filter(
+      (item) => !item.status && item.service == "selfVehicle"
+    );
 
     const data2 = [];
     data.forEach(async (element) => {
@@ -99,7 +101,6 @@ const CartVehicle = (props) => {
       });
 
     console.log("HUY 2");
-    getAPI();
   };
 
   useEffect(() => {
@@ -172,7 +173,10 @@ const CartVehicle = (props) => {
 
             <TouchableOpacity
               style={styles.signIn}
-              onPress={() => deleteAPI(item)}
+              onPress={() => {
+                deleteAPI(item);
+                getAPI();
+              }}
             >
               <LinearGradient
                 colors={["#3FA344", "#8DCA70"]}
@@ -196,9 +200,7 @@ const CartVehicle = (props) => {
         ) : (
           <>
             <FlatList
-              data={billData.filter(
-                (item) => !item.status && item.service == "selfVehicle"
-              )}
+              data={billData}
               renderItem={renderVehicleItem}
               keyExtractor={(item) => item.id}
               showsHorizontalScrollIndicator={false}

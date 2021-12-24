@@ -11,7 +11,6 @@ import {
   Image,
 } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
-import foodData from "../assets/data/foodData";
 import colors from "../assets/color/colors";
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
@@ -98,7 +97,7 @@ const FoodCityList = (props) => {
           >
             <View style={styles.roomPrice}>
               <Text style={styles.priceText}>
-                {item.priceFrom}-{item.priceTo}đ
+                {item.priceFrom}-{item.priceTo}$
               </Text>
               <Text style={styles.perdayText}>/món</Text>
             </View>

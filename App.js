@@ -4,7 +4,6 @@ import Home from "./components/Home";
 import Details from "./components/Details";
 import HotelDetails from "./components/HotelDetails";
 import SearchView from "./components/SearchView";
-import Find from "./components/Find";
 import Profile from "./components/Profile";
 import colors from "./assets/color/colors";
 import Entypo from "react-native-vector-icons/Entypo";

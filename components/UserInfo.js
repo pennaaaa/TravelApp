@@ -124,7 +124,7 @@ const UserInfo = ({ route, navigation }) => {
 
           <TouchableOpacity
             style={gender == 0 ? styles.buttonSelect : styles.buttonNonSelect}
-            onPress={() => setGender("Male")}
+            onPress={() => setGender("male")}
           >
             <Ionicons
               name="male"
@@ -252,6 +252,6 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
     height: 100,
     width: 100,
-    borderRadius: 35,
+    borderRadius: 50,
   },
 });
