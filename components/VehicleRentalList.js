@@ -12,7 +12,6 @@ import {
 } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import colors from "../assets/color/colors";
-import vehicleRentalData from "../assets/data/vehicleRentalData";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Entypo from "react-native-vector-icons/Entypo";

@@ -29,8 +29,6 @@ FontAwesome.loadFont();
 const Home = ({ navigation }) => {
   const [isRoomLoading, setRoomLoading] = useState(true);
   const [roomData, setRoomData] = useState([]);
-  const [isHotelLoading, setHotelLoading] = useState(true);
-  const [hotelData, setHotelData] = useState([]);
   const [isRestaurantLoading, setRestaurantLoading] = useState(true);
   const [restaurantData, setRestaurantData] = useState([]);
   const [isVehicleLoading, setVehicleLoading] = useState(true);
@@ -263,7 +261,7 @@ const Home = ({ navigation }) => {
                   <Text>Loading...</Text>
                 ) : (
                   <FlatList
-                    data={roomData}
+                    data={roomData.filter((item)=>item.idHotel != null)}
                     renderItem={renderRoomDataItem}
                     keyExtractor={(item) => item._id}
                     horizontal

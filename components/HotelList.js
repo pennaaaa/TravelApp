@@ -9,7 +9,6 @@ import {
   Image,
 } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-// import hotelData from "../assets/data/hotelData";
 import colors from "../assets/color/colors";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Entypo from "react-native-vector-icons/Entypo";

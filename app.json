@@ -1,34 +1,18 @@
 {
   "expo": {
-    "name": "TravelApp",
-    "slug": "TravelApp",
-    "userInterfaceStyle": "automatic",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
-      }
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    },
-    "description": ""
+   "name": "Go Go",
+   "version": "1.0.0",
+   "icon":"./assets/image/logo3.png",
+   "slug": "your-app-slug",
+   "ios": {
+     "bundleIdentifier": "com.winner.gogo",
+     "buildNumber": "1.0.0"
+   },
+   "android": {
+     "package": "com.winner.gogo",
+     "versionCode": 1
+   }
   }
 }
+
+
