@@ -124,7 +124,7 @@ const UserInfo = ({ route, navigation }) => {
 
           <TouchableOpacity
             style={gender == 0 ? styles.buttonSelect : styles.buttonNonSelect}
-            onPress={() => setGender("Male")}
+            onPress={() => setGender("male")}
           >
             <Ionicons
               name="male"

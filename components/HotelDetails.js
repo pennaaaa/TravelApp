@@ -92,6 +92,7 @@ const HotelDetails = ({ route, navigation }) => {
       .catch((error) => console.error(error));
   };
   const renderVoteDataItem = ({ item }) => {
+    console.log(item);
     return (
       <View style={styles.feedbackWrapper}>
         <View style={styles.userContainer}>
@@ -105,7 +106,7 @@ const HotelDetails = ({ route, navigation }) => {
               <Rating
                 type="star"
                 imageSize={20}
-                fractions="{1}"
+                fractions="{0}"
                 readonly
                 startingValue={item.vote}
                 style={{ marginLeft: 12 }}

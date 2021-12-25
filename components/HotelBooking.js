@@ -58,17 +58,25 @@ const HotelBooking = ({ route, navigation }) => {
     hideDatePicker();
     if (chosenMode) {
       setDateIn(date);
-      setTotalDay((dateOut.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
+      setTotalDay(
+        ((dateOut.getTime() - date.getTime()) / (1000 * 60 * 60 * 24)).toFixed(
+          0
+        )
+      );
 
       setDayPrice(
-        pricePerDay *
+        (
+          pricePerDay *
           ((dateOut.getTime() - date.getTime()) / (1000 * 60 * 60 * 24))
+        ).toFixed(0)
       );
 
       setVat(
-        pricePerDay *
+        (
+          pricePerDay *
           ((dateOut.getTime() - date.getTime()) / (1000 * 60 * 60 * 24)) *
           0.1
+        ).toFixed(0)
       );
 
       setPrice(
@@ -76,7 +84,7 @@ const HotelBooking = ({ route, navigation }) => {
           pricePerDay *
           ((dateOut.getTime() - date.getTime()) / (1000 * 60 * 60 * 24)) *
           1.1
-        ).toFixed()
+        ).toFixed(0)
       );
 
       setCheckIn(date.toLocaleDateString());
@@ -241,20 +249,26 @@ const HotelBooking = ({ route, navigation }) => {
             <Text style={styles.priceSubTitle1}>
               {item.price}đ x {totalDay} ngày
             </Text>
-            <Text style={styles.resultDatePrice}>{dayPrice} $</Text>
+            <Text style={styles.resultDatePrice}>
+              {dayPrice >= 0 ? dayPrice : 0} $
+            </Text>
           </View>
           <View style={styles.datePrice}>
             <Text style={styles.priceSubTitle}>VAT(10%)</Text>
-            <Text style={styles.resultDatePrice}>{vat} $</Text>
+            <Text style={styles.resultDatePrice}>{vat >= 0 ? vat : 0} $</Text>
           </View>
           <View style={styles.datePrice}>
             <Text style={styles.dateTitle}>Tổng tiền(VND)</Text>
-            <Text style={styles.resultDatePrice}>{price} $</Text>
+            <Text style={styles.resultDatePrice}>
+              {price >= 9 ? price : 0} $
+            </Text>
           </View>
           <TouchableOpacity
             style={styles.signIn}
             onPress={() => {
-              onPressBookButton(item);
+              if (price == 0) {
+                alert("Hãy nhập ngày đến và đi hợp lệ");
+              } else onPressBookButton(item);
             }}
           >
             <LinearGradient

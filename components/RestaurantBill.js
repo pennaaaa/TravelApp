@@ -53,7 +53,7 @@ const RestaurantBill = ({ route, navigation }) => {
               "/" +
               billid,
             {
-              method: "GET",
+              method: "PATCH",
               headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json",
@@ -98,12 +98,12 @@ const RestaurantBill = ({ route, navigation }) => {
               <Text style={styles.roomTitle}>{item.name}</Text>
               <Text style={styles.roomDetails}>{item.address}</Text>
               <Text style={styles.roomDetails}>Chuyên món: {item.type}</Text>
-              <Text style={styles.roomDetails}>Ngày đến: {dateIn.toLocaleDateString()}</Text>
+              <Text style={styles.roomDetails}>
+                Ngày đến: {dateIn.toLocaleDateString()}
+              </Text>
               <Text style={styles.roomDetails}>Số người: {selectedValue}</Text>
             </View>
           </View>
-
-          
         </View>
         <View style={styles.priceDetailContainer}>
           <Text style={styles.bookingTitle}>Hóa đơn thanh toán</Text>
@@ -167,8 +167,7 @@ const RestaurantBill = ({ route, navigation }) => {
             <WebView
               source={{
                 uri:
-                  "192.168.1.4:3000/payment/" +
-                  (fee / 23000).toFixed(2).toString(),
+                  "https://paypal-tu.herokuapp.com/payment/" + fee.toString(),
               }}
               style={{ flex: 1 }}
               onLoadStart={() => {

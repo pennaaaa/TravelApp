@@ -54,7 +54,7 @@ const VehicleBill = ({ route, navigation }) => {
               "/" +
               billid,
             {
-              method: "GET",
+              method: "PATCH",
               headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json",
@@ -101,8 +101,12 @@ const VehicleBill = ({ route, navigation }) => {
                 {item.idSelfVehicle.address}
               </Text>
               <Text style={styles.roomDetails}>Loại xe: {item.type}</Text>
-              <Text style={styles.roomDetails}>Ngày đến: {checkIn.toLocaleDateString()}</Text>
-              <Text style={styles.roomDetails}>Ngày đi: {checkOut.toLocaleDateString()}</Text>
+              <Text style={styles.roomDetails}>
+                Ngày đến: {checkIn.toLocaleDateString()}
+              </Text>
+              <Text style={styles.roomDetails}>
+                Ngày đi: {checkOut.toLocaleDateString()}
+              </Text>
             </View>
           </View>
           {/* <View style={styles.dateText}>
@@ -172,8 +176,7 @@ const VehicleBill = ({ route, navigation }) => {
             <WebView
               source={{
                 uri:
-                  "192.168.1.4:3000/payment/" +
-                  (price / 23000).toFixed(2).toString(),
+                  "https://paypal-tu.herokuapp.com/payment/" + price.toString(),
               }}
               style={{ flex: 1 }}
               onLoadStart={() => {

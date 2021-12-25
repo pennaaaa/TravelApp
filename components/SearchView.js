@@ -92,7 +92,7 @@ const SearchView = ({ navigation }) => {
             }}
           >
             <View style={styles.roomPrice}>
-              <Text style={styles.priceText}>{item.price}đ</Text>
+              <Text style={styles.priceText}>{item.price}$</Text>
               <Text style={styles.perdayText}>/ngày</Text>
             </View>
             <Rating

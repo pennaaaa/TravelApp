@@ -104,14 +104,14 @@ const VehicleDetails = ({ route, navigation }) => {
 
   const onPressBookButton = async () => {
     billid = await createBill();
-    console.log("bill: "+billid);
+    console.log("bill: " + billid);
     if (billid) {
       navigation.navigate("VehicleBill", {
         item: item,
         dateIn,
         dateOut,
         price,
-        billid
+        billid,
       });
     } else alert("Đăng nhập lại để đặt xe");
   };
@@ -176,12 +176,15 @@ const VehicleDetails = ({ route, navigation }) => {
         <Text style={styles.bookingTitle}>Chi tiết thanh toán</Text>
         <View style={styles.datePrice}>
           <Text style={styles.dateTitle}>Tổng tiền(VND)</Text>
-          <Text style={styles.resultDatePrice}>{price} $</Text>
+          <Text style={styles.resultDatePrice}>{price >= 0 ? price : 0} $</Text>
         </View>
 
         <TouchableOpacity
           style={styles.signIn}
-          onPress={() => onPressBookButton()}
+          onPress={() => {
+            if (price == 0) alert("Hãy chọn ngày nhận và trả xe phù hợp");
+            else onPressBookButton();
+          }}
         >
           <LinearGradient
             colors={["#3FA344", "#8DCA70"]}
